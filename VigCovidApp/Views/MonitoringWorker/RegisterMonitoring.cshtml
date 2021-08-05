@@ -1,0 +1,2743 @@
+﻿@model IEnumerable<VigCovidApp.ViewModels.SeguimientosViewModel>
+
+@{
+    ViewBag.Title = "Seguimiento Trabajador";
+    var trabajadorId = ViewBag.REGISTROTRABAJADOR;
+    var fechasImportantes = @ViewBag.FECHASIMPORTANTES;
+    var TipoRango = ViewBag.TIPOSDERANGO;
+    var activo = false;
+    var fechadeHoy = DateTime.Today;
+
+}
+<style>
+    .disabledbutton {
+        pointer-events: none;
+        opacity: 0.4;
+    }
+
+    .cart-no {
+        position: absolute;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        font-weight: 600;
+        font-size: 1em;
+        /*            background:blue;*/
+        color: blue;
+        text-align: center;
+        top: -4px;
+        right: 8px;
+    }
+</style>
+
+
+
+<link href="~/Content/horizontal-timeline.css" rel="stylesheet" />
+@*<link href="~/Content/reset.css" rel="stylesheet" />*@
+
+<div class="row">
+    <input type="hidden" id="estadoClinicoId" value="@ViewBag.CABECERA.EstadoClinico" />
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="panel">
+            <div class="panel widget" style="margin-bottom:0px; ">
+                <button id="btn-Regresar-Index" class="btn btn-info" style="position:absolute; z-index:1000"><i class="demo-pli-back"></i> IR A BANDEJA</button>
+                <div class="widget-header bg-warning text-center">
+                    <h4 class="text-light mar-no pad-top">@ViewBag.CABECERA.Trabajador</h4>
+                    <p>@ViewBag.CABECERA.Empresa / @ViewBag.CABECERA.Sede / @ViewBag.CABECERA.Puesto</p>
+                    <p>@ViewBag.CABECERA.ModoIngreso/ @ViewBag.CABECERA.ViaIngreso</p>
+                    <p>@ViewBag.CABECERA.Email - @ViewBag.CABECERA.Celular</p>
+                </div>
+                <div class="widget-body" style="margin-bottom:0px;">
+                    <img alt="Profile Picture" class="widget-img img-circle img-border-light" src="~/Assets/profile-photos/1.png">
+
+                    <div class="panel-group accordion" id="demo-acc-info-outline" style="margin-bottom:0px;">
+                        <div class="panel panel-bordered panel-info">
+                            <!--Accordion title-->
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    @*<a data-parent="#demo-acc-info-outline" data-toggle="collapse" href="#demo-acd-info-outline-3" class="collapsed" aria-expanded="true">Línea de tiempo</a>*@
+                                </h4>
+                            </div>
+                            <!--Accordion content-->
+                            <div class="panel-collapse collapse" id="demo-acd-info-outline-3" aria-expanded="true">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <section class="cd-horizontal-timeline" style="margin-top: 10px; margin-bottom: 10px;">
+                                            <div class="timeline">
+                                                <div class="events-wrapper">
+                                                    <div class="events ">
+                                                        <ol id="linea-tiempo">
+                                                            @for (int i = 0; i < fechasImportantes.Count; i++)
+                                                            {
+                                                                if (i == 0)
+                                                                {
+                                                                    <li>
+                                                                        <a href="#0" data-date="@fechasImportantes[i].DateDate" class="selected">
+                                                                            @fechasImportantes[i].DateLine
+                                                                        </a>
+                                                                    </li>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <li><a href="#0" data-date="@fechasImportantes[i].DateDate">@fechasImportantes[i].DateLine</a></li>
+                                                                }
+                                                            }
+                                                        </ol>
+                                                        <span class="filling-line" aria-hidden="true"></span>
+                                                    </div>
+                                                </div>
+                                                <ul class="cd-timeline-navigation">
+                                                    <li><a href="#0" class="prev inactive">Prev</a></li>
+                                                    <li><a href="#0" class="next">Next</a></li>
+                                                </ul>
+                                            </div>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <ul class="list-inline text-center">
+                                            <li><span class="label label-info">PS</span>Primer Seguimiento</li>
+                                            <li><span class="label label-warning">PR-+</span> P. Rápida</li>
+                                            <li><span class="label label-primary">PM-+</span> P. Molecular</li>
+                                            <li><span class="label label-dark">IAC</span> Aislamiento/Cuarentena</li>
+                                            <li><span class="label label-mint">Sx</span> Inicio Síntomas</li>
+                                            <li><span class="label label-danger">AP</span> Alta Programada</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Accordion content-->
+
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th>Fecha</th>
+                                        @*<th>Días</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-fechas-importantes">
+                                    <tr>
+
+                                        <td>Inicio Aislamiento/Cuarentena</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaAislaminetoCuarentena-@trabajadorId"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Inicio de Síntomas</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaInicioSintomas-@trabajadorId"></td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Último día de trabajo</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaUltimodiatrabajo-@trabajadorId"></td>
+                                        <td></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Fin de Síntomas</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaFinSintomas-@trabajadorId"></td>
+
+                                    </tr>
+                                    <tr>
+                                        @*Añadido por Saul Ramos Vega -- 05082021 -- Para agregar la información de Alta Médica*@ 
+                                        <td>Alta Médica</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaAltaMedica-@trabajadorId" disabled></td>
+                                        @*<td class="nroDiasAlta"></td>*@
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    @*</div>
+                </div>*@
+
+
+
+                        @foreach (var item in ViewBag.TIPOSDERANGO)
+                        {
+
+
+                            if (item.TipoRango == 1 && item.FechaFin == fechadeHoy)
+                            {
+                                <div class="panel-heading">
+
+                                    <h4 class="panel-title" style="text-align:center; color:red">
+                                        >> Hoy es el último dia de Descanso Médico, asignado para el paciente <<
+                                    </h4>
+                                </div>
+
+                            }
+
+
+
+                        }
+
+
+
+                        <div class="panel-heading">
+                            @*<h4 class="panel-title">
+                <a data-parent="#demo-acc-info-outline" data-toggle="collapse" href="#demo-acd-info-outline-2" class="collapsed" aria-expanded="true">Fechas importantes</a>
+
+            </h4>*@
+                            <h4 class="panel-title">
+                                <button id="btnModalNuevoRango" data-toggle="modal" data-target="#modal-rango" class="btn btn-primary btn-lg btn-block"><i class="demo-pli-add"></i> Agregar Nuevo Rango</button>
+                            </h4>
+                        </div>
+
+
+
+
+                        <table id="example" data-page-length='3'
+                               class="table table-striped">
+
+                            @*class="table table-sm table-striped table-hover table-bordered">*@
+                            @*data-order='[[ 1, "asc" ]]'*@
+
+
+
+
+
+                            <thead>
+                                <tr>
+                                    <th style="width:140px">Fecha de Inicio</th>
+                                    <th style="width:140px">Fecha de Fin</th>
+                                    <th style="width:160px">Tipo de Rango</th>
+                                    <th>Diagnóstico</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-TIPORANGO">
+                                @foreach (var item in ViewBag.TIPOSDERANGO)
+                                {
+                                <tr>
+                                    @if (item.FechaFin == null)
+                                    {
+                                        <td>@item.FechaInicio.ToString("dd/MM/yyyy")</td>
+                                        <td>Sin Registro</td>
+                                        @*<td>@item.FechaFin.ToString("dd/MM/yyyy")</td>*@
+                                        <td>@item.Descripcion</td>
+
+                                    }
+                                    else
+                                    {
+                                        <td>@item.FechaInicio.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.FechaFin.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.Descripcion</td>
+                                    }
+
+
+
+                                    @if (item.Diagnostico == "1")
+                                    {
+                                        <td style="font-size:11px">
+                                            U07.1 COVID-19, virus identificado
+                                        </td>
+                                    }
+                                    else if (item.Diagnostico == "2")
+                                    {
+                                        <td style="font-size: 11px">
+                                            U07.2 COVID-19, virus no identificado
+                                        </td>
+                                    }
+
+                                    else if (item.Diagnostico == "3")
+                                    {
+                                        <td style="font-size: 11px">
+                                            J39.9 Enfermedad del tracto respiratorio superior, no especificada
+                                        </td>
+                                    }
+                                    else if (item.Diagnostico == "4")
+                                    {
+                                        <td style="font-size:11px">
+                                            Z20.828 Contacto y (sospecha de) exposición a otras enfermedades
+                                        </td>
+                                    }
+                                    else if (item.Diagnostico == "5")
+                                    {
+                                        <td>
+                                            A09 Diarrea diarreico(a) (de presunto origen infeccioso)
+                                        </td>
+                                    }
+                                    else if (item.Diagnostico == "6")
+                                    {
+                                        <td>
+                                            Data Migrada
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            ----
+                                        </td>
+                                    }
+
+
+                                    @*<td>@item.Fecha</td>*@
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+
+
+
+
+
+                        <!--Accordion content-->
+                        <!--<div id="demo-acd-info-outline-2" aria-expanded="true">
+    <div class="panel-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Días</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-fechas-importantes">
+                <tr>
+
+                    <td>Inicio Aislamiento/Cuarentena</td>
+                    <td><input type="text" class="form-control fechas" id="dtp-FechaAislaminetoCuarentena-@trabajadorId"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Inicio de Síntomas</td>
+                    <td><input type="text" class="form-control fechas" id="dtp-FechaInicioSintomas-@trabajadorId"></td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>Fin de Síntomas</td>
+                    <td><input type="text" class="form-control fechas" id="dtp-FechaFinSintomas-@trabajadorId"></td>
+
+                </tr>
+
+                <tr>
+                    <td>Posible Alta 1</td>
+                    <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta-@trabajadorId"></td>
+                    <td class="nroDiasAlta"></td>
+                    <td>-->
+                        @*<input id="chk-PrimerDescanso-@trabajadorId" onclick="checkFluencypd1(@trabajadorId)" class="magic-checkbox" type="checkbox">
+        <label for="chk-PrimerDescanso-@trabajadorId">Enviar DM</label>*@
+                        <!--<button type="button"
+                    @{ if (activo == true) { @: disabled="disabled"
+                    } }
+                    class="btn btn-info btn-group-xs">
+                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Posible Alta 2</td>
+        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta2-@trabajadorId"></td>
+        <td class="nroDiasAlta"></td>
+        <td>-->
+                        @*<input id="chk-SegundoDescanso-@trabajadorId" onclick="checkFluencypd2(@trabajadorId)" class="magic-checkbox" type="checkbox">
+        <label for="chk-SegundoDescanso-@trabajadorId">Enviar DM</label>*@
+                        <!--<button type="button"
+                    @{ if (activo == true) { @: disabled="disabled"
+                    } }
+                    class="btn btn-info btn-group-xs">
+                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Posible Alta 3</td>
+        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta3-@trabajadorId"></td>
+        <td class="nroDiasAlta"></td>
+        <td>-->
+                        @*<input id="chk-TercerDescanso-@trabajadorId" onclick="checkFluencypd3(@trabajadorId)" class="magic-checkbox" type="checkbox">
+        <label for="chk-TercerDescanso-@trabajadorId">Enviar DM</label>*@
+                        <!--<button type="button"
+                    @{ if (activo == true) { @: disabled="disabled"
+                    } }
+                    class="btn btn-info btn-group-xs">
+                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Posible Alta 4</td>
+        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta4-@trabajadorId"></td>
+        <td class="nroDiasAlta"></td>
+        <td>-->
+                        @*<input id="chk-CuartoDescanso-@trabajadorId" onclick="checkFluencypd4(@trabajadorId)" class="magic-checkbox" type="checkbox">
+        <label for="chk-CuartoDescanso-@trabajadorId">Enviar DM</label>*@
+                        <!--<button type="button"
+                    @{ if (activo == true) { @: disabled="disabled"
+                    } }
+                    class="btn btn-info btn-group-xs">
+                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+            </button>
+        </td>
+    </tr>
+
+    <tr>
+        <td>Posible Alta 5</td>
+        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta5-@trabajadorId"></td>
+        <td class="nroDiasAlta"></td>
+        <td>-->
+                        @*<input id="chk-QuintoDescanso-@trabajadorId" onclick="checkFluencypd5(@trabajadorId)" class="magic-checkbox" type="checkbox">
+        <label for="chk-QuintoDescanso-@trabajadorId">Enviar DM</label>*@
+                        <!--<button type="button"
+                    @{ if (activo == true) { @: disabled="disabled"
+                    } }
+                    class="btn btn-info btn-group-xs">
+                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+            </button>
+        </td>
+    </tr>
+
+
+    <tr>
+        <td>Posible Alta 6</td>
+        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta6-@trabajadorId"></td>
+        <td class="nroDiasAlta"></td>
+        <td>-->
+                        @*<input id="chk-SextoDescanso-@trabajadorId" onclick="checkFluencypd6(@trabajadorId)" class="magic-checkbox" type="checkbox">
+        <label for="chk-SextoDescanso-@trabajadorId">Enviar DM</label>*@
+                        <!--<button type="button"
+                                    @{ if (activo == true) { @: disabled="disabled"
+                                    } }
+                                    class="btn btn-info btn-group-xs" data-toggle="tooltip" data-placement="top" title="Enviar Descanso Medico">
+                                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+                            </button>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>Alta Médica</td>
+                        <td><input type="text" class="form-control fechas" id="dtp-FechaAltaMedica-@trabajadorId" disabled></td>
+                        <td class="nroDiasAlta"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Último día de trabajo</td>
+                        <td><input type="text" class="form-control fechas" id="dtp-FechaUltimodiatrabajo-@trabajadorId"></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>-->
+                        @*</div>*@
+
+                        <!--PRUEBAS DATATABLES DM-->
+                        <!--PRUEBAS DE DATATABLES DM-->
+
+
+                        <div class="panel panel-bordered panel-info">
+                            <!--Accordion title-->
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-parent="#demo-acc-info-outline" data-toggle="collapse" href="#demo-acd-info-outline-1" aria-expanded="false" class="">Exámenes</a>
+                                </h4>
+                            </div>
+                            <!--Accordion content-->
+                            <div class="panel-collapse collapse in" id="demo-acd-info-outline-1" aria-expanded="false" style="">
+                                <div class="panel-body">
+                                    <div class="list-group bg-trans">
+                                        <div class="pad-btm form-inline">
+                                            <div class="row">
+                                                <div class="col-sm-6 table-toolbar-left">
+                                                    <button id="btnModalNuevoExamen" data-toggle="modal" data-target="#modal-examen" class="btn btn-purple"><i class="demo-pli-add"></i> Agregar examen</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Tipo Examen</th>
+                                                    <th>Resultado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-examenes">
+                                                @foreach (var item in @ViewBag.EXAMENES)
+                                                {
+                                                    <tr>
+                                                        <td><a href='#fakelink' class='btn-link'>@item.FechaExamen.ToString("dd/MM/yyyy")</a></td>
+                                                        <td>@item.TipoPrueba</td>
+                                                        <td>@item.Resultado</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <hr class="new-section-xs">
+                <!-- Timeline header -->
+                <div class="text-right">
+                    <button id="btn-AgregarSeguimiento" class="btn btn-primary">Agregar Seguimiento</button>
+                </div>
+                <input type="hidden" id="txtRegistroTrabajadoId" value="@ViewBag.REGISTROTRABAJADOR" />
+                <!-- Timeline -->
+                <!--===================================================-->
+                @foreach (var seguimiento in Model)
+                {
+                    @Html.HiddenFor(m => seguimiento.SeguimientoId)
+                    <input type="hidden" id="validarFechaProgramada" value="@seguimiento.ProximoSeguimiento" />
+                    <input type="hidden" id="validarUltimoEstado" value="@seguimiento.TipoEstadoId" />
+                    <div class="timeline">
+                        <div class="timeline-entry">
+                            <div class="timeline-stat">
+                                <div class="timeline-icon pos-rel">
+                                    <i class="demo-pli-home icon-3x"></i>
+                                    <div class="cart-no">@seguimiento.NroSeguimiento</div>
+                                </div>
+                                <div class="timeline-time cursor-pointer" onclick="CambiarFecha(@seguimiento.SeguimientoId, @seguimiento.RegistroTrabajadorId)">@seguimiento.Fecha</div>
+                            </div>
+                            @if (seguimiento.TipoEstadoId == -1)
+                            {
+                                @Html.ActionLink("Eliminar Ficha", "RemoveTab", "MonitoringWorker", new { SeguimientoId = seguimiento.SeguimientoId, RegistroTrabajadorId = seguimiento.RegistroTrabajadorId }, new { @class = "btn btn-danger" })
+                            }
+
+
+                            <div class="timeline-label">
+                                <p class="text-bold"><a href="#" class="text-warning">Síntomas</a></p>
+
+                                <hr class="new-section-xs">
+
+                                <div id="panel-checkbox-sintomas-@seguimiento.SeguimientoId" class="panel-sintomas">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input id="chk-SensacionFiebre-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.SensacionFiebre>
+                                            <label for="chk-SensacionFiebre-@seguimiento.SeguimientoId">Sensación de fiebre</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-Tos-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.Tos>
+                                            <label for="chk-Tos-@seguimiento.SeguimientoId">Tos</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-DolorGarganta-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.DolorGarganta>
+                                            <label for="chk-DolorGarganta-@seguimiento.SeguimientoId">Dolor de garganta</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input id="chk-DificultadRespiratoria-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.DificultadRespiratoria>
+                                            <label for="chk-DificultadRespiratoria-@seguimiento.SeguimientoId">Dificultad respiratoria</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-CongestionNasal-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.CongestionNasal>
+                                            <label for="chk-CongestionNasal-@seguimiento.SeguimientoId">Congestion Nasal</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-Cefalea-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.Cefalea>
+                                            <label for="chk-Cefalea-@seguimiento.SeguimientoId">Cefaléa</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input id="chk-MalestarGeneral-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.MalestarGeneral>
+                                            <label for="chk-MalestarGeneral-@seguimiento.SeguimientoId">Malestar General</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-PerdidaOlfato-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.PerdidaOlfato>
+                                            <label for="chk-PerdidaOlfato-@seguimiento.SeguimientoId">Perdida de Olfato</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-Asintomatico-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.Asintomatico>
+                                            <label for="chk-Asintomatico-@seguimiento.SeguimientoId">ASINTOMÁTICO</label>
+                                        </div>
+
+                                        @*// SE DESHABILITA POR AHORA 17042021 SRV  ENVIO AUTOMATICO DE EXAMEN*@
+                                        @*<br>
+                                            <p class="text-bold pad-top"><a href="#" class="text-warning">Solicitud de Adicionales</a></p>
+                                            <hr class="new-section-xs">
+
+
+                                            <div class="col-md-6">
+
+                                                <input id="chk-PulsoOximetro-@seguimiento.SeguimientoId" onclick="checkFluencyP(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PulsoOximetro>
+                                                <label for="chk-PulsoOximetro-@seguimiento.SeguimientoId">Pulso Oximetro</label>
+
+
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input id="chk-PAntigenos-@seguimiento.SeguimientoId" onclick="checkFluency(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos>
+                                                <label for="chk-PAntigenos-@seguimiento.SeguimientoId">Prueba Antígeno a la brevedad</label>
+                                            </div>
+
+
+
+                                            <div class="col-md-6">
+                                                <input id="chk-PAntigenos5-@seguimiento.SeguimientoId" onclick="checkFluency5(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos5>
+                                                <label for="chk-PAntigenos5-@seguimiento.SeguimientoId">Prueba Antígeno en 5 dias</label>
+                                            </div>*@
+
+                                    </div>
+
+
+
+
+
+                                    @*//SE AÑADE ESTA OPCION EN FACTORES CRITICOS 20042021 SE HABILITA LA OPCION DE NO ANTECEDENTES PARA COVID SEVERO*@
+                                    <!--<p class="text-bold pad-top"><a href="#" class="text-warning">Antecedentes</a></p>
+                                    <hr class="new-section-xs">
+
+
+                                    <div class="col-md-6">-->
+                                    @*<input id="chk-PerdidaOlfato-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.PerdidaOlfato>
+                                        <label for="chk-PulsoOximetro-@seguimiento.SeguimientoId">Prueba PulsoOximetro</label>*@
+                                    <!--<input id="chk-PAntigeno-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.PAntigeno>
+
+                                        <label for="chk-PAntigeno-@seguimiento.SeguimientoId">No Antecedentes para Covid Severo</label>
+
+                                    </div>
+                                    <div class="col-md-6">
+
+                                    </div>-->
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (seguimiento.NroSeguimiento == 1)
+                        {
+                            <div class="timeline-label">
+                                <p class="text-bold"><a href="#" class="text-warning">Factores de riesgo</a></p>
+                                <hr class="new-section-xs">
+                                <div id="panel-checkbox-aditional-@seguimiento.SeguimientoId" class="panel-sintomas">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input id="chk-HipertensionArterial-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.HipertensionArterial>
+                                            <label for="chk-HipertensionArterial-@seguimiento.SeguimientoId">Hipertensión Arterial</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-PulmonarCronica-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.PulmonarCronica>
+                                            <label for="chk-PulmonarCronica-@seguimiento.SeguimientoId">Enf. Pulmonar Crónica</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-AsmaModeradoSevero-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.AsmaModeradoSevero>
+                                            <label for="chk-AsmaModeradoSevero-@seguimiento.SeguimientoId">Asma Moderado/Sev.</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input id="chk-Diabetes-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.Diabetes>
+                                            <label for="chk-Diabetes-@seguimiento.SeguimientoId">Diabetes</label>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <input id="chk-Mayor65-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.Mayor65>
+                                            <label for="chk-Mayor65-@seguimiento.SeguimientoId">Mayor de 65 años</label>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <input id="chk-Cancer-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.Cancer>
+                                            <label for="chk-Cancer-@seguimiento.SeguimientoId">Cáncer</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input id="chk-CardiovascularGrave-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.CardiovascularGrave>
+                                            <label for="chk-CardiovascularGrave-@seguimiento.SeguimientoId">Enf. Cardio. Grave</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-ImcMayor40-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.ImcMayor40>
+                                            <label for="chk-ImcMayor40-@seguimiento.SeguimientoId">Imc Mayor a 40</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-TratInmunosupresor-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.TratInmunosupresor>
+                                            <label for="chk-TratInmunosupresor-@seguimiento.SeguimientoId">Trat. Inmunosupresor</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <input id="chk-HipertensionArterialNoControlada-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.HipertensionArterialNoControlada>
+                                            <label for="chk-HipertensionArterialNoControlada-@seguimiento.SeguimientoId">Hiper.Arte.no Controlada</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input id="chk-RenalDialisis-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.RenalDialisis>
+                                            <label for="chk-RenalDialisis-@seguimiento.SeguimientoId">Enf. Renal Crónica c/Dialisis</label>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            @*<input id="chk-PerdidaOlfato-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.PerdidaOlfato>
+                                                <label for="chk-PulsoOximetro-@seguimiento.SeguimientoId">Prueba PulsoOximetro</label>*@
+                                            <input id="chk-PAntigeno-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.PAntigeno>
+
+                                            <label for="chk-PAntigeno-@seguimiento.SeguimientoId">No Antecedentes para Covid Severo</label>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-label">
+                                <p class="text-bold"><a href="#" class="text-warning">Diagnósticos</a></p>
+                                <hr class="new-section-xs">
+                                <div class="row">
+                                    <div id="panel-checkbox-Dx-@seguimiento.SeguimientoId" class="panel-sintomas">
+                                        <div class="row col-12">
+                                            <div class="col-md-6">
+                                                <input id="chk-CasoPositivo-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.CasoPositivo>
+                                                <label for="chk-CasoPositivo-@seguimiento.SeguimientoId">Caso positivo para COVID-19 (U07.1)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input id="chk-CasoSospechoso-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.CasoSospechoso>
+                                                <label for="chk-CasoSospechoso-@seguimiento.SeguimientoId">Caso sospechoso de COVID-19 (U07.2)</label>
+                                            </div>
+                                        </div>
+                                        <div class="row col-12">
+                                            <div class="col-md-6">
+                                                <input id="chk-RinofaringitisAguda-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.RinofaringitisAguda>
+                                                <label for="chk-RinofaringitisAguda-@seguimiento.SeguimientoId">Rinofaringitis aguda (J00)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input id="chk-ContactoEnfermedades-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.ContactoEnfermedades>
+                                                <label for="chk-ContactoEnfermedades-@seguimiento.SeguimientoId">Contacto, exposición a enfermedades transmisibles (Z20.8)</label>
+                                            </div>
+                                        </div>
+                                        <div class="row col-12">
+                                            <div class="col-md-6">
+                                                <input id="chk-Aislamiento-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.Aislamiento>
+                                                <label for="chk-Aislamiento-@seguimiento.SeguimientoId">Aislamiento (Z29.0)</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input id="chk-NeumoniaViral-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.NeumoniaViral>
+                                                <label for="chk-NeumoniaViral-@seguimiento.SeguimientoId">Neumonía viral (J12)</label>
+                                            </div>
+                                        </div>
+                                        <div class="row col-12">
+                                            <div class="col-md-6">
+                                                <input id="chk-Otros-@seguimiento.SeguimientoId" class="magic-checkbox" type="checkbox" @seguimiento.Otros>
+                                                <label for="chk-Otros-@seguimiento.SeguimientoId">Otros</label>
+                                            </div>
+                                            @if (@seguimiento.Otros != "checked")
+                                            {
+                                                <div class="col-md-6">
+                                                    <input id="txt-Otros-@seguimiento.SeguimientoId" type="text" class="form-control inputChange" name="name" value="" disabled />
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-6">
+                                                    <input id="txt-Otros-@seguimiento.SeguimientoId" type="text" class="form-control inputChange" name="name" value="@seguimiento.OtrosComentar" />
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                        <div class="timeline-label">
+                            <p class="text-bold pad-top"><a href="#" class="text-warning">Estado y comentario diario</a></p>
+                            <hr class="new-section-xs">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <select id="ddl-TipoEstado-@seguimiento.SeguimientoId" class="selectpicker selectTipoEstado" data-width="95%" onchange="Posicionarelcursor()">
+                                        <option value="-1">  </option>
+                                        @if (seguimiento.TipoEstadoId == 1)
+                                        {
+                                            <option value="1" selected>Cuarentena (Contacto Directo) </option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+
+
+
+
+                                        }
+                                        else if (seguimiento.TipoEstadoId == 2)
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2" selected>Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+                                        }
+                                        else if (seguimiento.TipoEstadoId == 3)
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3" selected>Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+                                        }
+                                        else if (seguimiento.TipoEstadoId == 4)
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4" selected>Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+                                        }
+                                        else if (seguimiento.TipoEstadoId == 5)
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5" selected>Alta Epidemiológica</option>
+                                        }
+                                        else if (seguimiento.TipoEstadoId == 6)
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6" selected>Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+                                        }
+                                        else if (seguimiento.TipoEstadoId == 7)
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7" selected>Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+                                        }
+                                        else if (seguimiento.TipoEstadoId == 8)
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8" selected>Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+
+                                        }
+                                        else if (seguimiento.TipoEstadoId == 9)
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9" selected>Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option value="1">Cuarentena (Contacto Directo)</option>
+                                            <option value="2">Hospitalizado</option>
+                                            <option value="3">Fallecido</option>
+                                            <option value="8">Aislamiento-Caso asintomático</option>
+                                            <option value="4">Aislamiento-Caso Leve</option>
+                                            <option value="6">Aislamiento-Caso Moderado</option>
+                                            <option value="7">Aislamiento-Caso Severo</option>
+                                            <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                            <option value="5">Alta Epidemiológica</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-8">
+                                    <textarea id="txt-Comentario-@seguimiento.SeguimientoId" placeholder="Ingresar comentario" rows="4" class="form-control" data-width="100%">@seguimiento.Comentario</textarea>
+                                </div>
+                            </div>
+
+
+                            <br>
+                            <p class="text-bold pad-top"><a href="#" class="text-warning">Solicitud de Adicionales</a></p>
+                            <hr class="new-section-xs">
+
+                            <div class="row">
+                                <div class="col-md-6">
+
+                                    <input id="chk-PulsoOximetro-@seguimiento.SeguimientoId" onclick="checkFluencyP(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PulsoOximetro>
+                                    <label for="chk-PulsoOximetro-@seguimiento.SeguimientoId">Pulso Oximetro</label>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <input id="chk-PAntigenos-@seguimiento.SeguimientoId" onclick="checkFluency(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos>
+                                    <label for="chk-PAntigenos-@seguimiento.SeguimientoId">Prueba Antígeno a la brevedad</label>
+                                </div>
+
+
+
+                                <div class="col-md-6">
+                                    <input id="chk-PAntigenos5-@seguimiento.SeguimientoId" onclick="checkFluency5(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos5>
+                                    <label for="chk-PAntigenos5-@seguimiento.SeguimientoId">Prueba Antígeno en 5 dias</label>
+                                </div>
+                            </div>
+
+                            <p class="text-bold pad-top"><a href="#" class="text-warning">Receta Médica</a></p>
+                            <hr class="new-section-xs">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+
+
+                                        <textarea id="txt-Receta-@seguimiento.SeguimientoId" placeholder="Ingresar receta medica" rows="4" class="form-control" data-width="100%">@seguimiento.Recetamedica</textarea>
+
+                                        <input type="image" id="btn-Receta" onclick="Recetamedica(@seguimiento.SeguimientoId)" name="btn-Receta" src="~/img/enviarreceta.jpg" alt="Enviar Correos">
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <p class="text-bold pad-top"><a href="#" class="text-warning">Próximo Seguimiento</a></p>
+                            <hr class="new-section-xs">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control fechaProximoSeguimiento" id="dtp-ProximoSeguimiento-@seguimiento.SeguimientoId" value="@seguimiento.ProximoSeguimiento">
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                    @*</div>*@
+                }
+                <!--===================================================-->
+                <!-- End Timeline -->
+            </div>
+        </div>
+    </div>
+    @*</div>
+        </div>*@
+    <!--Modal Examen-->
+    <!--===================================================-->
+    <div class="modal fade"
+         id="modal-examen"
+         role="dialog"
+         tabindex="-1"
+         aria-labelledby="modal-examen"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--Modal header-->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="pci-cross pci-circle"></i>
+                    </button>
+                    <h4 class="modal-title">Registro de Examen</h4>
+                </div>
+
+                <!--Modal body-->
+                <div class="modal-body">
+                    <form id="form-examen">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Fecha</label>
+                                        <input type="text" class="form-control" id="dtpFechaExamen" name="validateFechaExamen">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Tipo Examen</label>
+                                        <select id="ddl-TipoExamen" class="selectpicker" data-width="80%">
+                                            <option value="1">Prueba rápida</option>
+                                            <option value="2">Molecular</option>
+                                            <option value="3">Antígenos</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Resultado</label>
+                                        <select id="ddl-ExamenResultado" class="selectpicker" data-width="95%">
+                                            <option value="0">Negativo</option>
+                                            <option value="1">No Válido</option>
+                                            <option value="2">IgM Positivo</option>
+                                            <option value="3">IgG Positivo</option>
+                                            <option value="4">IgM e IgG Positivo</option>
+                                            <option value="6">Positivo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <button class="btn btn-success" id="btnRegistrarExamen" type="submit">Registrar Examen</button>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--Modal Tipo Rango-->
+    <!--===================================================-->
+    <div class="modal fade"
+         id="modal-rango"
+         role="dialog"
+         tabindex="-1"
+         aria-labelledby="modal-rango"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--Modal header-->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="pci-cross pci-circle"></i>
+                    </button>
+                    <h4 class="modal-title">Registro de Nuevo Rango</h4>
+                </div>
+
+                <!--Modal body-->
+                <div class="modal-body">
+                    <form id="form-rango">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Fecha de Inicio</label>
+                                        <input type="text" class="form-control dtpFechaInicio" id="dtpFechaInicio" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Fecha de Fin</label>
+                                        <input type="text" class="form-control dtpFechaFin" id="dtpFechaFin" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Tipo de Rango</label>
+                                        <select id="ddl-TipoRango" class="selectpicker" data-width="80%" onchange="checkFluencyDD1(1)">
+                                            <option value="0">Seleccione...</option>
+                                            <option value="1">Descanso Médico</option>
+                                            <option value="2">Hospitalización</option>
+                                            <option value="3">Reevaluación</option>
+                                            <option value="4">Licencia con Goce</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Diagnóstico</label>
+                                        <select id="ddl-Diagnostico" name="ddl-Diagnostico" data-width="80%" style="width:147px;height:31px " disabled>
+                                            <option value="0">Ninguno</option>
+                                            <option value="1">U07.1 COVID-19, virus identificado</option>
+                                            <option value="2">U07.2 COVID-19, virus no identificado</option>
+                                            <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
+                                            <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
+                                            <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <input type="text" id="MensajeDiagnostico" style="border-style: none;width:500px;color:orangered" hidden>
+                        </div>
+                        <div class="panel-footer text-right">
+                            <button class="btn btn-success" id="btnRegistrarRango" type="submit">Registrar Rango</button>
+                        </div>
+
+
+
+
+
+                        <input type="hidden" id="EmpresaPrincipalId" value=@ViewBag.CABECERA.Empresa>
+                        <input type="hidden" id="TrabajadorEmpresaId" value=@trabajadorId>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--===================================================-->
+    <!--End Default Bootstrap Modal-->
+
+    <div class="modal fade cargaEsperar" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered text-center" role="document">
+            <div class="load6">
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/jquery.flot.min.js"></script>
+    <script src="~/Scripts/jquery.flot.categories.min.js"></script>
+    <script src="~/Scripts/jquery.flot.orderBars.min.js"></script>
+    <script src="~/Scripts/jquery.flot.tooltip.min.js"></script>
+    <script src="~/Scripts/jquery.flot.resize.min.js"></script>
+    <script src="~/Scripts/bootbox.min.js"></script>
+    <script src="~/Scripts/horizontal-timeline.js"></script>
+    @*<script src="~/Scripts/jquery-2.1.4.js"></script>*@
+    <script src="~/Scripts/jquery.mobile.custom.min.js"></script>
+    <script src="~/Scripts/modernizr.js"></script>
+
+    <!--Añadido por Saul Ramos  - 23072021-->
+    <!--datatables-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+    <!--datatables-->
+
+
+    <script>
+
+        $(document).ready(function () {
+
+            //$('[data-toggle="tooltip"]').tooltip()
+
+            //$('#example').DataTable();
+
+            var EmpresaPrincipalId = document.getElementById("EmpresaPrincipalId").value
+            var TrabajadorEmpresaId = document.getElementById("TrabajadorEmpresaId").value
+
+
+            if (EmpresaPrincipalId == 'Backus') {
+
+                $("#chk-PrimerDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+                $("#chk-SegundoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+                $("#chk-TercerDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+                $("#chk-CuartoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+                $("#chk-QuintoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+                $("#chk-SextoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+
+            }
+
+            else {
+                $("#chk-PrimerDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+                $("#chk-SegundoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+                $("#chk-TercerDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+                $("#chk-CuartoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+                $("#chk-QuintoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+                $("#chk-SextoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+            }
+
+
+            //window.location.hash = "no-back-button";
+            //window.location.hash = "Again-No-back-button";//esta linea es necesaria para chrome
+            //window.onhashchange = function (e) {
+            //    console.log("??",e);
+            //    if (ValidarProximoSeguimiento()) {
+            //        //window.location = "/Home/index";
+            //    } else {
+            //        window.location.hash = "no-back-button";
+            //        bootbox.alert({
+            //            size: 'extra-large',
+            //            title: "ES OBLIGATORIO",
+            //            message: "<h1 style='color:red'>INGRESAR PRÓXIMO SEGUIMIENTO</h1>"
+            //        });
+            //    }
+            //}
+
+            ListarFechasImportantes();
+
+            //$.niftyNoty({
+            //    type: 'danger',
+            //    icon: 'pli-cross icon-2x',
+            //    message: 'Se canceló la operación.',
+            //    container: 'floating',
+            //    timer: 3000
+            //});
+
+
+            $('#txtFechaExamen').datepicker({ autoclose: true });
+
+            $("#btn-AgregarSeguimiento").on("click", function () {
+
+                bootbox.confirm("¿Está seguro de agregar nuevo seguimiento?", function (result) {
+
+                    let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+                    if (result) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/MonitoringWorker/NewRegisterMonitoring?id=" + registroTrabajadorId,
+                            success: function (data) {
+                                window.location = "/MonitoringWorker/RegisterMonitoring?id=" + registroTrabajadorId;
+                            },
+                            error: function (jqXHR, exception) {
+                                alert("Ocurrió un error en la operación")
+                            }
+                        });
+                    } else {
+                        $.niftyNoty({
+                            type: 'danger',
+                            icon: 'pli-cross icon-2x',
+                            message: 'Se canceló la operación.',
+                            container: 'floating',
+                            timer: 3000
+                        });
+                    };
+                });
+
+            });
+
+            $("#form-examen").submit(function (ev) { ev.preventDefault(); });
+
+            $("#btnRegistrarExamen").on("click", function () {
+
+                if ($("#dtpFechaExamen").val() == undefined) {
+                    alert("El campo fecha es requerido");
+                    return;
+                }
+
+                let fechaSeguimiento = $("#dtpFechaExamen").val();
+                let tipoExamen = $("#ddl-TipoExamen").val();
+                let resultadoExamen = $("#ddl-ExamenResultado").val();
+                let trabajadorId = $("#txtRegistroTrabajadoId").val();
+
+                var datos = { "FechaExamen": fechaSeguimiento, "TrabajadorId": trabajadorId, "TipoExamen": tipoExamen, "ResultadoExamen": resultadoExamen };
+
+                $.ajax({
+                    type: "post",
+                    url: "/examen/crearexamen",
+                    data: datos,
+                    success: function (data) {
+                        $("#modal-examen").modal("hide");
+                        if (!data) {
+                            alert("Acceso denegado");
+                        } else {
+                            tablaExamenes();
+                            ActualizarLineaTiempo();
+                        }
+
+                    },
+                    error: function (jqxhr, exception) {
+                        alert("ocurrió un error en la operación")
+                    }
+                });
+            });
+
+            $('#modal-examen')
+                .on('shown.bs.modal', function () {
+                    $("#dtpFechaExamen").val(moment(Date.now()).format("DD/MM/yyyy"));
+                    $('#form-examen').find('[name="dtpFechaExamen"]').focus();
+                })
+                .on('hidden.bs.modal', function () {
+                    $('#form-examen').bootstrapValidator('resetForm', true);
+                });
+
+            // GRABAR EN TABLA FECHAS IMPORTANTES Y ENVIAR DATOS PARA EL DM - Saul Ramos Vega  20210714
+
+            $("#form-rango").submit(function (ev) { ev.preventDefault(); });
+
+            $("#btnRegistrarRango").on("click", function () {
+
+                var fini = $("#dtpFechaInicio").val();
+                var ffin = $("#dtpFechaFin").val();
+                let trango = $("#ddl-TipoRango").val();
+                var mensaje = $("#msjalerta").val();
+
+                if (fini > ffin) {
+
+                    // $("#msjalerta").val('MENSAJE DE PRUEBA');
+
+                    bootbox.alert({
+                        size: 'large',
+                        title: "CORREGIR:",
+                        message: "<h5 style='color:red'>La Fecha de Inicio debe de ser menor a la Fecha de Fin</h5>",
+
+                    });
+                    return;
+                }
+                if (fini == "" || ffin == "") {
+
+
+                    bootbox.alert({
+                        size: 'large',
+                        title: "CORREGIR:",
+                        message: "<h5 style='color:red'>Las Fechas no pueden estar en blanco</h5>",
+
+                    });
+                    return;
+                }
+
+                if (trango == 0) {
+
+
+                    bootbox.alert({
+                        size: 'large',
+                        title: "CORREGIR:",
+                        message: "<h5 style='color:red'>Debe Seleccionar el Tipo de Rango</h5>",
+
+                    });
+                    return;
+                }
+
+
+
+
+                let FechaInicio = $("#dtpFechaInicio").val();
+                let FechaFin = $("#dtpFechaFin").val();
+                let TipoRango = $("#ddl-TipoRango").val();
+                let trabajadorId = $("#txtRegistroTrabajadoId").val();
+                let Diagnostico = $("#ddl-Diagnostico").val();
+
+                var datos = { "FechaInicio": FechaInicio, "FechaFin": FechaFin, "TipoRango": TipoRango, "TrabajadorId": trabajadorId, "Diagnostico": Diagnostico };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarDescansoMedico1",
+                    data: datos,
+                    success: function (data) {
+                        $("#modal-rango").modal("hide");
+                        //window.location = "/Home/index";
+                        if (!data) {
+                            alert("Acceso denegado");
+                        } else {
+                            tablaTipoRango();
+                            //ActualizarLineaTiempo();
+                        }
+
+                    },
+                    error: function (jqxhr, exception) {
+                        alert("ocurrió un error en la operación")
+                    }
+                });
+            });
+
+            $('#modal-examen')
+                .on('shown.bs.modal', function () {
+                    $("#dtpFechaExamen").val(moment(Date.now()).format("DD/MM/yyyy"));
+                    $('#form-examen').find('[name="dtpFechaExamen"]').focus();
+                })
+                .on('hidden.bs.modal', function () {
+                    $('#form-examen').bootstrapValidator('resetForm', true);
+                });
+
+
+            $(".panel-body").on("click", ".panel-sintomas input", function (e) {
+                let checkId = $(e.target).attr("id");
+                let id = checkId.split('-')[2];
+                var labelText = $('label[for=' + checkId + ']').text();
+
+                DisableControlInputOtros(id);
+                SaveChange(id, labelText, "#" + checkId, "control-check");
+
+            });
+
+            $(".panel-body").on("blur", "textarea", function (e) {
+                let textAreaId = $(e.target).attr("id");
+                let id = textAreaId.split('-')[2];
+                SaveChange(id, "Comentario", "#" + textAreaId, "control-textarea");
+            });
+
+            $(".panel-body").on("blur", ".inputChange", function (e) {
+                let textOtrosId = $(e.target).attr("id");
+                let id = textOtrosId.split('-')[2];
+                SaveChange(id, "Otros", "#" + textOtrosId, "control-text");
+            });
+
+            $(".panel-body").on("change", ".fechaProximoSeguimiento", function (e) {
+                let fechaResultado = $($(e.target).get(0)).attr("id");
+                let id = fechaResultado.split('-')[2];
+                SaveChange(id, "Fecha Próximo Seguimiento", "#" + fechaResultado, "control-datepicker");
+
+                var valorFecha = $("#" + fechaResultado).val();
+
+                const fechaParse = moment(valorFecha, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+                var fechaActual = new Date($.now());
+                var fechaActualParse = moment(fechaActual, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+                if (fechaParse >= fechaActualParse) {
+                    $("#validarFechaProgramada").val(valorFecha);
+                } else {
+                    console.log("NADA");
+                }
+            });
+
+            $(".panel-body").on("change", ".fechas", function (e) {
+                let fechaImportante = $($(e.target).get(0)).attr("id");
+                let fechaNombre = fechaImportante.split('-')[1];
+                let id = fechaImportante.split('-')[2];
+                let fecha = $(this).val();
+
+
+                SaveFechaImportante(fechaNombre, fecha, fechaImportante);
+
+            });
+
+            $("select.selectTipoEstado").on("changed.bs.select", function (e) {
+
+                let ddlCalificacionId = $(e.target).attr("id");
+                let value = $("#" + ddlCalificacionId).val();
+
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+                var posibleAlta1 = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
+                var posibleAlta2 = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId).val();
+                var posibleAlta3 = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId).val();
+                var posibleAlta4 = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId).val();
+                var posibleAlta5 = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId).val();
+                var posibleAlta6 = $("#dtp-FechaPosibleAlta6-" + registroTrabajadorId).val();
+
+
+                var fecha = "";
+
+                if ((posibleAlta6 != undefined || posibleAlta6 != "") && fecha == "") {
+                    fecha = posibleAlta6;
+
+                }
+
+
+
+                if ((posibleAlta5 != undefined || posibleAlta5 != "") && fecha == "") {
+                    fecha = posibleAlta5;
+
+                }
+
+
+
+                if ((posibleAlta4 != undefined || posibleAlta4 != "") && fecha == "") {
+                    fecha = posibleAlta4;
+
+                }
+
+
+
+
+                if ((posibleAlta3 != undefined || posibleAlta3 != "") && fecha == "") {
+                    fecha = posibleAlta3;
+
+                }
+
+                if ((posibleAlta2 != undefined || posibleAlta2 != "") && fecha == "") {
+                    fecha = posibleAlta2;
+
+                }
+
+                if ((posibleAlta1 != undefined || posibleAlta1 != "") && fecha == "") {
+                    fecha = posibleAlta1;
+
+                }
+
+                var f = new Date();
+                let getDate = (f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear())
+
+                if (value == 5) {
+                    bootbox.prompt({
+                        title: "¿Está seguro de dar de ALTA?",
+                        onEscape: true,
+                        inputType: 'textarea',
+                        placeholder: 'Ingresar comentario de alta',
+                        required: true,
+                        callback: function (result) {
+
+                            if (result === null) {
+                                alert("Debe ingresar un comentario.")
+                                return;
+                            } else if (result === '') {
+                                alert("Debe ingresar un comentario.")
+                                return false;
+                            }
+                            else {
+                                $('.cargaEsperar').modal('show');
+                                let idSeguimiento = ddlCalificacionId.split('-')[2];
+                                var datos = { "TrabajadorId": registroTrabajadorId, "SeguimientoId": idSeguimiento, "ComentarioAlta": result, "FechaAlta": getDate, "Fecha": fecha };
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/MonitoringWorker/DarAltaTrabajador",
+                                    data: datos,
+                                    success: function (data) {
+                                        $('.cargaEsperar').modal('hide');
+                                        //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                                        window.location = "/Home/index";
+                                    },
+                                    error: function (jqXHR, exception) {
+                                        alert("Ocurrió un error en la operación");
+                                        $('.cargaEsperar').modal('hide');
+                                    }
+                                });
+                            }
+
+                        }
+                    });
+
+                } else {
+                    let id = ddlCalificacionId.split('-')[2];
+                    SaveChange(id, "Tipo Estado", "#" + ddlCalificacionId, "control-combo");
+                }
+
+            });
+
+            //$("#btn-Regresar-Index").on("click", function () {
+
+            //   let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            //   //var nroAltas = parseInt($(".nroDiasAlta").html());
+            //   var nroAltas = 12;
+            //   if (isNaN(nroAltas)) {
+            //        bootbox.alert({
+            //            size: 'extra-large',
+            //            title: "ES OBLIGATORIO",
+            //            message: "<h4 style='color:red'>INGRESAR FECHA DE INICIO AISLAMIENTO Y POSIBLE ALTA</h4>",
+            //       });
+            //    return;
+            // }
+
+
+            $("#btn-Regresar-Index").on("click", function () {
+
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+                //var nroAltas = parseInt($(".nroDiasAlta").html());
+                var nroAltas = 12;
+                if (isNaN(nroAltas)) {
+                    bootbox.alert({
+                        size: 'extra-large',
+                        title: "ES OBLIGATORIO",
+                        message: "<h4 style='color:red'>INGRESAR FECHA DE INICIO AISLAMIENTO Y POSIBLE ALTA</h4>",
+                    });
+                    return;
+                }
+
+
+
+                $.ajax({
+                    type: "GET",
+                    url: "/MonitoringWorker/ValidarAntesSalir?trabajadorId=" + registroTrabajadorId,
+                    success: function (data) {
+                        if (!data.resultado) {
+                            bootbox.alert({
+                                size: 'extra-large',
+                                title: "VALIDACIÓN",
+                                message: "<h4 style='color:red'>" + data.mensaje + "</h4>",
+                            });
+                            return;
+                        } else {
+                            window.location = "/Home/index";
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+
+            });
+
+            function ValidarProximoSeguimiento() {
+                if ($("#validarFechaProgramada").val() == undefined || $("#validarFechaProgramada").val() == "") {
+                    return false;
+                } else {
+                    return true;
+                }
+
+            }
+
+
+            function notificarCambio(campo) {
+                $.niftyNoty({
+                    type: 'info',
+                    icon: 'pli-cross icon-2x',
+                    message: 'Se  modificó ' + campo,
+                    container: 'floating',
+                    timer: 3000
+                });
+            }
+
+            function notificarCambio2() {
+                bootbox.alert({
+                    size: 'extra-large',
+                    title: "IMPORTANTE",
+                    message: "<h4 style='color:blue'>No olvide habilitar el check si desea enviar el Descanso Médico</h4>",
+                });
+
+            }
+
+
+
+            function SaveFechaImportante(fechaNombre, fecha, fechaImportante) {
+
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+                var datos = { "TrabajadorId": registroTrabajadorId, "Descripcion": fechaNombre, "Fecha": fecha };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/SaveFechaImportante",
+                    data: datos,
+                    success: function (data) {
+                        if (!data) {
+                            alert("Acceso denegado");
+                            $("#" + fechaImportante).val($.data("#" + fechaImportante, 'current'));
+                        } else {
+                            if (fechaNombre == "FechaPosibleAlta") {
+                                var fechaAislamiento = $("#dtp-FechaAislaminetoCuarentena-" + registroTrabajadorId).val();
+                                CalcularDiasAlta(registroTrabajadorId, fecha, fechaAislamiento);
+                            }
+                            else if (fechaNombre == "FechaPosibleAlta2") {
+                                var fechaAislamiento = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
+                                CalcularDiasAlta2(registroTrabajadorId, fecha, fechaAislamiento);
+                            } else if (fechaNombre == "FechaPosibleAlta3") {
+                                var fechaAislamiento = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId).val();
+                                CalcularDiasAlta3(registroTrabajadorId, fecha, fechaAislamiento);
+
+                            } else if (fechaNombre == "FechaPosibleAlta4") {
+                                var fechaAislamiento = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId).val();
+                                CalcularDiasAlta4(registroTrabajadorId, fecha, fechaAislamiento);
+
+                            } else if (fechaNombre == "FechaPosibleAlta5") {
+                                var fechaAislamiento = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId).val();
+                                CalcularDiasAlta5(registroTrabajadorId, fecha, fechaAislamiento);
+
+                            } else if (fechaNombre == "FechaPosibleAlta6") {
+                                var fechaAislamiento = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId).val();
+                                CalcularDiasAlta6(registroTrabajadorId, fecha, fechaAislamiento);
+
+
+                            } else if (fechaNombre = "FechaAltaMedica") {
+                                CalcularDiasAlta7(registroTrabajadorId, fecha, fechaImportante);
+                            } else if (fechaNombre == "FechaAislaminetoCuarentena") {
+                                var fechaPosibleAlta = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
+                                CalcularDiasAlta(registroTrabajadorId, fechaPosibleAlta, fecha);
+                            }
+
+                            notificarCambio("Fecha " + fechaNombre);
+                           // notificarCambio2();
+                            ActualizarLineaTiempo();
+                        }
+
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+
+            }
+
+            function UpdateEstadoClinico() {
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+                let datos = { "TrabajadorId": registroTrabajadorId };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/UpdateEstadoClinico",
+                    data: datos,
+                    success: function (data) {
+                        //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+            }
+
+            function UpdateComentarioAlta(comentario) {
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+                let datos = { "TrabajadorId": registroTrabajadorId, "Comentario": comentario };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/ComentarioAlta",
+                    data: datos,
+                    success: function (data) {
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+            }
+
+            function tablaExamenes() {
+
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Examen/ListarExamenesTrabajador?trabajadorId=" + registroTrabajadorId,
+                    success: function (data) {
+                        $("#tabla-examenes").empty();
+                        var content = "";
+                        for (var i = 0; i < data.length; i++) {
+                            content += "<tr>";
+                            let fecha = moment(data[i].FechaExamen).format("DD/MM/yyyy");
+                            content += "<td> <a href='#fakelink' class='btn-link'>" + fecha + "</a></td>";
+                            content += "<td>" + data[i].TipoPrueba + "</td>";
+                            content += "<td>" + data[i].Resultado + "</td>";
+                            content += "</tr>";
+                        }
+                        $("#tabla-examenes").append(content);
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+            }
+
+
+
+            function SaveChange(seguimientoId, mensaje, idControl, controlCheck) {
+
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+                let datos = {};
+                if ($("#chk-HipertensionArterial-" + seguimientoId).get(0) != undefined) {
+                    datos = {
+                        "Id": seguimientoId,
+                        "RegistroTrabajadorId": registroTrabajadorId,
+                        "SensacionFiebre": $("#chk-SensacionFiebre-" + seguimientoId).get(0).checked,
+                        "Tos": $("#chk-Tos-" + seguimientoId).get(0).checked,
+                        "DolorGarganta": $("#chk-DolorGarganta-" + seguimientoId).get(0).checked,
+                        "DificultadRespiratoria": $("#chk-DificultadRespiratoria-" + seguimientoId).get(0).checked,
+                        "CongestionNasal": $("#chk-CongestionNasal-" + seguimientoId).get(0).checked,
+                        "Cefalea": $("#chk-Cefalea-" + seguimientoId).get(0).checked,
+                        "MalestarGeneral": $("#chk-MalestarGeneral-" + seguimientoId).get(0).checked,
+                        "PerdidaOlfato": $("#chk-PerdidaOlfato-" + seguimientoId).get(0).checked,
+                        "Asintomatico": $("#chk-Asintomatico-" + seguimientoId).get(0).checked,
+                        "Comentario": $("#txt-Comentario-" + seguimientoId).val(),
+                        "ProximoSeguimiento": $("#dtp-ProximoSeguimiento-" + seguimientoId).val(),
+                        "TipoEstadoId": $("#ddl-TipoEstado-" + seguimientoId + " option:selected").val(),
+                        "HipertensionArterial": $("#chk-HipertensionArterial-" + seguimientoId).get(0).checked,
+                        "HipertensionArterialNoControlada": $("#chk-HipertensionArterialNoControlada-" + seguimientoId).get(0).checked,
+                        "AsmaModeradoSevero": $("#chk-AsmaModeradoSevero-" + seguimientoId).get(0).checked,
+                        "Diabetes": $("#chk-Diabetes-" + seguimientoId).get(0).checked,
+                        "Mayor65": $("#chk-Mayor65-" + seguimientoId).get(0).checked,
+                        "Cancer": $("#chk-Cancer-" + seguimientoId).get(0).checked,
+                        "CardiovascularGrave": $("#chk-CardiovascularGrave-" + seguimientoId).get(0).checked,
+                        "ImcMayor40": $("#chk-ImcMayor40-" + seguimientoId).get(0).checked,
+                        "RenalDialisis": $("#chk-RenalDialisis-" + seguimientoId).get(0).checked,
+                        "PulmonarCronica": $("#chk-PulmonarCronica-" + seguimientoId).get(0).checked,
+                        "TratInmunosupresor": $("#chk-TratInmunosupresor-" + seguimientoId).get(0).checked,
+                        "CasoPositivo": $("#chk-CasoPositivo-" + seguimientoId).get(0).checked,
+                        "CasoSospechoso": $("#chk-CasoSospechoso-" + seguimientoId).get(0).checked,
+                        "RinofaringitisAguda": $("#chk-RinofaringitisAguda-" + seguimientoId).get(0).checked,
+                        "NeumoniaViral": $("#chk-NeumoniaViral-" + seguimientoId).get(0).checked,
+                        "ContactoEnfermedades": $("#chk-ContactoEnfermedades-" + seguimientoId).get(0).checked,
+                        "Aislamiento": $("#chk-Aislamiento-" + seguimientoId).get(0).checked,
+                        "Otros": $("#chk-Otros-" + seguimientoId).get(0).checked,
+                        "OtrosComentar": $("#txt-Otros-" + seguimientoId).val(),
+                        "PAntigeno": $("#chk-PAntigeno-" + seguimientoId).get(0).checked,
+                        "PAntigenos": $("#chk-PAntigenos-" + seguimientoId).get(0).checked,
+                        "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
+                        "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
+                        "Recetamedica": $("#txt-Receta-" + seguimientoId).val()
+                    }
+                } else {
+                    datos = {
+                        "Id": seguimientoId,
+                        "RegistroTrabajadorId": registroTrabajadorId,
+                        //"ClasificacionId": $("#ddl-Calificacion-" + seguimientoId + " option:selected").val(),
+                        "SensacionFiebre": $("#chk-SensacionFiebre-" + seguimientoId).get(0).checked,
+                        "Tos": $("#chk-Tos-" + seguimientoId).get(0).checked,
+                        "DolorGarganta": $("#chk-DolorGarganta-" + seguimientoId).get(0).checked,
+                        "DificultadRespiratoria": $("#chk-DificultadRespiratoria-" + seguimientoId).get(0).checked,
+                        "CongestionNasal": $("#chk-CongestionNasal-" + seguimientoId).get(0).checked,
+                        "Cefalea": $("#chk-Cefalea-" + seguimientoId).get(0).checked,
+                        "MalestarGeneral": $("#chk-MalestarGeneral-" + seguimientoId).get(0).checked,
+                        "PerdidaOlfato": $("#chk-PerdidaOlfato-" + seguimientoId).get(0).checked,
+                        "Asintomatico": $("#chk-Asintomatico-" + seguimientoId).get(0).checked,
+                        "Comentario": $("#txt-Comentario-" + seguimientoId).val(),
+                        "TipoEstadoId": $("#ddl-TipoEstado-" + seguimientoId + " option:selected").val(),
+                        "ProximoSeguimiento": $("#dtp-ProximoSeguimiento-" + seguimientoId).val(),
+                        //"PAntigeno": $("#chk-PAntigeno-" + seguimientoId).get(0).checked
+                        "PAntigenos": $("#chk-PAntigenos-" + seguimientoId).get(0).checked,
+                        "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
+                        "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
+                        "Recetamedica": $("#txt-Receta-" + seguimientoId).val()
+
+                    }
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/UpdateSeguimiento",
+                    data: datos,
+
+                    success: function (data) {
+                        if (!data) {
+                            alert("Acceso denegado");
+                            if (controlCheck == "control-check") {
+                                if ($(idControl).get(0).checked) {
+                                    $(idControl).prop('checked', false);
+                                } else {
+                                    $(idControl).prop('checked', true);
+                                }
+                            } else if (controlCheck == "control-combo") {
+                                $(idControl).val($.data(idControl, 'current'));
+                                $(idControl).selectpicker('refresh');
+                            }
+
+                        } else {
+                            notificarCambio(mensaje);
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+            }
+
+            function BloquearSintomas(id) {
+
+                let tipoSeguimientoId = $("#ddl-TipoSeguimiento-" + id + " option:selected").val();
+
+                if (tipoSeguimientoId == 1) {
+                    $("#panel-checkbox-sintomas-" + id).removeClass("disabledbutton");
+                }
+                else {
+                    $("#panel-checkbox-sintomas-" + id).addClass("disabledbutton");
+
+                    $("#chk-SensacionFiebre-" + id).prop('checked', false);
+                    $("#chk-Tos-" + id).prop('checked', false);
+                    $("#chk-DolorGarganta-" + id).prop('checked', false);
+                    $("#chk-DificultadRespiratoria-" + id).prop('checked', false);
+                }
+            }
+
+            function CalcularDiasAlta(trabajadorId, fechaAlta, fechaAislamiento) {
+
+                if (fechaAlta == undefined || fechaAislamiento == undefined) {
+                    return false;
+                }
+                console.log(fechaAislamiento, fechaAlta)
+                let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 1;
+                console.log("dias", dias);
+                if (dias < 0) {
+                    dias = dias * (-1);
+
+                    bootbox.alert({
+                        size: 'extra-large',
+                        title: "VALIDACIÓN",
+                        message: "<h4 style='color:red'>La fecha de ALTA debe ser mayor a la fecha de INICIO SÍNTOMAS</h4>",
+                    });
+
+                    return false;
+
+                }
+                $("#dtp-FechaPosibleAlta-" + trabajadorId).parent().next('td').html(dias);
+                return true;
+            }
+
+            function CalcularDiasAlta2(trabajadorId, fechaAlta, fechaAislamiento) {
+
+                if (fechaAlta == undefined || fechaAislamiento == undefined) {
+                    return false;
+                }
+                console.log(fechaAislamiento, fechaAlta)
+                let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 0;
+                console.log("dias", dias);
+
+                $("#dtp-FechaPosibleAlta2-" + trabajadorId).parent().next('td').html(dias);
+                return true;
+            }
+
+            function CalcularDiasAlta3(trabajadorId, fechaAlta, fechaAlta2) {
+
+                if (fechaAlta == undefined || fechaAlta2 == undefined) {
+                    return false;
+                }
+                console.log(fechaAlta2, fechaAlta)
+                let dias = (restaFechas(fechaAlta2, fechaAlta)) + 0;
+                console.log("dias", dias);
+
+                $("#dtp-FechaPosibleAlta3-" + trabajadorId).parent().next('td').html(dias);
+                return true;
+            }
+
+            function CalcularDiasAlta4(trabajadorId, fechaAlta, fechaAlta3) {
+
+                if (fechaAlta == undefined || fechaAlta3 == undefined) {
+                    return false;
+                }
+                console.log(fechaAlta3, fechaAlta)
+                let dias = (restaFechas(fechaAlta3, fechaAlta)) + 0;
+                console.log("dias", dias);
+
+                $("#dtp-FechaPosibleAlta4-" + trabajadorId).parent().next('td').html(dias);
+                return true;
+            }
+
+            function CalcularDiasAlta5(trabajadorId, fechaAlta, fechaAlta4) {
+
+                if (fechaAlta == undefined || fechaAlta4 == undefined) {
+                    return false;
+                }
+                console.log(fechaAlta4, fechaAlta)
+                let dias = (restaFechas(fechaAlta4, fechaAlta)) + 0;
+                console.log("dias", dias);
+
+                $("#dtp-FechaPosibleAlta5-" + trabajadorId).parent().next('td').html(dias);
+                return true;
+            }
+
+
+
+            function CalcularDiasAlta6(trabajadorId, fechaAlta, fechaAlta5) {
+
+                if (fechaAlta == undefined || fechaAlta5 == undefined) {
+                    return false;
+                }
+                console.log(fechaAlta5, fechaAlta)
+                let dias = (restaFechas(fechaAlta5, fechaAlta)) + 0;
+                console.log("dias", dias);
+
+                $("#dtp-FechaPosibleAlta6-" + trabajadorId).parent().next('td').html(dias);
+                return true;
+            }
+
+
+            function CalcularDiasAlta7(trabajadorId, fechaAlta, fechaAislamiento) {
+
+                if (fechaAlta == undefined || fechaAislamiento == undefined) {
+                    return false;
+                }
+                console.log(fechaAislamiento, fechaAlta)
+                let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 0;
+                console.log("dias", dias);
+               
+                $("#dtp-FechaAltaMedica-" + trabajadorId).parent().next('td').html(dias);
+                return true;
+            }
+
+            function CalcularDias(idControl, fecha) {
+                let fechaActual = moment(Date.now()).format("DD/MM/yyyy");
+                let dias = (restaFechas(fecha, fechaActual)) + 1;
+                if (dias < 0) {
+                    dias = dias * (-1)
+                }
+                $(idControl).parent().next('td').html(dias);
+            }
+
+            
+            function parseJsonDate(jsonDateString) {
+                return new Date(parseInt(jsonDateString.replace('/Date(', '')));
+            }
+
+            function ListarFechasImportantes() {
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+                $.ajax({
+                    type: "GET",
+                    url: "/MonitoringWorker/ListarFechasImportabtes?idTrabajador=" + registroTrabajadorId,
+                    success: function (data) {
+                        var fechaAislamiento = data.filter((ele) => {
+                            return ele.Descripcion == 'FechaAislaminetoCuarentena'
+                        });
+
+                        var FechaAlta1 = data.filter((ele) => {
+                            return ele.Descripcion == 'FechaPosibleAlta'
+                        });
+
+                        var FechaAlta2 = data.filter((ele) => {
+                            return ele.Descripcion == 'FechaPosibleAlta2'
+                        });
+
+                        var FechaAlta3 = data.filter((ele) => {
+                            return ele.Descripcion == 'FechaPosibleAlta3'
+                        });
+
+                        var FechaAlta4 = data.filter((ele) => {
+                            return ele.Descripcion == 'FechaPosibleAlta4'
+                        });
+
+                        var FechaAlta5 = data.filter((ele) => {
+                            return ele.Descripcion == 'FechaPosibleAlta5'
+                        });
+
+                        var FechaAlta6 = data.filter((ele) => {
+                            return ele.Descripcion == 'FechaPosibleAlta6'
+                        });
+
+
+                      
+
+
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].Descripcion == 'FechaFinSintomas') {
+                                let idControl = $("#dtp-FechaFinSintomas-" + registroTrabajadorId);
+                                //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy") );
+                                idControl.val(data[i].Fecha);
+                            } else if (data[i].Descripcion == 'FechaInicioSintomas') {
+                                let idControl = $("#dtp-FechaInicioSintomas-" + registroTrabajadorId);
+                                //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy"));
+                                idControl.val(data[i].Fecha);
+                            } else if (data[i].Descripcion == 'FechaAislaminetoCuarentena') {
+
+                                let idControl = $("#dtp-FechaAislaminetoCuarentena-" + registroTrabajadorId);
+                                idControl.val(data[i].Fecha);
+
+                            } else if (data[i].Descripcion == 'FechaPosibleAlta') {
+
+                                let idControl = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId);
+                                let fechaAlta = data[i].Fecha;
+
+                                idControl.val(data[i].Fecha);
+
+                                CalcularDiasAlta(registroTrabajadorId, fechaAlta, fechaAislamiento[0].Fecha);
+
+                            } else if (data[i].Descripcion == 'FechaUltimodiatrabajo') {
+                                let idControl = $("#dtp-FechaUltimodiatrabajo-" + registroTrabajadorId);
+                                //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy"));
+                                idControl.val(data[i].Fecha);
+                            } else if (data[i].Descripcion == 'FechaPosibleAlta2') {
+
+                                let idControl = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId);
+                                let fechaAlta = data[i].Fecha;
+
+                                idControl.val(data[i].Fecha);
+
+                                CalcularDiasAlta2(registroTrabajadorId, fechaAlta, FechaAlta1[0].Fecha);
+
+                            } else if (data[i].Descripcion == 'FechaPosibleAlta3') {
+                                let idControl = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId);
+                                let fechaAlta = data[i].Fecha;
+
+                                idControl.val(data[i].Fecha);
+
+                                CalcularDiasAlta3(registroTrabajadorId, fechaAlta, FechaAlta2[0].Fecha);
+
+
+                            } else if (data[i].Descripcion == 'FechaPosibleAlta4') {
+                                let idControl = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId);
+                                let fechaAlta = data[i].Fecha;
+
+                                idControl.val(data[i].Fecha);
+
+                                CalcularDiasAlta4(registroTrabajadorId, fechaAlta, FechaAlta3[0].Fecha);
+
+
+                            } else if (data[i].Descripcion == 'FechaPosibleAlta5') {
+                                let idControl = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId);
+                                let fechaAlta = data[i].Fecha;
+
+                                idControl.val(data[i].Fecha);
+
+                                CalcularDiasAlta5(registroTrabajadorId, fechaAlta, FechaAlta4[0].Fecha);
+
+
+                            } else if (data[i].Descripcion == 'FechaPosibleAlta6') {
+                                let idControl = $("#dtp-FechaPosibleAlta6-" + registroTrabajadorId);
+                                let fechaAlta = data[i].Fecha;
+
+                                idControl.val(data[i].Fecha);
+
+                                CalcularDiasAlta6(registroTrabajadorId, fechaAlta, FechaAlta5[0].Fecha);
+
+                                // var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
+                                // $("#dtp-FechaPosibleAlta6-" + trabajadorId).parent().next('td').html(dias);
+
+                            } else if (data[i].Descripcion == 'FechaAltaMedica') {
+                                let idControl = $("#dtp-FechaAltaMedica-" + registroTrabajadorId);
+                                let fechaAlta = data[i].Fecha;
+
+                                idControl.val(data[i].Fecha);
+
+                                CalcularDiasAlta7(registroTrabajadorId, fechaAlta, FechaAlta6[0].Fecha);
+                            }
+                        }
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+            }
+
+            function ActualizarLineaTiempo() {
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+                $.ajax({
+                    type: "GET",
+                    url: "/MonitoringWorker/GetFechasImportantesJson?trabajadorId=" + registroTrabajadorId,
+
+
+                    success: function (data) {
+                        $(".cd-horizontal-timeline").empty();
+                        var content = "";
+
+                        content += "<div class='timeline'>";
+                        content += "<div class='events-wrapper'>";
+                        content += "<div class='events '>";
+                        content += "<ol id='linea-tiempo'>";
+                        for (var i = 0; i < data.length; i++) {
+                            if (i == 0) {
+                                content += "<li><a href='#0' data-date='" + moment(data[i].Fecha).format("DD/MM/yyyy") + "' class='selected'>" + data[i].DateLine + "</a></li>";
+                            } else {
+                                content += "<li><a href='#0' data-date='" + moment(data[i].Fecha).format("DD/MM/yyyy") + "'>" + data[i].DateLine + "</a></li>";
+                            }
+                        }
+                        content += "</ol>";
+                        content += "<span class='filling-line' aria-hidden='true'></span>";
+                        content += "</div>";
+                        content += "</div>";
+                        content += "<ul class='cd-timeline-navigation'>";
+                        content += "<li><a href='#0' class='prev inactive'>Prev</a></li>";
+                        content += "<li><a href='#0' class='next'>Next</a></li>";
+                        content += "</ul>";
+                        content += "</div>";
+
+                        $(".cd-horizontal-timeline").append(content);
+
+                        initTimeline($(".cd-horizontal-timeline"));
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+            }
+
+        });
+
+        $(document).on('nifty.ready', function () {
+            $('#FechaInicioSintomas .input-group.date').datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
+            $("#dtpFechaExamen").datepicker({
+                autoclose: true, format: 'dd/mm/yyyy', onClose: function () {
+                    this.focus();
+                }
+            });
+
+            $(".fechas").datepicker({
+                autoclose: true,
+                format: 'dd/mm/yyyy',
+                onClose: function (e) {                
+                this.focus();
+                }
+            });
+
+            
+            $(".fechaProximoSeguimiento").datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
+
+            var faIcon = {
+                valid: 'fa fa-check-circle fa-lg text-success',
+                invalid: 'fa fa-times-circle fa-lg',
+                validating: 'fa fa-refresh'
+            }
+
+            
+
+
+
+            $(".dtpFechaInicio").datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
+
+            var faIcon = {
+                valid: 'fa fa-check-circle fa-lg text-success',
+                invalid: 'fa fa-times-circle fa-lg',
+                validating: 'fa fa-refresh'
+            }
+
+            $(".dtpFechaFin").datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
+
+            var faIcon = {
+                valid: 'fa fa-check-circle fa-lg text-success',
+                invalid: 'fa fa-times-circle fa-lg',
+                validating: 'fa fa-refresh'
+            }
+
+
+            $('#form-examen').bootstrapValidator({
+                excluded: ':disabled',
+                feedbackIcons: faIcon,
+                fields: {
+                    validateFechaExamen: {
+                        validators: {
+                            notEmpty: {
+                                message: 'La fecha es requerido'
+                            }
+                        }
+                    }
+                }
+            }).on('success.field.bv', function (e, data) {
+                var $parent = data.element.parents('.form-group');
+
+                // Remove the has-success class
+                $parent.removeClass('has-success');
+            });
+        });
+
+        function CambiarFecha(idSeguimiento, idTrabajador) {
+            bootbox.prompt({
+                title: "Actualizar fecha de seguimiento",
+                inputType: 'date',
+                callback: function (result) {
+
+                    if (result) {
+                        var datos = { "SeguimientoId": idSeguimiento, "Fecha": result, "TrabajadorId": idTrabajador };
+                        $.ajax({
+                            type: "POST",
+                            url: "/MonitoringWorker/UpdateFechaSeguimiento",
+                            data: datos,
+                            success: function (data) {
+                                if (data == "") {
+                                    alert("Conflicto de fechas");
+                                }
+                                window.location = "/MonitoringWorker/RegisterMonitoring?id=" + idTrabajador
+
+                            },
+                            error: function (jqXHR, exception) {
+                                alert("Ocurrió un error en la operación")
+                            }
+                        });
+                    } else {
+                        $.niftyNoty({
+                            type: 'danger',
+                            icon: 'pli-cross icon-2x',
+                            message: 'Se canceló la operación.',
+                            container: 'floating',
+                            timer: 3000
+                        });
+                    };
+
+                }
+            });
+        }
+
+        function DisableControlInputOtros(id) {
+            if ($("#chk-Otros-" + id).val() == undefined) return;
+
+            var val = $("#chk-Otros-" + id).get(0).checked;
+            if (val) {
+                $("#txt-Otros-" + id).prop("disabled", false);
+            } else {
+                $("#txt-Otros-" + id).prop("disabled", true);
+                $("#txt-Otros-" + id).val('');
+            }
+
+        }
+
+        function viewAltaMedica(idTrabajador, comentario) {
+            window.location.href = "/MonitoringWorker/ExportAltaMedica?id=" + idTrabajador + "&comentario=" + comentario;
+        }
+
+
+        // CODIGO PARA EL ENVIO DE LOS DATOS PARA EL ENVIO DE LA NOTIFICACION POR CORREO -  Creado por Saul Ramos
+
+
+        function checkFluency(seguimientoId) {
+            var Valordelchk = $("#chk-PAntigenos-" + seguimientoId).get(0).checked;
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+            var datos = { "TrabajadorId": registroTrabajadorId };
+
+
+            if (Valordelchk == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarSolicituddePruebas",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+            }
+        }
+
+
+        // CODIGO PARA EL ENVIO DE LOS DATOS PARA EL ENVIO DE LA NOTIFICACION POR CORREO PRUEBA 5DIAS - Creado por Saul Ramos
+
+        function checkFluency5(seguimientoId) {
+            var Valordelchk = $("#chk-PAntigenos5-" + seguimientoId).get(0).checked;
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+            var datos = { "TrabajadorId": registroTrabajadorId };
+
+
+            if (Valordelchk == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarSolicituddePruebas5dias",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+            }
+        }
+
+
+        //CODIGO ENVIO PULSOOXIMETRO -  Creado por Saul Ramos
+
+
+
+        function checkFluencyP(seguimientoId) {
+            var Valordelchk = $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked;
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+            var datos = { "TrabajadorId": registroTrabajadorId };
+
+
+            if (Valordelchk == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarSolicituddePruebasPulsoOximetro",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+            }
+        }
+
+        //CODIGO ENVIO DE DM
+
+        //function checkFluencypd1(trabajadorId) {
+        //    var Valordelchk = $("#chk-PrimerDescanso-" + trabajadorId).get(0).checked;
+        //    let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        //    var Descripcion = "FechaPosibleAlta";
+        //    var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+        //    if (Valordelchk == true) {
+
+        //        $.ajax({
+        //            type: "POST",
+        //            url: "/MonitoringWorker/EnviarDescansoMedico1",
+        //            data: datos,
+        //            success: function (data) {
+        //                $('.cargaEsperar').modal('hide');
+
+        //                //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+        //                //                //window.location = "/Home/index";
+        //            },
+        //            error: function (jqXHR, exception) {
+        //                alert("Ocurrió un error en la operación");
+        //                $('.cargaEsperar').modal('hide');
+
+
+        //            }
+        //        });
+
+        //    }
+
+        //}
+
+
+
+        //CODIGO ENVIO DE DM - CAMBIO Saul Ramos Vega 14/07/2021
+
+        function checkFluencypd1(trabajadorId) {
+            var Valordelddl = $("#ddl-TipoRango" + "option:selected").val();
+
+            //    //let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            //    //var seguimientoId = seguimientoId;
+
+            var datos = { "trabajadorId": trabajadorId, };
+
+
+            //    console.log(trabajadorId);
+            //    //Habilitar para pruebas 22/06/2021
+            if (Valordelddl == 1) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarDescansoMedico1",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //            //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //            //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+            }
+
+        }
+
+        function checkFluencypd2(trabajadorId) {
+            var Valordelchk = $("#chk-SegundoDescanso-" + trabajadorId).get(0).checked;
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            var Descripcion = "FechaPosibleAlta2";
+            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+            if (Valordelchk == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarDescansoMedico2",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+            }
+        }
+
+
+
+        function checkFluencypd3(trabajadorId) {
+            var Valordelchk = $("#chk-TercerDescanso-" + trabajadorId).get(0).checked;
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            var Descripcion = "FechaPosibleAlta3";
+            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+            if (Valordelchk == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarDescansoMedico3",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+            }
+        }
+
+
+
+        function checkFluencypd4(trabajadorId) {
+            var Valordelchk = $("#chk-CuartoDescanso-" + trabajadorId).get(0).checked;
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            var Descripcion = "FechaPosibleAlta4";
+            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+            if (Valordelchk == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarDescansoMedico4",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+            }
+        }
+
+
+
+        function checkFluencypd5(trabajadorId) {
+            var Valordelchk = $("#chk-QuintoDescanso-" + trabajadorId).get(0).checked;
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            var Descripcion = "FechaPosibleAlta5";
+            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+            if (Valordelchk == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarDescansoMedico5",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+            }
+        }
+
+
+        function checkFluencypd6(trabajadorId) {
+            var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            var Descripcion = "FechaPosibleAlta6";
+            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+            if (Valordelchk == true) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/MonitoringWorker/EnviarDescansoMedico6",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+            }
+        }
+
+
+        //CODIGO PARA EL ENVIO DE LOS DATOS A GRABAR PARA LA RECETA MEDICA  creado por Saul Ramos
+        function Recetamedica(seguimientoId) {
+
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            let RecetasMedicas = $("#txt-Receta-" + seguimientoId).val();
+
+
+
+            var datos = { "TrabajadorId": registroTrabajadorId, "SeguimientoId": seguimientoId, "Receta": RecetasMedicas };
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/DarRegistrarReceta",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+
+                    //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
+                }
+            });
+
+        }
+
+        //Actualizar Tabla de Rangos en la ventana : Saul Ramos Vega 20210715
+        function tablaTipoRango() {
+
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+            $.ajax({
+                type: "GET",
+                url: "/MonitoringWorker/GetTipoRangoJson?trabajadorId=" + registroTrabajadorId,
+                success: function (data) {
+                    $("#tabla-TIPORANGO").empty();
+                    var content = "";
+                    for (var i = 0; i < data.length; i++) {
+                        content += "<tr>";
+                        let fecha1 = moment(data[i].FechaInicio).format("DD/MM/yyyy");
+                        let fecha2 = moment(data[i].FechaFin).format("DD/MM/yyyy");
+                        content += "<td> <a href='#fakelink' class='btn-link'>" + fecha1 + "</a></td>";
+                        content += "<td><a href='#fakelink' class='btn-link'>" + fecha2 + "</a></td>";
+                        content += "<td>" + data[i].Descripcion + "</td>";
+                        content += "</tr>";
+                    }
+                    $("#tabla-TIPORANGO").append(content);
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+        }
+
+        //Validar fechas : : Saul Ramos Vega 20210715
+        function notificarCambio2() {
+            var FechaInicio = $("#dtpFechaInicio").val();
+            var FechaFin = $("#dtpFechaFin-").val();
+
+
+
+            const fechaParseInicio = moment(FechaInicio, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+            var fechaActualParseFin = moment(FechaFin, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+
+
+            if (fechaParseInicio > fechaActualParseFin) {
+
+
+                bootbox.alert({
+                    size: 'extra-large',
+                    title: "IMPORTANTE",
+                    message: "<h4 style='color:blue'>La Fecha de Inicio, No debe ser mayor a la Fecha de Fin</h4>",
+
+                });
+
+            } else if (fechaActualParseFin < fechaParseInicio) {
+
+                bootbox.alert({
+                    size: 'extra-large',
+                    title: "IMPORTANTE",
+                    message: "<h4 style='color:blue'>La Fecha de Fin, No debe ser menor a la Fecha de Inicio</h4>",
+
+                });
+
+
+            }
+        }
+
+
+
+
+        //DESHABILITAR - HABILITAR OPCIONES EN POPUP  - Creado por Saul Ramos
+        function checkFluencyDD1() {
+            //var SelecDM = $("#ddl-TipoRango" + "option:selected").val();
+
+            var SelecDM = $("#ddl-TipoRango").val();
+
+            if (SelecDM == 1) {
+
+                $("#ddl-Diagnostico").prop("disabled", false);
+
+                $("#ddl-Diagnostico").focus;
+
+                //$("#ddl-Diagnostico").on("click", handler).
+
+                $("#MensajeDiagnostico").prop("hidden", false);
+
+                $("#MensajeDiagnostico").val("DEBE SELECCIONAR UN DIAGNOSTICO");
+            }
+            else {
+                $("#ddl-Diagnostico").prop("disabled", true);
+                
+                $("#MensajeDiagnostico").prop("hidden", true);
+
+                $("#ddl-Diagnostico").val("0");
+
+
+            }
+        }
+
+
+        //js/datatable.js
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "columnDefs": [{
+                    "targets": 0
+                }],
+                language: {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ resultados",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "Ningún dato disponible en esta tabla",
+                    "sInfo": "Mostrando resultados _START_-_END_ de  _TOTAL_",
+                    "sInfoEmpty": "Mostrando resultados del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Último",
+                        "sNext": "Siguiente",
+                        "sPrevious": "Anterior"
+
+                        
+                    },
+                }
+            });
+        });
+
+
+
+
+
+
+    </script>

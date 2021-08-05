@@ -1,0 +1,30 @@
+[
+  {
+    "usuario": "Francisco",
+    "clave": "12345678",
+    "Empresas": [
+      {
+        "empresa": "SalusLaboris",
+        "EmpresaCodigo": 1
+      },
+      {
+        "empresa": "Ambev",
+        "EmpresaCodigo": 3
+      }
+    ]
+  },
+  {
+    "usuario": "Luis",
+    "clave": "12345678",
+    "Empresas": [
+      {
+        "empresa": "Backus",
+        "EmpresaCodigo": 2
+      },
+      {
+        "empresa": "SalusLaboris",
+        "EmpresaCodigo": 1
+      }
+    ]
+  }
+]
