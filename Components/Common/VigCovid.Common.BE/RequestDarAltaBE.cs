@@ -25,6 +25,7 @@
 
         public string Diagnostico { get; set; }
 
+        public string EmpresaPrincipalId { get; set; }
 
     }
 }

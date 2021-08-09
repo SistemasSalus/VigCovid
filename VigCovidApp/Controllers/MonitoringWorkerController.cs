@@ -504,7 +504,7 @@ namespace VigCovidApp.Controllers
 
                 if (oRequestDarAltaBE.TipoRango == 1)
                 {
-                    EnviarDM(oRequestDarAltaBE.TrabajadorId);
+                    EnviarDM(oRequestDarAltaBE.TrabajadorId, oRequestDarAltaBE.EmpresaPrincipalId, oRequestDarAltaBE.Diagnostico);
                 }
                 else
                 {
@@ -1040,7 +1040,7 @@ namespace VigCovidApp.Controllers
 
             MemoryStream memoryStream = GetPdfAltaMedica(datosAlta);
 
-            // Hacer una copia en memoria, una sera usada para el correo y el proceso de devoler el PDF
+            // Hacer una copia en memoria, una sera usada para el correo y el proceso de devoler el PDF - Saul Ramos Vega
             var position = memoryStream.Position;
             var archivoPDFDescarga = new MemoryStream();
             memoryStream.CopyTo(archivoPDFDescarga);
@@ -1344,11 +1344,15 @@ namespace VigCovidApp.Controllers
         }
 
 
-        public void EnviarDM(int id)
+        public void EnviarDM(int id, string eid, string Diagnostico)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
             var oReportAltaBL = new ReportAltaBL();
-            var datosAlta = oReportAltaBL.EnviarDocumentoDM1(id, sessione.IdUser);
+            var empresa = eid;
+
+            if (empresa == "BACKUS" || empresa == "Backus"  || empresa == "UCP" || empresa == "CERVECERIA" || empresa == "San")
+            { 
+            var datosAlta = oReportAltaBL.EnviarDocumentoDM1(id, sessione.IdUser,Diagnostico);
 
             //if (comentario != null)
             //{
@@ -1411,9 +1415,10 @@ namespace VigCovidApp.Controllers
 
 
             {
-                Subject = "DESCANSO MEDICO",
+                Subject = "DESCANSO MEDICO, " + datosAlta.Trabajador,
+
                 IsBodyHtml = true,
-                Body = "Se adjunta el Descanso Médico"
+                Body = "Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + " < br > " + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
             };
 
             mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
@@ -1426,8 +1431,9 @@ namespace VigCovidApp.Controllers
             };
 
             smtpClient.Send(mailMessage);
-            #endregion
+                #endregion
 
+            }
         }
 
 

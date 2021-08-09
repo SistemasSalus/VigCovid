@@ -193,123 +193,123 @@ style{
                                         </div>
                                     </div>
                                 </div>
-                                @*<div class="input-group mb-3">
-                                        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="button">Button</button>
-                                        </div>
-                                    </div>*@
-                            </div>
+                               
+                            @*</div>---*@
                         </div>
                         @**@
                         @*class="table table-bordered table-hover toggle-circle"*@
                         @*<table id="table-Lista-Trabajadores" class="table table-striped" data-page-length='50' data-order='[[ 1, "asc" ]]'>*@
 
-                        <table id="table-Lista-Trabajadores" data-page-size="1000" class="table table-striped">
+                            
 
-                            @*class="table table-sm table-striped table-hover table-bordered">*@
-                            @*data-order='[[ 1, "asc" ]]'*@
+                        @*<table id="" data-page-size="1000" class="table table-striped">*@
+                    <table id="table-Lista-Trabajadores" data-page-size="1000" class="display">
+                        @*class="table table-sm table-striped table-hover table-bordered">*@
+                        @*data-order='[[ 1, "asc" ]]'*@
 
 
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th data-toggle="true">Trabajador</th>
-                                    <th>DNI</th>
-                                    <th>Empresa Empleadora</th>
-                                    <th>Sede</th>
-                                    <th data-hide="phone, tablet">Edad</th>
-                                    <th data-hide="phone, tablet">Fecha INGRESO</th>
-                                    <th data-hide="phone, tablet">Fecha ALTA</th>
-                                    <th data-hide="phone, tablet" class="text-center">Modo de ingreso</th>
-                                    <th data-hide="phone, tablet" class="text-center">Estado Actual</th>
-                                    <th data-hide="phone, tablet" class="text-center">Médico Asignado </th>
-                                    <th data-hide="phone, tablet" class="text-center">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-Lista-Trabajadores">
-                                @foreach (var trabajador in Model)
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Trabajador</th>
+                                @*//<th data-toggle="true">Trabajador</th>*@
+                                <th>DNI</th>
+                                <th>Empresa Empleadora</th>
+                                <th>Sede</th>
+                                <th>Edad</th>
+                                <th>Fecha INGRESO</th>
+                                <th>Fecha ALTA</th>
+                                <th>Modo de ingreso</th>
+                                <th>Estado Actual</th>
+                                <th>Médico Asignado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var trabajador in Model)
+                            {
+                                if (trabajador.RegistroTrabajadorId == 107)
                                 {
-                                    if (trabajador.RegistroTrabajadorId == 107)
-                                    {
 
+                                }
+                                <tr>
+                                    @*SI ES PROPIETARIO PUEDE MODIFICAR*@
+                                    <td>@trabajador.Indice</td>
+                                    @if (trabajador.Propietario)
+                                    {
+                                        <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
                                     }
-                                    <tr>
-                                        @*SI ES PROPIETARIO PUEDE MODIFICAR*@
-                                        <td>@trabajador.Indice</td>
-                                        @if (trabajador.Propietario)
+                                    else
+                                    {
+                                        if (trabajador.PermisoLectura && !trabajador.Propietario)
                                         {
                                             <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
                                         }
                                         else
                                         {
-                                            if (trabajador.PermisoLectura && !trabajador.Propietario)
-                                            {
-                                                <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
-                                            }
-                                            else
-                                            {
-                                                <td>@Html.DisplayFor(modelItem => trabajador.NombreCompleto)</td>
-                                            }
+                                            <td>@Html.DisplayFor(modelItem => trabajador.NombreCompleto)</td>
                                         }
+                                    }
 
-                                        <td>@Html.DisplayFor(modelItem => trabajador.Dni)</td>
-                                        <td>@Html.DisplayFor(modelItem => trabajador.EmpresaEmpleadora)</td>
-                                        <td>@Html.DisplayFor(modelItem => trabajador.Sede)</td>
-                                        <td><span class="text-muted">@Html.DisplayFor(modelItem => trabajador.Edad)</span></td>
-                                        <td>@Html.DisplayFor(modelItem => trabajador.FechaIngreso)</td>
-                                        <td>@Html.DisplayFor(modelItem => trabajador.FechaAlta)</td>
-                                        <td class="text-center text-uppercase">
-                                            @Html.DisplayFor(modelItem => trabajador.ModoIngreso)
-                                        </td>
-                                        <td class="text-center">@Html.DisplayFor(modelItem => trabajador.EstadoDiario)</td>
-                                        <td class="text-center">@Html.DisplayFor(modelItem => trabajador.MedicoVigila)</td>
-                                        <td class="text-center">
-                                            @*<div id="btn-editar-@trabajador.RegistroTrabajadorId" class="label label-table label-success cursor-pointer" data-toggle="modal" data-target="#modal-editar-trabajador">Editar registro</div>
-                                                <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label label-table label-danger cursor-pointer btn-elimnar-registro">Eliminar</div>*@
+                                    <td>@Html.DisplayFor(modelItem => trabajador.Dni)</td>
+                                    <td>@Html.DisplayFor(modelItem => trabajador.EmpresaEmpleadora)</td>
+                                    <td>@Html.DisplayFor(modelItem => trabajador.Sede)</td>
+                                    <td><span class="text-muted">@Html.DisplayFor(modelItem => trabajador.Edad)</span></td>
+                                    <td>@Html.DisplayFor(modelItem => trabajador.FechaIngreso)</td>
+                                    <td>@Html.DisplayFor(modelItem => trabajador.FechaAlta)</td>
+                                    <td class="text-center text-uppercase">
+                                        @Html.DisplayFor(modelItem => trabajador.ModoIngreso)
+                                    </td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => trabajador.EstadoDiario)</td>
+                                    <td class="text-center">@Html.DisplayFor(modelItem => trabajador.MedicoVigila)</td>
+                                    <td class="text-center">
+                                        @*<div id="btn-editar-@trabajador.RegistroTrabajadorId" class="label label-table label-success cursor-pointer" data-toggle="modal" data-target="#modal-editar-trabajador">Editar registro</div>
+                        <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label label-table label-danger cursor-pointer btn-elimnar-registro">Eliminar</div>*@
 
-                                            @*Modificado por Saul Ramos V - 13072021*@
-                                            <div id="btn-editar-@trabajador.RegistroTrabajadorId" data-toggle="modal" data-target="#modal-editar-trabajador" class="label cursor-pointer"><img src="~/img/editarREGISTROS.png" title="EDITAR" width="22" height="20" /></div>
-                                            <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label cursor-pointer btn-elimnar-registro"><img src="~/img/eliminarREGISTRO.png" title="ELIMINAR" width="22" height="20" /></div>
+                                        @*Modificado por Saul Ramos V - 13072021*@
+                                        <div id="btn-editar-@trabajador.RegistroTrabajadorId" data-toggle="modal" data-target="#modal-editar-trabajador" class="label cursor-pointer"><img src="~/img/editarREGISTROS.png" title="EDITAR" width="22" height="20" /></div>
+                                        <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label cursor-pointer btn-elimnar-registro"><img src="~/img/eliminarREGISTRO.png" title="ELIMINAR" width="22" height="20" /></div>
 
 
 
-                                        </td>
-                                        <td class="text-center">
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                            @*<tfoot>
-                                    <tr>
-                                        <td colspan="12" class="footable-visible">
-                                            <div class="text-right">
-                                                <ul class="pagination">
-                                                    <li class="footable-page-arrow">
-                                                        <a data-page="first" href="#first">«</a>
-                                                    </li>
-                                                    <li class="footable-page-arrow">
-                                                        <a data-page="prev" href="#prev">‹</a>
-                                                    </li>
-                                                    <li class="footable-page">
-                                                        <a data-page="0" href="#">1</a>
-                                                    </li>
-                                                    <li class="footable-page active">
-                                                        <a data-page="1" href="#">2</a>
-                                                    </li>
-                                                    <li class="footable-page-arrow disabled">
-                                                        <a data-page="next" href="#next">›</a>
-                                                    </li>
-                                                    <li class="footable-page-arrow disabled">
-                                                        <a data-page="last" href="#last">»</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tfoot>*@
-                        </table>
+                                    </td>
+                                    <td class="text-center">
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+             
+                        @*<tfoot>
+            <tr>
+                <td colspan="12" class="footable-visible">
+                    <div class="text-right">
+                        <ul class="pagination">
+                            <li class="footable-page-arrow">
+                                <a data-page="first" href="#first">«</a>
+                            </li>
+                            <li class="footable-page-arrow">
+                                <a data-page="prev" href="#">‹</a>
+                            </li>
+                            <li class="footable-page">
+                                <a data-page="0" href="#">1</a>
+                            </li>
+                            <li class="footable-page active">
+                                <a data-page="1" href="#">2</a>
+                            </li>
+                            <li class="footable-page-arrow disabled">
+                                <a data-page="next" href="#next">›</a>
+                            </li>
+                            <li class="footable-page-arrow disabled">
+                                <a data-page="last" href="#last">»</a>
+                            </li>
+                        </ul>
                     </div>
+                </td>
+            </tr>
+        </tfoot>*@
+                    </table>
+                   </div>
                 </div>
             </div>
         </div>
@@ -546,15 +546,17 @@ style{
                                                     <label class="control-label">Emp. Principal</label>
                                                     <select class="selectpicker" id="ddlEmpresaRegistro" name="validateEmpresaRegistro" data-width="90%">
                                                         @*<option> </option>
-                                                            <option value="1">BACKUS</option>
-                                                            <option value="2">AMBEV</option>
-                                                            <option value="3">TRANSPORTE 77</option>
-                                                            <option value="4">NAVIERA ORIENTE S.A.C.</option>
-                                                            <option value="5">BARBARIAN</option>
-                                                            <option value="6">PERU LNG</option>*@
+        <option value="1">BACKUS</option>
+        <option value="2">AMBEV</option>
+        <option value="3">TRANSPORTE 77</option>
+        <option value="4">NAVIERA ORIENTE S.A.C.</option>
+        <option value="5">BARBARIAN</option>
+        <option value="6">PERU LNG</option>*@
+                                                        <option value="0" selected>Seleccione...</option>
 
                                                         @foreach (var item in @ViewBag.EmpresasRegistro)
                                                         {
+
                                                             <option value="@item.EmpresaId">@item.EmpresaNombre</option>
                                                         }
                                                     </select>
@@ -566,10 +568,16 @@ style{
                                                     <label class="control-label">Sede</label>
                                                     <select class="selectpicker" id="ddlSedeRegistro" name="validateEmpresaRegistro" data-width="90%">
                                                         <option> </option>
-                                                        @foreach (var item in @ViewBag.SEDESASIGNADAS)
-                                                        {
-                                                            <option value="@item.SedeId">@item.SedeNombre</option>
-                                                        }
+
+                                                      
+
+                                                            @foreach (var item in @ViewBag.SEDESASIGNADAS)
+                                                            {
+                                                                <option value="@item.SedeId">@item.SedeNombre</option>
+                                                            }
+
+                                                    
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -911,9 +919,11 @@ style{
 
 
 <!--datatables-->
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
-    <script src="~/Scripts/jquery-ui.js"></script>
-    <script src="https://malsup.github.io/jquery.blockUI.js"></script>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+
+<script src="~/Scripts/jquery-ui.js"></script>
+<script src="https://malsup.github.io/jquery.blockUI.js"></script>
 
 <!-- This is highcharts -->
 <script src="~/Scripts/Highcharts/highcharts.js"></script>
@@ -924,7 +934,10 @@ style{
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 
 
-    @*<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<link rel= "stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+
+@*<script src="//code.jquery.com/jquery-1.12.4.js"></script>
     <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
 
 <script>
@@ -940,6 +953,8 @@ style{
         function viewAltaMedica(idTrabajador) {
             window.location.href = "/MonitoringWorker/ExportAltaMedica?id=" + idTrabajador;
         }
+
+
 
         function eliminarRegistro(idRegistro, trabajador) {
 
@@ -2364,7 +2379,9 @@ style{
     //    });
     //});
 
-
+    $(document).ready(function () {
+        $('#table-Lista-Trabajadores').DataTable();
+    });
 
 
 

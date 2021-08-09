@@ -217,7 +217,7 @@
                                     @if (item.FechaFin == null)
                                     {
                                         <td>@item.FechaInicio.ToString("dd/MM/yyyy")</td>
-                                        <td>Sin Registro</td>
+                                        <td>Dado de Alta</td>
                                         @*<td>@item.FechaFin.ToString("dd/MM/yyyy")</td>*@
                                         <td>@item.Descripcion</td>
 
@@ -1069,8 +1069,8 @@
                                         <label class="control-label">Diagnóstico</label>
                                         <select id="ddl-Diagnostico" name="ddl-Diagnostico" data-width="80%" style="width:147px;height:31px " disabled>
                                             <option value="0">Ninguno</option>
-                                            <option value="1">U07.1 COVID-19, virus identificado</option>
-                                            <option value="2">U07.2 COVID-19, virus no identificado</option>
+                                            <option value="1">U07.1 COVID-19 virus identificado</option>
+                                            <option value="2">U07.2 COVID-19 virus no identificado</option>
                                             <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
                                             <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
                                             <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
@@ -1323,8 +1323,8 @@
                 let TipoRango = $("#ddl-TipoRango").val();
                 let trabajadorId = $("#txtRegistroTrabajadoId").val();
                 let Diagnostico = $("#ddl-Diagnostico").val();
-
-                var datos = { "FechaInicio": FechaInicio, "FechaFin": FechaFin, "TipoRango": TipoRango, "TrabajadorId": trabajadorId, "Diagnostico": Diagnostico };
+                var EmpresaPrincipalId = document.getElementById("EmpresaPrincipalId").value;
+                var datos = { "FechaInicio": FechaInicio, "FechaFin": FechaFin, "TipoRango": TipoRango, "TrabajadorId": trabajadorId, "Diagnostico": Diagnostico, "EmpresaPrincipalId":EmpresaPrincipalId};
 
                 $.ajax({
                     type: "POST",

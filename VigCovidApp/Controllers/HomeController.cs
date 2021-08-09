@@ -1730,6 +1730,9 @@ namespace VigCovidApp.Controllers
             return seguimientos[0].NroSeguimiento;
         }
 
+
+
+
         private string ObtenerNombreCalificacion(int clasificacionId)
         {
             if (clasificacionId == 1)
