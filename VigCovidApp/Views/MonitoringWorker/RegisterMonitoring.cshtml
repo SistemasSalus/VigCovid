@@ -1067,7 +1067,7 @@
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <label class="control-label">Diagnóstico</label>
-                                        <select id="ddl-Diagnostico" name="ddl-Diagnostico" data-width="80%" style="width:147px;height:31px " disabled>
+                                        <select id="ddl-Diagnostico" name="ddl-Diagnostico" data-width="80%" onchange="checkFluencyDD2()" style="width:147px;height:31px " disabled>
                                             <option value="0">Ninguno</option>
                                             <option value="1">U07.1 COVID-19 virus identificado</option>
                                             <option value="2">U07.2 COVID-19 virus no identificado</option>
@@ -1337,6 +1337,7 @@
                             alert("Acceso denegado");
                         } else {
                             tablaTipoRango();
+                            notificarCambio2();
                             //ActualizarLineaTiempo();
                         }
 
@@ -1584,10 +1585,10 @@
             }
 
             function notificarCambio2() {
-                bootbox.alert({
+                bootbox.dialog({
                     size: 'extra-large',
                     title: "IMPORTANTE",
-                    message: "<h4 style='color:blue'>No olvide habilitar el check si desea enviar el Descanso Médico</h4>",
+                    message: "<h4 style='color:blue'>Se ha realizado el Registro con éxito</h4>",
                 });
 
             }
@@ -2705,6 +2706,25 @@
 
             }
         }
+
+
+        //DESHABILITAR - HABILITAR OPCIONES EN POPUP  - Creado por Saul Ramos
+        function checkFluencyDD2() {
+            //var SelecDM = $("#ddl-TipoRango" + "option:selected").val();
+
+            var SelecDM = $("#ddl-Diagnostico").val();
+
+            if (SelecDM >= 1) {
+
+             
+                $("#MensajeDiagnostico").val("");
+            }
+            else {
+
+                $("#MensajeDiagnostico").val("DEBE SELECCIONAR UN DIAGNOSTICO");
+            }
+        }
+
 
 
         //js/datatable.js

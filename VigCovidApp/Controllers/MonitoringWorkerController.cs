@@ -1418,7 +1418,7 @@ namespace VigCovidApp.Controllers
                 Subject = "DESCANSO MEDICO, " + datosAlta.Trabajador,
 
                 IsBodyHtml = true,
-                Body = "Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + " < br > " + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
+                Body = "Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + "<br>" + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada" + "<br>" + "el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
             };
 
             mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
@@ -2180,6 +2180,7 @@ namespace VigCovidApp.Controllers
 
                     Font fontTitle1 = FontFactory.GetFont(FontFactory.HELVETICA, 15, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
                     Font fontTitle2 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitle44 = FontFactory.GetFont(FontFactory.HELVETICA, 13, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
                     Font fontTitleTable = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
                     Font fontTitleTableNegro = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
                     Font fontSubTitle = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.White));
@@ -2222,7 +2223,7 @@ namespace VigCovidApp.Controllers
                         new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
                         //new PdfPCell(new Phrase("-Z29.0 Aislamiento",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
