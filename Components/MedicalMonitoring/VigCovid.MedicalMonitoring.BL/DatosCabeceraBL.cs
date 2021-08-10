@@ -102,7 +102,7 @@ namespace VigCovid.MedicalMonitoring.BL
                 //registroTrabajador.ComentarioAlta = oRequestDarAltaBE.ComentarioAlta;
                 //registroTrabajador.EstadoClinicoId = 1;
 
-                UpdateFechasImportantesDM(oRequestDarAltaBE.TrabajadorId, oRequestDarAltaBE.FechaInicio, oRequestDarAltaBE.FechaFin,oRequestDarAltaBE.TipoRango,oRequestDarAltaBE.Diagnostico);
+                UpdateFechasImportantesDM(oRequestDarAltaBE.TrabajadorId, oRequestDarAltaBE.FechaInicio, oRequestDarAltaBE.FechaFin,oRequestDarAltaBE.TipoRango,oRequestDarAltaBE.Diagnostico,oRequestDarAltaBE.NroDias);
                 // InsertFechaImportanteAltaMedica(oRequestDarAltaBE.TrabajadorId, Convert.ToDateTime(oRequestDarAltaBE.FechaAlta));
                 // UpdateRegistroTrabajadorParaReceta(oRequestDarAltaBE.TrabajadorId, oRequestDarAltaBE.UsuarioId, oRequestDarAltaBE.Receta);
 
@@ -116,10 +116,6 @@ namespace VigCovid.MedicalMonitoring.BL
                 throw;
             }
         }
-
-
-
-
 
 
 
@@ -191,7 +187,7 @@ namespace VigCovid.MedicalMonitoring.BL
         //ACTUALIZAR INFORMACION DEL DESCANSO MEDICO
 
 
-        private void UpdateFechasImportantesDM(int id, string FechaInicio, string FechaFin, int TipoRango, string Diagnostico)
+        private void UpdateFechasImportantesDM(int id, string FechaInicio, string FechaFin, int TipoRango, string Diagnostico, int NroDias)
         {
             using (SqlConnection con = new SqlConnection(Constants.CONEXION))
             {
@@ -204,6 +200,7 @@ namespace VigCovid.MedicalMonitoring.BL
                     cmd.Parameters.Add("@FechaFin", SqlDbType.Date).Value = FechaFin;
                     cmd.Parameters.Add("@TipoRango", SqlDbType.Int).Value = TipoRango;
                     cmd.Parameters.Add("@Diagnostico", SqlDbType.Int).Value = Diagnostico;
+                    cmd.Parameters.Add("@NroDias", SqlDbType.Int).Value = NroDias;
 
                     try
                     {

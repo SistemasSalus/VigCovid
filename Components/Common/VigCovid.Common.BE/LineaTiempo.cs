@@ -16,6 +16,8 @@ namespace VigCovid.Common.BE
 
         public string Diagnostico { get; set; }
 
+        public int? NroDias { get; set; }
+
         public bool DM { get; set; }
     }
 }

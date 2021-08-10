@@ -23,6 +23,10 @@
 
         public int TipoRango { get; set; }
 
+
+        public int NroDias { get; set; }
+
+
         public string Diagnostico { get; set; }
 
         public string EmpresaPrincipalId { get; set; }

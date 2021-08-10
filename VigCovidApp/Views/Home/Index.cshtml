@@ -1679,7 +1679,7 @@ style{
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
 
-                bootbox.confirm("¿Está seguro de registrar trabajador?", function (result) {
+                bootbox.confirm("¿Está seguro de registrar al trabajador?", function (result) {
 
                     var datos = poblarEntidadRegistroTrabajador();
                     console.log("DATOS", datos);
@@ -1692,7 +1692,7 @@ style{
 
                                 console.log("DATA", data);
                                 if (data == "DNI") {
-                                    alert("El trabajador ya ha sido registrado");
+                                    alert("El trabajador ya ha sido registrado, ¿Aún así desea registrarlo?");
                                 }
                                 else if (data == "NOM") {
 

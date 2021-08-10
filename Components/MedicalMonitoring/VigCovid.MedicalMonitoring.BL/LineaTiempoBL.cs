@@ -123,7 +123,8 @@ namespace VigCovid.MedicalMonitoring.BL
                 //oFechaInicioSintomas.FechaFin = Nullable<item.FechaFin>;
                 oFechaInicioSintomas.Descripcion = item.Descripcion;
                 oFechaInicioSintomas.TipoRango = item.TipoRango;
-                oFechaInicioSintomas.Diagnostico = item.Diagnostico;
+                oFechaInicioSintomas.NroDias = item.NroDias;
+
                 fechas.Add(oFechaInicioSintomas);
 
                   
