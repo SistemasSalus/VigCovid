@@ -4,6 +4,8 @@ namespace VigCovid.Common.BE
 {
     public class LineaTiempo
     {
+
+        public int Id { get; set; }
         public DateTime Fecha { get; set; }
         public string DateLine { get; set; }
         public string DateDate { get; set; }
@@ -19,5 +21,6 @@ namespace VigCovid.Common.BE
         public int? NroDias { get; set; }
 
         public bool DM { get; set; }
+
     }
 }

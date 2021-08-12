@@ -110,7 +110,7 @@ namespace VigCovid.MedicalMonitoring.BL
                 var oFechaInicioSintomas = new LineaTiempo();
 
 
-
+                oFechaInicioSintomas.Id = item.Id;
                 oFechaInicioSintomas.FechaInicio = item.FechaInicio.Value;
                 oFechaInicioSintomas.FechaFin = item.FechaFin;
 

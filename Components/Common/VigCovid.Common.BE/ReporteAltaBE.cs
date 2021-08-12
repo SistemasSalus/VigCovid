@@ -29,6 +29,8 @@ namespace VigCovid.Common.BE
         public string CorreosTrabajador { get; set; }
 
         public string Diagnostico { get; set; }
+        public string DetalleDiagnostico { get; set; }
+
         public string CorreosPeople { get; set; }
         public string CorreosBP { get; set; }
         public string CorreosSeguridad { get; set; }

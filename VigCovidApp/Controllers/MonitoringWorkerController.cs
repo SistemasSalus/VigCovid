@@ -1027,7 +1027,76 @@ namespace VigCovidApp.Controllers
 
 
 
+        public async Task<FileResult> ExportDescansoMedico(int id, string comentario, int trabajadorId)
+        {
+            var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
+            var oReportAltaBL = new ReportAltaBL();
 
+            if (comentario == "Descanso Médico")
+            {
+
+                var datosAlta = oReportAltaBL.EnviarDocumentoDMex(id, sessione.IdUser,trabajadorId);
+
+
+                MemoryStream memoryStream = GetPdfDescansoMedico(datosAlta);
+
+                // Hacer una copia en memoria, una sera usada para el correo y el proceso de devoler el PDF - Saul Ramos Vega
+                var position = memoryStream.Position;
+                var archivoPDFDescarga = new MemoryStream();
+                memoryStream.CopyTo(archivoPDFDescarga);
+                memoryStream.Position = position;
+                archivoPDFDescarga.Position = position;
+
+
+                #region Envio correos
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+                if (datosAlta.CorreosTrabajador == null)
+                {
+                    datosAlta.CorreosTrabajador = "saulroach@hotmail.com";
+                }
+                if (datosAlta.CorreosChampios == null)
+                {
+                    datosAlta.CorreosChampios = "saulroach@hotmail.com";
+                }
+
+                //using (var mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios))
+                using (var mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador))
+                {
+                    mailMessage.Subject = "Descanso Médico Descarga";
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted " + "<b>podrá</b> " + " reincorporarse a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ", la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b>Nota</b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" ;
+
+
+                    mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                    SmtpClient smtpClient = new SmtpClient
+                    {
+                        Host = smtp,
+                        Port = port,
+                        EnableSsl = true,
+                        Credentials = new NetworkCredential(from, fromPassword)
+                    };
+
+                    await smtpClient.SendMailAsync(mailMessage);
+                };
+
+                #endregion Envio correos
+
+
+                DateTime fileCreationDatetime = DateTime.Now;
+                string fileName = string.Format("{0}_{1}.pdf", "Descanso Médico" + datosAlta.Trabajador, fileCreationDatetime.ToString(@"yyyyMMdd") + "_" + fileCreationDatetime.ToString(@"HHmmss"));
+
+                return File(archivoPDFDescarga, "application/pdf", fileName);
+            }
+            return null;
+        }
+
+
+         
         public async Task<FileResult> ExportAltaMedica(int id, string comentario)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
@@ -1418,7 +1487,8 @@ namespace VigCovidApp.Controllers
                 Subject = "DESCANSO MEDICO, " + datosAlta.Trabajador,
 
                 IsBodyHtml = true,
-                Body = "Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + "<br>" + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada" + "<br>" + "el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
+                Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted " + "<b>podrá</b> " + " reincorporarse a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ", la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b>Nota</b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris"
+                //"Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + "<br>" + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada" + "<br>" + "<br>" + "el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
             };
 
             mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
@@ -2180,7 +2250,7 @@ namespace VigCovidApp.Controllers
 
                     Font fontTitle1 = FontFactory.GetFont(FontFactory.HELVETICA, 15, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
                     Font fontTitle2 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
-                    Font fontTitle44 = FontFactory.GetFont(FontFactory.HELVETICA, 13, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitle44 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
                     Font fontTitleTable = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
                     Font fontTitleTableNegro = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
                     Font fontSubTitle = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.White));
@@ -2223,7 +2293,8 @@ namespace VigCovidApp.Controllers
                         new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("  " + "   " + " " + datos.DetalleDiagnostico,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
                         //new PdfPCell(new Phrase("-Z29.0 Aislamiento",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
@@ -2234,7 +2305,7 @@ namespace VigCovidApp.Controllers
                         new PdfPCell(new Phrase(" " + "Por lo que se indica" + " " + " " + datos.DiasTotalDescanso + " " + " " + "días de descanso médico, del" + " " +  " " + datos.FechaAislaminetoCuarentena + " " + "al" + " " + datos.FechaPosibleAlta +" " + "se emite" + " " + "el", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase(" " + "presente certificado a solicitud  del interesado y para los fines que crea conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase(" " + "presente certificado para los fines que crea conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
                         //new PdfPCell(new Phrase(" " + "conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },

@@ -258,9 +258,6 @@ namespace VigCovid.MedicalMonitoring.BL
 
 
 
-
-
-
         private void UpdateRegistroTrabajadorParaAltaMedica(int id, string comentario, int usuario)
         {
             using (SqlConnection con = new SqlConnection(Constants.CONEXION))

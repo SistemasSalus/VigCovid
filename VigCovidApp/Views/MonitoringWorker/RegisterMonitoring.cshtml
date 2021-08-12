@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Seguimiento Trabajador";
     var trabajadorId = ViewBag.REGISTROTRABAJADOR;
+     
     var fechasImportantes = @ViewBag.FECHASIMPORTANTES;
     var TipoRango = ViewBag.TIPOSDERANGO;
     var activo = false;
@@ -179,8 +180,6 @@
 
 
 
-
-
                         <div class="panel-heading">
                             @*<h4 class="panel-title">
                 <a data-parent="#demo-acc-info-outline" data-toggle="collapse" href="#demo-acd-info-outline-2" class="collapsed" aria-expanded="true">Fechas importantes</a>
@@ -191,7 +190,11 @@
                             </h4>
                         </div>
 
-                       
+                        <div class="panel-heading">
+                            <h4 id="totaldias" style="text-align:center;color:navy">Total:</h4>
+                        </div>
+
+
                         <table id="example" data-page-length='3'
                                class="table table-striped">
 
@@ -200,6 +203,7 @@
 
                             <thead>
                                 <tr>
+                                    <th hidden>Idx</th>
                                     <th style="width:140px">Fecha de Inicio</th>
                                     <th style="width:140px">Fecha de Fin</th>
                                     <th style="width:160px">Tipo de Rango</th>
@@ -208,12 +212,16 @@
                                 </tr>
                             </thead>
                             <tbody id="tabla-TIPORANGO">
+
+
+
                                 @foreach (var item in ViewBag.TIPOSDERANGO)
                                 {
                                     <tr>
 
                                         @if (item.FechaFin == null)
                                         {
+                                            <td id="Idx" hidden>@item.Id</td>
                                             <td>@item.FechaInicio.ToString("dd/MM/yyyy")</td>
                                             <td>Dado de Alta</td>
                                             @*<td>@item.FechaFin.ToString("dd/MM/yyyy")</td>*@
@@ -222,33 +230,39 @@
                                         }
                                         else
                                         {
-                                            <td>@item.FechaInicio.ToString("dd/MM/yyyy")</td>
+
+                                            <td id="Idx" hidden>@item.Id</td>
+                                            <td id="FEC">@item.FechaInicio.ToString("dd/MM/yyyy")</td>
                                             <td>@item.FechaFin.ToString("dd/MM/yyyy")</td>
                                             <td>@item.Descripcion</td>
 
                                         }
-                                        <td>@item.NroDias</td>
+
+                                        <td class="numdias">@item.NroDias</td>
 
 
                                         @if (item.Descripcion == "Descanso Médico")
                                         {
                                             <td align="center">
-                                                <input type="image" img src="~/img/descar.jpg" title="Descargar" width="15" height="13">
+                                                @*<input type="button" img src="~/img/descar.jpg" title="Descargar" width="16" height="14">*@
+
+                                                <button id="DescargarDM" class="closing"><img src="~/img/descar.jpg" width="15" height="13" /></button>
+                                                @*onClick="DescargarelDM()"*@
                                             </td>
                                         }
 
                                     </tr>
                                 }
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th>Total:</th>
-                                </tr>
-                            </tfoot>
+                            <!--<tfoot>
+        <tr>
+            <th></th>-->
+                            @* <th id="totaldias">Total:</th>*@
+                            <!--</tr>
+        </tfoot>-->
                         </table>
-
-
+                        <input id="IdFechaImportante" hidden type="text" value='' />
+                        <input id="dmDescripcion" hidden type="text" value='' />
                         <!--Accordion content-->
                         <!--<div id="demo-acd-info-outline-2" aria-expanded="true">
     <div class="panel-body">
@@ -440,7 +454,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div>
             </div>
             <div class="panel-body">
                 <hr class="new-section-xs">
@@ -1103,6 +1117,29 @@
 
             //$('#example').DataTable();
 
+            var data = [];
+            $("td.numdias").each(function () {
+
+                //alert(parseFloat($(this).text()));
+                if ($(this).text() != '') {
+                    data.push(parseFloat($(this).text()));
+                    //alert($(this).text());
+                }
+
+            });
+
+            var suma = data.reduce(function (a, b) { return a + b; }, 0);
+            //alert(suma);
+            $("#totaldias").html("Total dias de Descanso:  " + suma)
+
+
+            
+
+           
+
+
+
+
             var EmpresaPrincipalId = document.getElementById("EmpresaPrincipalId").value
             var TrabajadorEmpresaId = document.getElementById("TrabajadorEmpresaId").value
 
@@ -1153,7 +1190,7 @@
             //    container: 'floating',
             //    timer: 3000
             //});
-            getTblTotal();
+           
 
             $('#txtFechaExamen').datepicker({ autoclose: true });
 
@@ -2750,6 +2787,80 @@
         });
 
 
+
+        function viewAltaMedica(idTrabajador) {
+            window.location.href = "/MonitoringWorker/ExportDescansoMedico?id=" + idTrabajador;
+        }
+
+
+        //Descargar DM - 11082021  Creado por Saul Ramos
+        function DescargarelDM(campo1, campo2, trabajadorId) {
+     
+                       
+            var datos = { "Id": campo1, "comentario": campo2, "trabajadorId": trabajadorId};
+
+             $.ajax({
+                 type: "POST",
+                 url: "/MonitoringWorker/ExportDescansoMedico",
+                 data: datos,
+                 xhrFields: {
+                     responseType: 'blob'
+                 },
+                  success: function (data) {
+
+
+                      //$('.cargaEsperar').modal('hide');
+
+                     // window.location = "/Home/Index";
+
+                      const url = window.URL.createObjectURL(data);
+                      const a = document.createElement('a');
+                      a.style.display = 'none';
+                      a.href = url;
+                      // the filename you want
+                      a.download = 'Descanso Medico.pdf';
+                      document.body.appendChild(a);
+                      a.click();
+                      window.URL.revokeObjectURL(url);
+
+                     
+                      //window.location = "/MonitoringWorker/RegisterMonitoring?id=" + trabajadorId
+
+                   },
+                   error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación")
+                    }
+                });
+            
+           }   
+                   
+        $("#example").on('click', 'tr', function (e) {
+            e.preventDefault();
+            var renglon = $(this);
+            var campo1, campo2, campo3;
+            $(this).children("td").each(function (i) {
+                switch (i) {
+                    case 0:
+                        campo1 = $(this).text();
+                        break;
+                    case 3:
+                      campo2 = $(this).text();
+                      break;
+                }
+                $(this).css("background-color", "#ECF8E0");
+            })
+            var textoRenglon = campo1
+            //var dmDescripcion = campo2
+            //console.log(textoRenglon);
+            $("#IdFechaImportante").val(textoRenglon);
+            let trabajadorId = $("#txtRegistroTrabajadoId").val();
+            //alert(renglon);
+
+            DescargarelDM(campo1, campo2, trabajadorId);
+
+        });
+     
+           
 
 
     </script>
