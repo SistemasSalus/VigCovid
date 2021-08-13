@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Seguimiento Trabajador";
     var trabajadorId = ViewBag.REGISTROTRABAJADOR;
-     
+
     var fechasImportantes = @ViewBag.FECHASIMPORTANTES;
     var TipoRango = ViewBag.TIPOSDERANGO;
     var activo = false;
@@ -29,8 +29,11 @@
         top: -4px;
         right: 8px;
     }
-</style>
 
+    .blackiconcolor {
+        color: red;
+    }
+</style>
 
 
 <link href="~/Content/horizontal-timeline.css" rel="stylesheet" />
@@ -155,7 +158,7 @@
                             </table>
                         </div>
                         @*</div>
-        </div>*@
+                            </div>*@
 
 
 
@@ -182,9 +185,9 @@
 
                         <div class="panel-heading">
                             @*<h4 class="panel-title">
-                <a data-parent="#demo-acc-info-outline" data-toggle="collapse" href="#demo-acd-info-outline-2" class="collapsed" aria-expanded="true">Fechas importantes</a>
+                                    <a data-parent="#demo-acc-info-outline" data-toggle="collapse" href="#demo-acd-info-outline-2" class="collapsed" aria-expanded="true">Fechas importantes</a>
 
-            </h4>*@
+                                </h4>*@
                             <h4 class="panel-title">
                                 <button id="btnModalNuevoRango" data-toggle="modal" data-target="#modal-rango" class="btn btn-primary btn-lg btn-block"><i class="demo-pli-add"></i> Agregar Nuevo Rango</button>
                             </h4>
@@ -195,7 +198,7 @@
                         </div>
 
 
-                        <table id="example" data-page-length='3'
+                        <table id="example" data-page-length='50'
                                class="table table-striped">
 
                             @*class="table table-sm table-striped table-hover table-bordered">*@
@@ -232,7 +235,7 @@
                                         {
 
                                             <td id="Idx" hidden>@item.Id</td>
-                                            <td id="FEC">@item.FechaInicio.ToString("dd/MM/yyyy")</td>
+                                            <td class="fechainicial">@item.FechaInicio.ToString("dd/MM/yyyy")</td>
                                             <td>@item.FechaFin.ToString("dd/MM/yyyy")</td>
                                             <td>@item.Descripcion</td>
 
@@ -255,157 +258,157 @@
                                 }
                             </tbody>
                             <!--<tfoot>
-        <tr>
-            <th></th>-->
+                            <tr>
+                                <th></th>-->
                             @* <th id="totaldias">Total:</th>*@
                             <!--</tr>
-        </tfoot>-->
+                            </tfoot>-->
                         </table>
                         <input id="IdFechaImportante" hidden type="text" value='' />
                         <input id="dmDescripcion" hidden type="text" value='' />
                         <!--Accordion content-->
                         <!--<div id="demo-acd-info-outline-2" aria-expanded="true">
-    <div class="panel-body">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Descripción</th>
-                    <th>Fecha</th>
-                    <th>Días</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-fechas-importantes">
-                <tr>
+                        <div class="panel-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Descripción</th>
+                                        <th>Fecha</th>
+                                        <th>Días</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-fechas-importantes">
+                                    <tr>
 
-                    <td>Inicio Aislamiento/Cuarentena</td>
-                    <td><input type="text" class="form-control fechas" id="dtp-FechaAislaminetoCuarentena-@trabajadorId"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Inicio de Síntomas</td>
-                    <td><input type="text" class="form-control fechas" id="dtp-FechaInicioSintomas-@trabajadorId"></td>
-                    <td></td>
-                </tr>
+                                        <td>Inicio Aislamiento/Cuarentena</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaAislaminetoCuarentena-@trabajadorId"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Inicio de Síntomas</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaInicioSintomas-@trabajadorId"></td>
+                                        <td></td>
+                                    </tr>
 
-                <tr>
-                    <td>Fin de Síntomas</td>
-                    <td><input type="text" class="form-control fechas" id="dtp-FechaFinSintomas-@trabajadorId"></td>
+                                    <tr>
+                                        <td>Fin de Síntomas</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaFinSintomas-@trabajadorId"></td>
 
-                </tr>
+                                    </tr>
 
-                <tr>
-                    <td>Posible Alta 1</td>
-                    <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta-@trabajadorId"></td>
-                    <td class="nroDiasAlta"></td>
-                    <td>-->
+                                    <tr>
+                                        <td>Posible Alta 1</td>
+                                        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta-@trabajadorId"></td>
+                                        <td class="nroDiasAlta"></td>
+                                        <td>-->
                         @*<input id="chk-PrimerDescanso-@trabajadorId" onclick="checkFluencypd1(@trabajadorId)" class="magic-checkbox" type="checkbox">
-        <label for="chk-PrimerDescanso-@trabajadorId">Enviar DM</label>*@
+                            <label for="chk-PrimerDescanso-@trabajadorId">Enviar DM</label>*@
                         <!--<button type="button"
-                    @{ if (activo == true) { @: disabled="disabled"
-                    } }
-                    class="btn btn-info btn-group-xs">
-                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
-            </button>
-        </td>
-    </tr>
+                                        @{ if (activo == true) { @: disabled="disabled"
+                                        } }
+                                        class="btn btn-info btn-group-xs">
+                                    <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
 
-    <tr>
-        <td>Posible Alta 2</td>
-        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta2-@trabajadorId"></td>
-        <td class="nroDiasAlta"></td>
-        <td>-->
+                        <tr>
+                            <td>Posible Alta 2</td>
+                            <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta2-@trabajadorId"></td>
+                            <td class="nroDiasAlta"></td>
+                            <td>-->
                         @*<input id="chk-SegundoDescanso-@trabajadorId" onclick="checkFluencypd2(@trabajadorId)" class="magic-checkbox" type="checkbox">
-        <label for="chk-SegundoDescanso-@trabajadorId">Enviar DM</label>*@
+                            <label for="chk-SegundoDescanso-@trabajadorId">Enviar DM</label>*@
                         <!--<button type="button"
-                    @{ if (activo == true) { @: disabled="disabled"
-                    } }
-                    class="btn btn-info btn-group-xs">
-                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
-            </button>
-        </td>
-    </tr>
+                                        @{ if (activo == true) { @: disabled="disabled"
+                                        } }
+                                        class="btn btn-info btn-group-xs">
+                                    <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
 
-    <tr>
-        <td>Posible Alta 3</td>
-        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta3-@trabajadorId"></td>
-        <td class="nroDiasAlta"></td>
-        <td>-->
+                        <tr>
+                            <td>Posible Alta 3</td>
+                            <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta3-@trabajadorId"></td>
+                            <td class="nroDiasAlta"></td>
+                            <td>-->
                         @*<input id="chk-TercerDescanso-@trabajadorId" onclick="checkFluencypd3(@trabajadorId)" class="magic-checkbox" type="checkbox">
-        <label for="chk-TercerDescanso-@trabajadorId">Enviar DM</label>*@
+                            <label for="chk-TercerDescanso-@trabajadorId">Enviar DM</label>*@
                         <!--<button type="button"
-                    @{ if (activo == true) { @: disabled="disabled"
-                    } }
-                    class="btn btn-info btn-group-xs">
-                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
-            </button>
-        </td>
-    </tr>
+                                        @{ if (activo == true) { @: disabled="disabled"
+                                        } }
+                                        class="btn btn-info btn-group-xs">
+                                    <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
 
-    <tr>
-        <td>Posible Alta 4</td>
-        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta4-@trabajadorId"></td>
-        <td class="nroDiasAlta"></td>
-        <td>-->
+                        <tr>
+                            <td>Posible Alta 4</td>
+                            <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta4-@trabajadorId"></td>
+                            <td class="nroDiasAlta"></td>
+                            <td>-->
                         @*<input id="chk-CuartoDescanso-@trabajadorId" onclick="checkFluencypd4(@trabajadorId)" class="magic-checkbox" type="checkbox">
-        <label for="chk-CuartoDescanso-@trabajadorId">Enviar DM</label>*@
+                            <label for="chk-CuartoDescanso-@trabajadorId">Enviar DM</label>*@
                         <!--<button type="button"
-                    @{ if (activo == true) { @: disabled="disabled"
-                    } }
-                    class="btn btn-info btn-group-xs">
-                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
-            </button>
-        </td>
-    </tr>
+                                        @{ if (activo == true) { @: disabled="disabled"
+                                        } }
+                                        class="btn btn-info btn-group-xs">
+                                    <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
 
-    <tr>
-        <td>Posible Alta 5</td>
-        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta5-@trabajadorId"></td>
-        <td class="nroDiasAlta"></td>
-        <td>-->
+                        <tr>
+                            <td>Posible Alta 5</td>
+                            <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta5-@trabajadorId"></td>
+                            <td class="nroDiasAlta"></td>
+                            <td>-->
                         @*<input id="chk-QuintoDescanso-@trabajadorId" onclick="checkFluencypd5(@trabajadorId)" class="magic-checkbox" type="checkbox">
-        <label for="chk-QuintoDescanso-@trabajadorId">Enviar DM</label>*@
+                            <label for="chk-QuintoDescanso-@trabajadorId">Enviar DM</label>*@
                         <!--<button type="button"
-                    @{ if (activo == true) { @: disabled="disabled"
-                    } }
-                    class="btn btn-info btn-group-xs">
-                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
-            </button>
-        </td>
-    </tr>
+                                        @{ if (activo == true) { @: disabled="disabled"
+                                        } }
+                                        class="btn btn-info btn-group-xs">
+                                    <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                        </tr>
 
 
-    <tr>
-        <td>Posible Alta 6</td>
-        <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta6-@trabajadorId"></td>
-        <td class="nroDiasAlta"></td>
-        <td>-->
+                        <tr>
+                            <td>Posible Alta 6</td>
+                            <td><input type="text" class="form-control fechas" id="dtp-FechaPosibleAlta6-@trabajadorId"></td>
+                            <td class="nroDiasAlta"></td>
+                            <td>-->
                         @*<input id="chk-SextoDescanso-@trabajadorId" onclick="checkFluencypd6(@trabajadorId)" class="magic-checkbox" type="checkbox">
-        <label for="chk-SextoDescanso-@trabajadorId">Enviar DM</label>*@
+                            <label for="chk-SextoDescanso-@trabajadorId">Enviar DM</label>*@
                         <!--<button type="button"
-                                    @{ if (activo == true) { @: disabled="disabled"
-                                    } }
-                                    class="btn btn-info btn-group-xs" data-toggle="tooltip" data-placement="top" title="Enviar Descanso Medico">
-                                <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
-                            </button>
-                        </td>
-                    </tr>
+                                                        @{ if (activo == true) { @: disabled="disabled"
+                                                        } }
+                                                        class="btn btn-info btn-group-xs" data-toggle="tooltip" data-placement="top" title="Enviar Descanso Medico">
+                                                    <span class="glyphicon glyphicon-bed" aria-hidden="true"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
 
 
-                    <tr>
-                        <td>Alta Médica</td>
-                        <td><input type="text" class="form-control fechas" id="dtp-FechaAltaMedica-@trabajadorId" disabled></td>
-                        <td class="nroDiasAlta"></td>
-                    </tr>
+                                        <tr>
+                                            <td>Alta Médica</td>
+                                            <td><input type="text" class="form-control fechas" id="dtp-FechaAltaMedica-@trabajadorId" disabled></td>
+                                            <td class="nroDiasAlta"></td>
+                                        </tr>
 
-                    <tr>
-                        <td>Último día de trabajo</td>
-                        <td><input type="text" class="form-control fechas" id="dtp-FechaUltimodiatrabajo-@trabajadorId"></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>-->
+                                        <tr>
+                                            <td>Último día de trabajo</td>
+                                            <td><input type="text" class="form-control fechas" id="dtp-FechaUltimodiatrabajo-@trabajadorId"></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>-->
                         @*</div>*@
 
                         <!--PRUEBAS DATATABLES DM-->
@@ -454,7 +457,7 @@
                             </div>
                         </div>
                     </div>
-                    </div>
+                </div>
             </div>
             <div class="panel-body">
                 <hr class="new-section-xs">
@@ -925,1702 +928,1596 @@
             </div>
         </div>
     </div>
-    @*</div>
-        </div>*@
-    <!--Modal Examen-->
-    <!--===================================================-->
-    <div class="modal fade"
-         id="modal-examen"
-         role="dialog"
-         tabindex="-1"
-         aria-labelledby="modal-examen"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!--Modal header-->
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <i class="pci-cross pci-circle"></i>
-                    </button>
-                    <h4 class="modal-title">Registro de Examen</h4>
-                </div>
+</div>
 
-                <!--Modal body-->
-                <div class="modal-body">
-                    <form id="form-examen">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label">Fecha</label>
-                                        <input type="text" class="form-control" id="dtpFechaExamen" name="validateFechaExamen">
-                                    </div>
+
+<!--Modal Examen-->
+<!--===================================================-->
+<div class="modal fade"
+     id="modal-examen"
+     role="dialog"
+     tabindex="-1"
+     aria-labelledby="modal-examen"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="pci-cross pci-circle"></i>
+                </button>
+                <h4 class="modal-title">Registro de Examen</h4>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body">
+                <form id="form-examen">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Fecha</label>
+                                    <input type="text" class="form-control" id="dtpFechaExamen" name="validateFechaExamen">
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label">Tipo Examen</label>
-                                        <select id="ddl-TipoExamen" class="selectpicker" data-width="80%">
-                                            <option value="1">Prueba rápida</option>
-                                            <option value="2">Molecular</option>
-                                            <option value="3">Antígenos</option>
-                                        </select>
-                                    </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Tipo Examen</label>
+                                    <select id="ddl-TipoExamen" class="selectpicker" data-width="80%">
+                                        <option value="1">Prueba rápida</option>
+                                        <option value="2">Molecular</option>
+                                        <option value="3">Antígenos</option>
+                                    </select>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label class="control-label">Resultado</label>
-                                        <select id="ddl-ExamenResultado" class="selectpicker" data-width="95%">
-                                            <option value="0">Negativo</option>
-                                            <option value="1">No Válido</option>
-                                            <option value="2">IgM Positivo</option>
-                                            <option value="3">IgG Positivo</option>
-                                            <option value="4">IgM e IgG Positivo</option>
-                                            <option value="6">Positivo</option>
-                                        </select>
-                                    </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Resultado</label>
+                                    <select id="ddl-ExamenResultado" class="selectpicker" data-width="95%">
+                                        <option value="0">Negativo</option>
+                                        <option value="1">No Válido</option>
+                                        <option value="2">IgM Positivo</option>
+                                        <option value="3">IgG Positivo</option>
+                                        <option value="4">IgM e IgG Positivo</option>
+                                        <option value="6">Positivo</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-footer text-right">
-                            <button class="btn btn-success" id="btnRegistrarExamen" type="submit">Registrar Examen</button>
-                        </div>
+                    </div>
+                    <div class="panel-footer text-right">
+                        <button class="btn btn-success" id="btnRegistrarExamen" type="submit">Registrar Examen</button>
+                    </div>
 
 
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
 
-    <!--Modal Tipo Rango-->
-    <!--===================================================-->
-    <div class="modal fade"
-         id="modal-rango"
-         role="dialog"
-         tabindex="-1"
-         aria-labelledby="modal-rango"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!--Modal header-->
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <i class="pci-cross pci-circle"></i>
-                    </button>
-                    <h4 class="modal-title">Registro de Nuevo Rango</h4>
-                </div>
+<!--Modal Tipo Rango-->
+<!--===================================================-->
+<div class="modal fade"
+     id="modal-rango"
+     role="dialog"
+     tabindex="-1"
+     aria-labelledby="modal-rango"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="pci-cross pci-circle"></i>
+                </button>
+                <h4 class="modal-title">Registro de Nuevo Rango</h4>
+            </div>
 
-                <!--Modal body-->
-                <div class="modal-body">
-                    <form id="form-rango">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Fecha de Inicio</label>
-                                        <input type="text" class="form-control dtpFechaInicio" id="dtpFechaInicio" autocomplete="off">
-                                    </div>
+            <!--Modal body-->
+            <div class="modal-body">
+                <form id="form-rango">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label">Fecha de Inicio</label>
+                                    <input type="text" class="form-control kid" id="dtpFechaInicio"  autocomplete="off">
                                 </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Fecha de Fin</label>
-                                        <input type="text" class="form-control dtpFechaFin" id="dtpFechaFin" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Tipo de Rango</label>
-                                        <select id="ddl-TipoRango" class="selectpicker" data-width="80%" onchange="checkFluencyDD1(1)">
-                                            <option value="0">Seleccione...</option>
-                                            <option value="1">Descanso Médico</option>
-                                            <option value="2">Hospitalización</option>
-                                            <option value="3">Reevaluación</option>
-                                            <option value="4">Licencia con Goce</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Diagnóstico</label>
-                                        <select id="ddl-Diagnostico" name="ddl-Diagnostico" data-width="80%" onchange="checkFluencyDD2()" style="width:147px;height:31px " disabled>
-                                            <option value="0">Ninguno</option>
-                                            <option value="1">U07.1 COVID-19 virus identificado</option>
-                                            <option value="2">U07.2 COVID-19 virus no identificado</option>
-                                            <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
-                                            <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
-                                            <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
-                                        </select>
-                                    </div>
-                                </div>
-
                             </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label">Fecha de Fin</label>
+                                    <input type="text" class="form-control dtpFechaFin" id="dtpFechaFin"  autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label">Tipo de Rango</label>
+                                    <select id="ddl-TipoRango" class="selectpicker" data-width="80%" onchange="checkFluencyDD1(1)">
+                                        <option value="0">Seleccione...</option>
+                                        <option value="1">Descanso Médico</option>
+                                        <option value="2">Hospitalización</option>
+                                        <option value="3">Reevaluación</option>
+                                        <option value="4">Licencia con Goce</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="control-label">Diagnóstico</label>
+                                    <select id="ddl-Diagnostico" name="ddl-Diagnostico" data-width="80%" onchange="checkFluencyDD2()" style="width:147px;height:31px " disabled>
+                                        <option value="0">Ninguno</option>
+                                        <option value="1">U07.1 COVID-19 virus identificado</option>
+                                        <option value="2">U07.2 COVID-19 virus no identificado</option>
+                                        <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
+                                        <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
+                                        <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="panel-footer text-right">
-                            <input type="text" id="MensajeDiagnostico" style="border-style: none;width:500px;color:orangered" hidden>
-                        </div>
-                        <div class="panel-footer text-right">
-                            <button class="btn btn-success" id="btnRegistrarRango" type="submit">Registrar Rango</button>
-                        </div>
+                    </div>
+                    <div class="panel-footer text-right">
+                        <input type="text" id="MensajeDiagnostico" style="border-style: none;width:500px;color:orangered" hidden>
+                    </div>
+                    <div class="panel-footer text-right">
+                        <button class="btn btn-success" id="btnRegistrarRango" type="submit">Registrar Rango</button>
+                    </div>
 
 
 
 
 
-                        <input type="hidden" id="EmpresaPrincipalId" value=@ViewBag.CABECERA.Empresa>
-                        <input type="hidden" id="TrabajadorEmpresaId" value=@trabajadorId>
+                    <input type="hidden" id="EmpresaPrincipalId" value=@ViewBag.CABECERA.Empresa>
+                    <input type="hidden" id="TrabajadorEmpresaId" value=@trabajadorId>
 
 
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
 
-    <!--===================================================-->
-    <!--End Default Bootstrap Modal-->
+<!--===================================================-->
+<!--End Default Bootstrap Modal-->
 
-    <div class="modal fade cargaEsperar" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered text-center" role="document">
-            <div class="load6">
-                <div class="loader"></div>
-            </div>
+<div class="modal fade cargaEsperar" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered text-center" role="document">
+        <div class="load6">
+            <div class="loader"></div>
         </div>
     </div>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="~/Scripts/jquery-3.4.1.js"></script>
-    <script src="~/Scripts/jquery.flot.min.js"></script>
-    <script src="~/Scripts/jquery.flot.categories.min.js"></script>
-    <script src="~/Scripts/jquery.flot.orderBars.min.js"></script>
-    <script src="~/Scripts/jquery.flot.tooltip.min.js"></script>
-    <script src="~/Scripts/jquery.flot.resize.min.js"></script>
-    <script src="~/Scripts/bootbox.min.js"></script>
-    <script src="~/Scripts/horizontal-timeline.js"></script>
-    @*<script src="~/Scripts/jquery-2.1.4.js"></script>*@
-    <script src="~/Scripts/jquery.mobile.custom.min.js"></script>
-    <script src="~/Scripts/modernizr.js"></script>
+</div>
 
-    <!--Añadido por Saul Ramos  - 23072021-->
-    <!--datatables-->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css" />
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
-    <!--datatables-->
 
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
 
-        $(document).ready(function () {
+<script src="~/Scripts/jquery.flot.min.js"></script>
+<script src="~/Scripts/jquery.flot.categories.min.js"></script>
+<script src="~/Scripts/jquery.flot.orderBars.min.js"></script>
+<script src="~/Scripts/jquery.flot.tooltip.min.js"></script>
+<script src="~/Scripts/jquery.flot.resize.min.js"></script>
 
-            //$('[data-toggle="tooltip"]').tooltip()
+<script src="~/Scripts/bootbox.min.js"></script>
+<script src="~/Scripts/horizontal-timeline.js"></script>
 
-            //$('#example').DataTable();
+<script src="~/Scripts/jquery.mobile.custom.min.js"></script>
+<script src="~/Scripts/modernizr.js"></script>
 
-            var data = [];
-            $("td.numdias").each(function () {
+<!--Añadido por Saul Ramos  - 23072021-->
+<!--datatables-->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css" />
 
-                //alert(parseFloat($(this).text()));
-                if ($(this).text() != '') {
-                    data.push(parseFloat($(this).text()));
-                    //alert($(this).text());
-                }
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
 
-            });
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-            var suma = data.reduce(function (a, b) { return a + b; }, 0);
-            //alert(suma);
-            $("#totaldias").html("Total dias de Descanso:  " + suma)
 
 
-            
 
-           
+<script>
 
+    $(document).ready(function () {
 
+        //$('[data-toggle="tooltip"]').tooltip()
 
+        //$('#example').DataTable();
 
-            var EmpresaPrincipalId = document.getElementById("EmpresaPrincipalId").value
-            var TrabajadorEmpresaId = document.getElementById("TrabajadorEmpresaId").value
+        var data = [];
+        $("td.numdias").each(function () {
 
-
-            if (EmpresaPrincipalId == 'Backus') {
-
-                $("#chk-PrimerDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
-                $("#chk-SegundoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
-                $("#chk-TercerDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
-                $("#chk-CuartoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
-                $("#chk-QuintoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
-                $("#chk-SextoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
-
-            }
-
-            else {
-                $("#chk-PrimerDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
-                $("#chk-SegundoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
-                $("#chk-TercerDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
-                $("#chk-CuartoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
-                $("#chk-QuintoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
-                $("#chk-SextoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
-            }
-
-
-            //window.location.hash = "no-back-button";
-            //window.location.hash = "Again-No-back-button";//esta linea es necesaria para chrome
-            //window.onhashchange = function (e) {
-            //    console.log("??",e);
-            //    if (ValidarProximoSeguimiento()) {
-            //        //window.location = "/Home/index";
-            //    } else {
-            //        window.location.hash = "no-back-button";
-            //        bootbox.alert({
-            //            size: 'extra-large',
-            //            title: "ES OBLIGATORIO",
-            //            message: "<h1 style='color:red'>INGRESAR PRÓXIMO SEGUIMIENTO</h1>"
-            //        });
-            //    }
-            //}
-
-            ListarFechasImportantes();
-
-            //$.niftyNoty({
-            //    type: 'danger',
-            //    icon: 'pli-cross icon-2x',
-            //    message: 'Se canceló la operación.',
-            //    container: 'floating',
-            //    timer: 3000
-            //});
-           
-
-            $('#txtFechaExamen').datepicker({ autoclose: true });
-
-            $("#btn-AgregarSeguimiento").on("click", function () {
-
-                bootbox.confirm("¿Está seguro de agregar nuevo seguimiento?", function (result) {
-
-                    let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-                    if (result) {
-                        $.ajax({
-                            type: "GET",
-                            url: "/MonitoringWorker/NewRegisterMonitoring?id=" + registroTrabajadorId,
-                            success: function (data) {
-                                window.location = "/MonitoringWorker/RegisterMonitoring?id=" + registroTrabajadorId;
-                            },
-                            error: function (jqXHR, exception) {
-                                alert("Ocurrió un error en la operación")
-                            }
-                        });
-                    } else {
-                        $.niftyNoty({
-                            type: 'danger',
-                            icon: 'pli-cross icon-2x',
-                            message: 'Se canceló la operación.',
-                            container: 'floating',
-                            timer: 3000
-                        });
-                    };
-                });
-
-            });
-
-            $("#form-examen").submit(function (ev) { ev.preventDefault(); });
-
-            $("#btnRegistrarExamen").on("click", function () {
-
-                if ($("#dtpFechaExamen").val() == undefined) {
-                    alert("El campo fecha es requerido");
-                    return;
-                }
-
-                let fechaSeguimiento = $("#dtpFechaExamen").val();
-                let tipoExamen = $("#ddl-TipoExamen").val();
-                let resultadoExamen = $("#ddl-ExamenResultado").val();
-                let trabajadorId = $("#txtRegistroTrabajadoId").val();
-
-                var datos = { "FechaExamen": fechaSeguimiento, "TrabajadorId": trabajadorId, "TipoExamen": tipoExamen, "ResultadoExamen": resultadoExamen };
-
-                $.ajax({
-                    type: "post",
-                    url: "/examen/crearexamen",
-                    data: datos,
-                    success: function (data) {
-                        $("#modal-examen").modal("hide");
-                        if (!data) {
-                            alert("Acceso denegado");
-                        } else {
-                            tablaExamenes();
-                            ActualizarLineaTiempo();
-                        }
-
-                    },
-                    error: function (jqxhr, exception) {
-                        alert("ocurrió un error en la operación")
-                    }
-                });
-            });
-
-            $('#modal-examen')
-                .on('shown.bs.modal', function () {
-                    $("#dtpFechaExamen").val(moment(Date.now()).format("DD/MM/yyyy"));
-                    $('#form-examen').find('[name="dtpFechaExamen"]').focus();
-                })
-                .on('hidden.bs.modal', function () {
-                    $('#form-examen').bootstrapValidator('resetForm', true);
-                });
-
-            // GRABAR EN TABLA FECHAS IMPORTANTES Y ENVIAR DATOS PARA EL DM - Saul Ramos Vega  20210714
-
-            $("#form-rango").submit(function (ev) { ev.preventDefault(); });
-
-            $("#btnRegistrarRango").on("click", function () {
-
-                var fini = $("#dtpFechaInicio").val();
-                var ffin = $("#dtpFechaFin").val();
-                let trango = $("#ddl-TipoRango").val();
-                var mensaje = $("#msjalerta").val();
-
-                if (fini > ffin) {
-
-                    // $("#msjalerta").val('MENSAJE DE PRUEBA');
-
-                    bootbox.alert({
-                        size: 'large',
-                        title: "CORREGIR:",
-                        message: "<h5 style='color:red'>La Fecha de Inicio debe de ser menor a la Fecha de Fin</h5>",
-
-                    });
-                    return;
-                }
-                if (fini == "" || ffin == "") {
-
-
-                    bootbox.alert({
-                        size: 'large',
-                        title: "CORREGIR:",
-                        message: "<h5 style='color:red'>Las Fechas no pueden estar en blanco</h5>",
-
-                    });
-                    return;
-                }
-
-                if (trango == 0) {
-
-
-                    bootbox.alert({
-                        size: 'large',
-                        title: "CORREGIR:",
-                        message: "<h5 style='color:red'>Debe Seleccionar el Tipo de Rango</h5>",
-
-                    });
-                    return;
-                }
-
-
-
-
-                let FechaInicio = $("#dtpFechaInicio").val();
-                let FechaFin = $("#dtpFechaFin").val();
-                let TipoRango = $("#ddl-TipoRango").val();
-                let trabajadorId = $("#txtRegistroTrabajadoId").val();
-                let Diagnostico = $("#ddl-Diagnostico").val();
-                var EmpresaPrincipalId = document.getElementById("EmpresaPrincipalId").value;
-
-
-
-                //const fechaParseInicio = moment(FechaInicio, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
-                //var fechaActualParseFin = moment(FechaFin, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
-
-                let NroDias = (restaFechas(FechaInicio, FechaFin)) + 1;
-
-                console.log(NroDias);
-
-
-                if (TipoRango > 1) {
-
-                    NroDias = 0;
-                }
-
-
-                var datos = { "FechaInicio": FechaInicio, "FechaFin": FechaFin, "TipoRango": TipoRango, "TrabajadorId": trabajadorId, "Diagnostico": Diagnostico, "EmpresaPrincipalId": EmpresaPrincipalId, "NroDias": NroDias };
-
-
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarDescansoMedico1",
-                    data: datos,
-                    success: function (data) {
-                        $("#modal-rango").modal("hide");
-                        //window.location = "/Home/index";
-                        if (!data) {
-                            alert("Acceso denegado");
-                        } else {
-                            tablaTipoRango();
-                            notificarCambio2();
-                            //ActualizarLineaTiempo();
-                        }
-
-                    },
-                    error: function (jqxhr, exception) {
-                        alert("ocurrió un error en la operación")
-                    }
-                });
-            });
-
-            $('#modal-examen')
-                .on('shown.bs.modal', function () {
-                    $("#dtpFechaExamen").val(moment(Date.now()).format("DD/MM/yyyy"));
-                    $('#form-examen').find('[name="dtpFechaExamen"]').focus();
-                })
-                .on('hidden.bs.modal', function () {
-                    $('#form-examen').bootstrapValidator('resetForm', true);
-                });
-
-
-            $(".panel-body").on("click", ".panel-sintomas input", function (e) {
-                let checkId = $(e.target).attr("id");
-                let id = checkId.split('-')[2];
-                var labelText = $('label[for=' + checkId + ']').text();
-
-                DisableControlInputOtros(id);
-                SaveChange(id, labelText, "#" + checkId, "control-check");
-
-            });
-
-            $(".panel-body").on("blur", "textarea", function (e) {
-                let textAreaId = $(e.target).attr("id");
-                let id = textAreaId.split('-')[2];
-                SaveChange(id, "Comentario", "#" + textAreaId, "control-textarea");
-            });
-
-            $(".panel-body").on("blur", ".inputChange", function (e) {
-                let textOtrosId = $(e.target).attr("id");
-                let id = textOtrosId.split('-')[2];
-                SaveChange(id, "Otros", "#" + textOtrosId, "control-text");
-            });
-
-            $(".panel-body").on("change", ".fechaProximoSeguimiento", function (e) {
-                let fechaResultado = $($(e.target).get(0)).attr("id");
-                let id = fechaResultado.split('-')[2];
-                SaveChange(id, "Fecha Próximo Seguimiento", "#" + fechaResultado, "control-datepicker");
-
-                var valorFecha = $("#" + fechaResultado).val();
-
-                const fechaParse = moment(valorFecha, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
-                var fechaActual = new Date($.now());
-                var fechaActualParse = moment(fechaActual, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
-                if (fechaParse >= fechaActualParse) {
-                    $("#validarFechaProgramada").val(valorFecha);
-                } else {
-                    console.log("NADA");
-                }
-            });
-
-            $(".panel-body").on("change", ".fechas", function (e) {
-                let fechaImportante = $($(e.target).get(0)).attr("id");
-                let fechaNombre = fechaImportante.split('-')[1];
-                let id = fechaImportante.split('-')[2];
-                let fecha = $(this).val();
-
-
-                SaveFechaImportante(fechaNombre, fecha, fechaImportante);
-
-            });
-
-            $("select.selectTipoEstado").on("changed.bs.select", function (e) {
-
-                let ddlCalificacionId = $(e.target).attr("id");
-                let value = $("#" + ddlCalificacionId).val();
-
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-
-                var posibleAlta1 = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
-                var posibleAlta2 = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId).val();
-                var posibleAlta3 = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId).val();
-                var posibleAlta4 = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId).val();
-                var posibleAlta5 = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId).val();
-                var posibleAlta6 = $("#dtp-FechaPosibleAlta6-" + registroTrabajadorId).val();
-
-
-                var fecha = "";
-
-                if ((posibleAlta6 != undefined || posibleAlta6 != "") && fecha == "") {
-                    fecha = posibleAlta6;
-
-                }
-
-
-
-                if ((posibleAlta5 != undefined || posibleAlta5 != "") && fecha == "") {
-                    fecha = posibleAlta5;
-
-                }
-
-
-
-                if ((posibleAlta4 != undefined || posibleAlta4 != "") && fecha == "") {
-                    fecha = posibleAlta4;
-
-                }
-
-
-
-
-                if ((posibleAlta3 != undefined || posibleAlta3 != "") && fecha == "") {
-                    fecha = posibleAlta3;
-
-                }
-
-                if ((posibleAlta2 != undefined || posibleAlta2 != "") && fecha == "") {
-                    fecha = posibleAlta2;
-
-                }
-
-                if ((posibleAlta1 != undefined || posibleAlta1 != "") && fecha == "") {
-                    fecha = posibleAlta1;
-
-                }
-
-                var f = new Date();
-                let getDate = (f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear())
-
-                if (value == 5) {
-                    bootbox.prompt({
-                        title: "¿Está seguro de dar de ALTA?",
-                        onEscape: true,
-                        inputType: 'textarea',
-                        placeholder: 'Ingresar comentario de alta',
-                        required: true,
-                        callback: function (result) {
-
-                            if (result === null) {
-                                alert("Debe ingresar un comentario.")
-                                return;
-                            } else if (result === '') {
-                                alert("Debe ingresar un comentario.")
-                                return false;
-                            }
-                            else {
-                                $('.cargaEsperar').modal('show');
-                                let idSeguimiento = ddlCalificacionId.split('-')[2];
-                                var datos = { "TrabajadorId": registroTrabajadorId, "SeguimientoId": idSeguimiento, "ComentarioAlta": result, "FechaAlta": getDate, "Fecha": fecha };
-                                $.ajax({
-                                    type: "POST",
-                                    url: "/MonitoringWorker/DarAltaTrabajador",
-                                    data: datos,
-                                    success: function (data) {
-                                        $('.cargaEsperar').modal('hide');
-                                        //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                                        window.location = "/Home/index";
-                                    },
-                                    error: function (jqXHR, exception) {
-                                        alert("Ocurrió un error en la operación");
-                                        $('.cargaEsperar').modal('hide');
-                                    }
-                                });
-                            }
-
-                        }
-                    });
-
-                } else {
-                    let id = ddlCalificacionId.split('-')[2];
-                    SaveChange(id, "Tipo Estado", "#" + ddlCalificacionId, "control-combo");
-                }
-
-            });
-
-            //$("#btn-Regresar-Index").on("click", function () {
-
-            //   let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-            //   //var nroAltas = parseInt($(".nroDiasAlta").html());
-            //   var nroAltas = 12;
-            //   if (isNaN(nroAltas)) {
-            //        bootbox.alert({
-            //            size: 'extra-large',
-            //            title: "ES OBLIGATORIO",
-            //            message: "<h4 style='color:red'>INGRESAR FECHA DE INICIO AISLAMIENTO Y POSIBLE ALTA</h4>",
-            //       });
-            //    return;
-            // }
-
-
-            $("#btn-Regresar-Index").on("click", function () {
-
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-                //var nroAltas = parseInt($(".nroDiasAlta").html());
-                var nroAltas = 12;
-                if (isNaN(nroAltas)) {
-                    bootbox.alert({
-                        size: 'extra-large',
-                        title: "ES OBLIGATORIO",
-                        message: "<h4 style='color:red'>INGRESAR FECHA DE INICIO AISLAMIENTO Y POSIBLE ALTA</h4>",
-                    });
-                    return;
-                }
-
-
-
-                $.ajax({
-                    type: "GET",
-                    url: "/MonitoringWorker/ValidarAntesSalir?trabajadorId=" + registroTrabajadorId,
-                    success: function (data) {
-                        if (!data.resultado) {
-                            bootbox.alert({
-                                size: 'extra-large',
-                                title: "VALIDACIÓN",
-                                message: "<h4 style='color:red'>" + data.mensaje + "</h4>",
-                            });
-                            return;
-                        } else {
-                            window.location = "/Home/index";
-                        }
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
-
-            });
-
-            function ValidarProximoSeguimiento() {
-                if ($("#validarFechaProgramada").val() == undefined || $("#validarFechaProgramada").val() == "") {
-                    return false;
-                } else {
-                    return true;
-                }
-
-            }
-
-
-            function notificarCambio(campo) {
-                $.niftyNoty({
-                    type: 'info',
-                    icon: 'pli-cross icon-2x',
-                    message: 'Se  modificó ' + campo,
-                    container: 'floating',
-                    timer: 3000
-                });
-            }
-
-            function notificarCambio2() {
-                bootbox.dialog({
-                    size: 'extra-large',
-                    title: "IMPORTANTE",
-                    message: "<h4 style='color:blue'>Se ha realizado el Registro con éxito</h4>",
-                });
-
-            }
-
-
-
-            function SaveFechaImportante(fechaNombre, fecha, fechaImportante) {
-
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-
-                var datos = { "TrabajadorId": registroTrabajadorId, "Descripcion": fechaNombre, "Fecha": fecha };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/SaveFechaImportante",
-                    data: datos,
-                    success: function (data) {
-                        if (!data) {
-                            alert("Acceso denegado");
-                            $("#" + fechaImportante).val($.data("#" + fechaImportante, 'current'));
-                        } else {
-                            if (fechaNombre == "FechaPosibleAlta") {
-                                var fechaAislamiento = $("#dtp-FechaAislaminetoCuarentena-" + registroTrabajadorId).val();
-                                CalcularDiasAlta(registroTrabajadorId, fecha, fechaAislamiento);
-                            }
-                            else if (fechaNombre == "FechaPosibleAlta2") {
-                                var fechaAislamiento = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
-                                CalcularDiasAlta2(registroTrabajadorId, fecha, fechaAislamiento);
-                            } else if (fechaNombre == "FechaPosibleAlta3") {
-                                var fechaAislamiento = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId).val();
-                                CalcularDiasAlta3(registroTrabajadorId, fecha, fechaAislamiento);
-
-                            } else if (fechaNombre == "FechaPosibleAlta4") {
-                                var fechaAislamiento = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId).val();
-                                CalcularDiasAlta4(registroTrabajadorId, fecha, fechaAislamiento);
-
-                            } else if (fechaNombre == "FechaPosibleAlta5") {
-                                var fechaAislamiento = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId).val();
-                                CalcularDiasAlta5(registroTrabajadorId, fecha, fechaAislamiento);
-
-                            } else if (fechaNombre == "FechaPosibleAlta6") {
-                                var fechaAislamiento = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId).val();
-                                CalcularDiasAlta6(registroTrabajadorId, fecha, fechaAislamiento);
-
-
-                            } else if (fechaNombre = "FechaAltaMedica") {
-                                CalcularDiasAlta7(registroTrabajadorId, fecha, fechaImportante);
-                            } else if (fechaNombre == "FechaAislaminetoCuarentena") {
-                                var fechaPosibleAlta = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
-                                CalcularDiasAlta(registroTrabajadorId, fechaPosibleAlta, fecha);
-                            }
-
-                            notificarCambio("Fecha " + fechaNombre);
-                           // notificarCambio2();
-                            ActualizarLineaTiempo();
-                        }
-
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
-
-            }
-
-            function UpdateEstadoClinico() {
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-                let datos = { "TrabajadorId": registroTrabajadorId };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/UpdateEstadoClinico",
-                    data: datos,
-                    success: function (data) {
-                        //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
-            }
-
-            function UpdateComentarioAlta(comentario) {
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-                let datos = { "TrabajadorId": registroTrabajadorId, "Comentario": comentario };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/ComentarioAlta",
-                    data: datos,
-                    success: function (data) {
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
-            }
-
-            function tablaExamenes() {
-
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-
-                $.ajax({
-                    type: "GET",
-                    url: "/Examen/ListarExamenesTrabajador?trabajadorId=" + registroTrabajadorId,
-                    success: function (data) {
-                        $("#tabla-examenes").empty();
-                        var content = "";
-                        for (var i = 0; i < data.length; i++) {
-                            content += "<tr>";
-                            let fecha = moment(data[i].FechaExamen).format("DD/MM/yyyy");
-                            content += "<td> <a href='#fakelink' class='btn-link'>" + fecha + "</a></td>";
-                            content += "<td>" + data[i].TipoPrueba + "</td>";
-                            content += "<td>" + data[i].Resultado + "</td>";
-                            content += "</tr>";
-                        }
-                        $("#tabla-examenes").append(content);
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
-            }
-
-
-
-            function SaveChange(seguimientoId, mensaje, idControl, controlCheck) {
-
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-                let datos = {};
-                if ($("#chk-HipertensionArterial-" + seguimientoId).get(0) != undefined) {
-                    datos = {
-                        "Id": seguimientoId,
-                        "RegistroTrabajadorId": registroTrabajadorId,
-                        "SensacionFiebre": $("#chk-SensacionFiebre-" + seguimientoId).get(0).checked,
-                        "Tos": $("#chk-Tos-" + seguimientoId).get(0).checked,
-                        "DolorGarganta": $("#chk-DolorGarganta-" + seguimientoId).get(0).checked,
-                        "DificultadRespiratoria": $("#chk-DificultadRespiratoria-" + seguimientoId).get(0).checked,
-                        "CongestionNasal": $("#chk-CongestionNasal-" + seguimientoId).get(0).checked,
-                        "Cefalea": $("#chk-Cefalea-" + seguimientoId).get(0).checked,
-                        "MalestarGeneral": $("#chk-MalestarGeneral-" + seguimientoId).get(0).checked,
-                        "PerdidaOlfato": $("#chk-PerdidaOlfato-" + seguimientoId).get(0).checked,
-                        "Asintomatico": $("#chk-Asintomatico-" + seguimientoId).get(0).checked,
-                        "Comentario": $("#txt-Comentario-" + seguimientoId).val(),
-                        "ProximoSeguimiento": $("#dtp-ProximoSeguimiento-" + seguimientoId).val(),
-                        "TipoEstadoId": $("#ddl-TipoEstado-" + seguimientoId + " option:selected").val(),
-                        "HipertensionArterial": $("#chk-HipertensionArterial-" + seguimientoId).get(0).checked,
-                        "HipertensionArterialNoControlada": $("#chk-HipertensionArterialNoControlada-" + seguimientoId).get(0).checked,
-                        "AsmaModeradoSevero": $("#chk-AsmaModeradoSevero-" + seguimientoId).get(0).checked,
-                        "Diabetes": $("#chk-Diabetes-" + seguimientoId).get(0).checked,
-                        "Mayor65": $("#chk-Mayor65-" + seguimientoId).get(0).checked,
-                        "Cancer": $("#chk-Cancer-" + seguimientoId).get(0).checked,
-                        "CardiovascularGrave": $("#chk-CardiovascularGrave-" + seguimientoId).get(0).checked,
-                        "ImcMayor40": $("#chk-ImcMayor40-" + seguimientoId).get(0).checked,
-                        "RenalDialisis": $("#chk-RenalDialisis-" + seguimientoId).get(0).checked,
-                        "PulmonarCronica": $("#chk-PulmonarCronica-" + seguimientoId).get(0).checked,
-                        "TratInmunosupresor": $("#chk-TratInmunosupresor-" + seguimientoId).get(0).checked,
-                        "CasoPositivo": $("#chk-CasoPositivo-" + seguimientoId).get(0).checked,
-                        "CasoSospechoso": $("#chk-CasoSospechoso-" + seguimientoId).get(0).checked,
-                        "RinofaringitisAguda": $("#chk-RinofaringitisAguda-" + seguimientoId).get(0).checked,
-                        "NeumoniaViral": $("#chk-NeumoniaViral-" + seguimientoId).get(0).checked,
-                        "ContactoEnfermedades": $("#chk-ContactoEnfermedades-" + seguimientoId).get(0).checked,
-                        "Aislamiento": $("#chk-Aislamiento-" + seguimientoId).get(0).checked,
-                        "Otros": $("#chk-Otros-" + seguimientoId).get(0).checked,
-                        "OtrosComentar": $("#txt-Otros-" + seguimientoId).val(),
-                        "PAntigeno": $("#chk-PAntigeno-" + seguimientoId).get(0).checked,
-                        "PAntigenos": $("#chk-PAntigenos-" + seguimientoId).get(0).checked,
-                        "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
-                        "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
-                        "Recetamedica": $("#txt-Receta-" + seguimientoId).val()
-                    }
-                } else {
-                    datos = {
-                        "Id": seguimientoId,
-                        "RegistroTrabajadorId": registroTrabajadorId,
-                        //"ClasificacionId": $("#ddl-Calificacion-" + seguimientoId + " option:selected").val(),
-                        "SensacionFiebre": $("#chk-SensacionFiebre-" + seguimientoId).get(0).checked,
-                        "Tos": $("#chk-Tos-" + seguimientoId).get(0).checked,
-                        "DolorGarganta": $("#chk-DolorGarganta-" + seguimientoId).get(0).checked,
-                        "DificultadRespiratoria": $("#chk-DificultadRespiratoria-" + seguimientoId).get(0).checked,
-                        "CongestionNasal": $("#chk-CongestionNasal-" + seguimientoId).get(0).checked,
-                        "Cefalea": $("#chk-Cefalea-" + seguimientoId).get(0).checked,
-                        "MalestarGeneral": $("#chk-MalestarGeneral-" + seguimientoId).get(0).checked,
-                        "PerdidaOlfato": $("#chk-PerdidaOlfato-" + seguimientoId).get(0).checked,
-                        "Asintomatico": $("#chk-Asintomatico-" + seguimientoId).get(0).checked,
-                        "Comentario": $("#txt-Comentario-" + seguimientoId).val(),
-                        "TipoEstadoId": $("#ddl-TipoEstado-" + seguimientoId + " option:selected").val(),
-                        "ProximoSeguimiento": $("#dtp-ProximoSeguimiento-" + seguimientoId).val(),
-                        //"PAntigeno": $("#chk-PAntigeno-" + seguimientoId).get(0).checked
-                        "PAntigenos": $("#chk-PAntigenos-" + seguimientoId).get(0).checked,
-                        "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
-                        "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
-                        "Recetamedica": $("#txt-Receta-" + seguimientoId).val()
-
-                    }
-                }
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/UpdateSeguimiento",
-                    data: datos,
-
-                    success: function (data) {
-                        if (!data) {
-                            alert("Acceso denegado");
-                            if (controlCheck == "control-check") {
-                                if ($(idControl).get(0).checked) {
-                                    $(idControl).prop('checked', false);
-                                } else {
-                                    $(idControl).prop('checked', true);
-                                }
-                            } else if (controlCheck == "control-combo") {
-                                $(idControl).val($.data(idControl, 'current'));
-                                $(idControl).selectpicker('refresh');
-                            }
-
-                        } else {
-                            notificarCambio(mensaje);
-                        }
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
-            }
-
-            function BloquearSintomas(id) {
-
-                let tipoSeguimientoId = $("#ddl-TipoSeguimiento-" + id + " option:selected").val();
-
-                if (tipoSeguimientoId == 1) {
-                    $("#panel-checkbox-sintomas-" + id).removeClass("disabledbutton");
-                }
-                else {
-                    $("#panel-checkbox-sintomas-" + id).addClass("disabledbutton");
-
-                    $("#chk-SensacionFiebre-" + id).prop('checked', false);
-                    $("#chk-Tos-" + id).prop('checked', false);
-                    $("#chk-DolorGarganta-" + id).prop('checked', false);
-                    $("#chk-DificultadRespiratoria-" + id).prop('checked', false);
-                }
-            }
-
-            function CalcularDiasAlta(trabajadorId, fechaAlta, fechaAislamiento) {
-
-                if (fechaAlta == undefined || fechaAislamiento == undefined) {
-                    return false;
-                }
-                console.log(fechaAislamiento, fechaAlta)
-                let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 1;
-                console.log("dias", dias);
-                if (dias < 0) {
-                    dias = dias * (-1);
-
-                    bootbox.alert({
-                        size: 'extra-large',
-                        title: "VALIDACIÓN",
-                        message: "<h4 style='color:red'>La fecha de ALTA debe ser mayor a la fecha de INICIO SÍNTOMAS</h4>",
-                    });
-
-                    return false;
-
-                }
-                $("#dtp-FechaPosibleAlta-" + trabajadorId).parent().next('td').html(dias);
-                return true;
-            }
-
-            function CalcularDiasAlta2(trabajadorId, fechaAlta, fechaAislamiento) {
-
-                if (fechaAlta == undefined || fechaAislamiento == undefined) {
-                    return false;
-                }
-                console.log(fechaAislamiento, fechaAlta)
-                let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 0;
-                console.log("dias", dias);
-
-                $("#dtp-FechaPosibleAlta2-" + trabajadorId).parent().next('td').html(dias);
-                return true;
-            }
-
-            function CalcularDiasAlta3(trabajadorId, fechaAlta, fechaAlta2) {
-
-                if (fechaAlta == undefined || fechaAlta2 == undefined) {
-                    return false;
-                }
-                console.log(fechaAlta2, fechaAlta)
-                let dias = (restaFechas(fechaAlta2, fechaAlta)) + 0;
-                console.log("dias", dias);
-
-                $("#dtp-FechaPosibleAlta3-" + trabajadorId).parent().next('td').html(dias);
-                return true;
-            }
-
-            function CalcularDiasAlta4(trabajadorId, fechaAlta, fechaAlta3) {
-
-                if (fechaAlta == undefined || fechaAlta3 == undefined) {
-                    return false;
-                }
-                console.log(fechaAlta3, fechaAlta)
-                let dias = (restaFechas(fechaAlta3, fechaAlta)) + 0;
-                console.log("dias", dias);
-
-                $("#dtp-FechaPosibleAlta4-" + trabajadorId).parent().next('td').html(dias);
-                return true;
-            }
-
-            function CalcularDiasAlta5(trabajadorId, fechaAlta, fechaAlta4) {
-
-                if (fechaAlta == undefined || fechaAlta4 == undefined) {
-                    return false;
-                }
-                console.log(fechaAlta4, fechaAlta)
-                let dias = (restaFechas(fechaAlta4, fechaAlta)) + 0;
-                console.log("dias", dias);
-
-                $("#dtp-FechaPosibleAlta5-" + trabajadorId).parent().next('td').html(dias);
-                return true;
-            }
-
-
-
-            function CalcularDiasAlta6(trabajadorId, fechaAlta, fechaAlta5) {
-
-                if (fechaAlta == undefined || fechaAlta5 == undefined) {
-                    return false;
-                }
-                console.log(fechaAlta5, fechaAlta)
-                let dias = (restaFechas(fechaAlta5, fechaAlta)) + 0;
-                console.log("dias", dias);
-
-                $("#dtp-FechaPosibleAlta6-" + trabajadorId).parent().next('td').html(dias);
-                return true;
-            }
-
-
-            function CalcularDiasAlta7(trabajadorId, fechaAlta, fechaAislamiento) {
-
-                if (fechaAlta == undefined || fechaAislamiento == undefined) {
-                    return false;
-                }
-                console.log(fechaAislamiento, fechaAlta)
-                let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 0;
-                console.log("dias", dias);
-               
-                $("#dtp-FechaAltaMedica-" + trabajadorId).parent().next('td').html(dias);
-                return true;
-            }
-
-            function CalcularDias(idControl, fecha) {
-                let fechaActual = moment(Date.now()).format("DD/MM/yyyy");
-                let dias = (restaFechas(fecha, fechaActual)) + 1;
-                if (dias < 0) {
-                    dias = dias * (-1)
-                }
-                $(idControl).parent().next('td').html(dias);
-            }
-
-            
-            function parseJsonDate(jsonDateString) {
-                return new Date(parseInt(jsonDateString.replace('/Date(', '')));
-            }
-
-            function ListarFechasImportantes() {
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-                $.ajax({
-                    type: "GET",
-                    url: "/MonitoringWorker/ListarFechasImportabtes?idTrabajador=" + registroTrabajadorId,
-                    success: function (data) {
-                        var fechaAislamiento = data.filter((ele) => {
-                            return ele.Descripcion == 'FechaAislaminetoCuarentena'
-                        });
-
-                        var FechaAlta1 = data.filter((ele) => {
-                            return ele.Descripcion == 'FechaPosibleAlta'
-                        });
-
-                        var FechaAlta2 = data.filter((ele) => {
-                            return ele.Descripcion == 'FechaPosibleAlta2'
-                        });
-
-                        var FechaAlta3 = data.filter((ele) => {
-                            return ele.Descripcion == 'FechaPosibleAlta3'
-                        });
-
-                        var FechaAlta4 = data.filter((ele) => {
-                            return ele.Descripcion == 'FechaPosibleAlta4'
-                        });
-
-                        var FechaAlta5 = data.filter((ele) => {
-                            return ele.Descripcion == 'FechaPosibleAlta5'
-                        });
-
-                        var FechaAlta6 = data.filter((ele) => {
-                            return ele.Descripcion == 'FechaPosibleAlta6'
-                        });
-
-
-                      
-
-
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].Descripcion == 'FechaFinSintomas') {
-                                let idControl = $("#dtp-FechaFinSintomas-" + registroTrabajadorId);
-                                //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy") );
-                                idControl.val(data[i].Fecha);
-                            } else if (data[i].Descripcion == 'FechaInicioSintomas') {
-                                let idControl = $("#dtp-FechaInicioSintomas-" + registroTrabajadorId);
-                                //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy"));
-                                idControl.val(data[i].Fecha);
-                            } else if (data[i].Descripcion == 'FechaAislaminetoCuarentena') {
-
-                                let idControl = $("#dtp-FechaAislaminetoCuarentena-" + registroTrabajadorId);
-                                idControl.val(data[i].Fecha);
-
-                            } else if (data[i].Descripcion == 'FechaPosibleAlta') {
-
-                                let idControl = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId);
-                                let fechaAlta = data[i].Fecha;
-
-                                idControl.val(data[i].Fecha);
-
-                                CalcularDiasAlta(registroTrabajadorId, fechaAlta, fechaAislamiento[0].Fecha);
-
-                            } else if (data[i].Descripcion == 'FechaUltimodiatrabajo') {
-                                let idControl = $("#dtp-FechaUltimodiatrabajo-" + registroTrabajadorId);
-                                //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy"));
-                                idControl.val(data[i].Fecha);
-                            } else if (data[i].Descripcion == 'FechaPosibleAlta2') {
-
-                                let idControl = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId);
-                                let fechaAlta = data[i].Fecha;
-
-                                idControl.val(data[i].Fecha);
-
-                                CalcularDiasAlta2(registroTrabajadorId, fechaAlta, FechaAlta1[0].Fecha);
-
-                            } else if (data[i].Descripcion == 'FechaPosibleAlta3') {
-                                let idControl = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId);
-                                let fechaAlta = data[i].Fecha;
-
-                                idControl.val(data[i].Fecha);
-
-                                CalcularDiasAlta3(registroTrabajadorId, fechaAlta, FechaAlta2[0].Fecha);
-
-
-                            } else if (data[i].Descripcion == 'FechaPosibleAlta4') {
-                                let idControl = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId);
-                                let fechaAlta = data[i].Fecha;
-
-                                idControl.val(data[i].Fecha);
-
-                                CalcularDiasAlta4(registroTrabajadorId, fechaAlta, FechaAlta3[0].Fecha);
-
-
-                            } else if (data[i].Descripcion == 'FechaPosibleAlta5') {
-                                let idControl = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId);
-                                let fechaAlta = data[i].Fecha;
-
-                                idControl.val(data[i].Fecha);
-
-                                CalcularDiasAlta5(registroTrabajadorId, fechaAlta, FechaAlta4[0].Fecha);
-
-
-                            } else if (data[i].Descripcion == 'FechaPosibleAlta6') {
-                                let idControl = $("#dtp-FechaPosibleAlta6-" + registroTrabajadorId);
-                                let fechaAlta = data[i].Fecha;
-
-                                idControl.val(data[i].Fecha);
-
-                                CalcularDiasAlta6(registroTrabajadorId, fechaAlta, FechaAlta5[0].Fecha);
-
-                                // var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
-                                // $("#dtp-FechaPosibleAlta6-" + trabajadorId).parent().next('td').html(dias);
-
-                            } else if (data[i].Descripcion == 'FechaAltaMedica') {
-                                let idControl = $("#dtp-FechaAltaMedica-" + registroTrabajadorId);
-                                let fechaAlta = data[i].Fecha;
-
-                                idControl.val(data[i].Fecha);
-
-                                CalcularDiasAlta7(registroTrabajadorId, fechaAlta, FechaAlta6[0].Fecha);
-                            }
-                        }
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
-            }
-
-            function ActualizarLineaTiempo() {
-                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-
-                $.ajax({
-                    type: "GET",
-                    url: "/MonitoringWorker/GetFechasImportantesJson?trabajadorId=" + registroTrabajadorId,
-
-
-                    success: function (data) {
-                        $(".cd-horizontal-timeline").empty();
-                        var content = "";
-
-                        content += "<div class='timeline'>";
-                        content += "<div class='events-wrapper'>";
-                        content += "<div class='events '>";
-                        content += "<ol id='linea-tiempo'>";
-                        for (var i = 0; i < data.length; i++) {
-                            if (i == 0) {
-                                content += "<li><a href='#0' data-date='" + moment(data[i].Fecha).format("DD/MM/yyyy") + "' class='selected'>" + data[i].DateLine + "</a></li>";
-                            } else {
-                                content += "<li><a href='#0' data-date='" + moment(data[i].Fecha).format("DD/MM/yyyy") + "'>" + data[i].DateLine + "</a></li>";
-                            }
-                        }
-                        content += "</ol>";
-                        content += "<span class='filling-line' aria-hidden='true'></span>";
-                        content += "</div>";
-                        content += "</div>";
-                        content += "<ul class='cd-timeline-navigation'>";
-                        content += "<li><a href='#0' class='prev inactive'>Prev</a></li>";
-                        content += "<li><a href='#0' class='next'>Next</a></li>";
-                        content += "</ul>";
-                        content += "</div>";
-
-                        $(".cd-horizontal-timeline").append(content);
-
-                        initTimeline($(".cd-horizontal-timeline"));
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
+            //alert(parseFloat($(this).text()));
+            if ($(this).text() != '') {
+                data.push(parseFloat($(this).text()));
+               //alert($(this).text());
             }
 
         });
 
-        $(document).on('nifty.ready', function () {
-            $('#FechaInicioSintomas .input-group.date').datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
-            $("#dtpFechaExamen").datepicker({
-                autoclose: true, format: 'dd/mm/yyyy', onClose: function () {
-                    this.focus();
-                }
-            });
+        var suma = data.reduce(function (a, b) { return a + b; }, 0);
+        //alert(suma);
+        $("#totaldias").html("Total dias de Descanso:  " + suma)
 
-            $(".fechas").datepicker({
-                autoclose: true,
-                format: 'dd/mm/yyyy',
-                onClose: function (e) {                
-                this.focus();
-                }
-            });
-
-            
-            $(".fechaProximoSeguimiento").datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
-
-            var faIcon = {
-                valid: 'fa fa-check-circle fa-lg text-success',
-                invalid: 'fa fa-times-circle fa-lg',
-                validating: 'fa fa-refresh'
-            }
-
-            
+        
 
 
+        //var table = $('#example').DataTable();
 
-            $(".dtpFechaInicio").datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
+        //table
+        //    .column(0)
+        //    .data()
+        //    .each(function (value, index) {
+        //        console.log('Data in index: ' + index + ' is: ' + value);
+        //    });
 
-            var faIcon = {
-                valid: 'fa fa-check-circle fa-lg text-success',
-                invalid: 'fa fa-times-circle fa-lg',
-                validating: 'fa fa-refresh'
-            }
+     
 
-            $(".dtpFechaFin").datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
-
-            var faIcon = {
-                valid: 'fa fa-check-circle fa-lg text-success',
-                invalid: 'fa fa-times-circle fa-lg',
-                validating: 'fa fa-refresh'
-            }
+        var EmpresaPrincipalId = document.getElementById("EmpresaPrincipalId").value
+        var TrabajadorEmpresaId = document.getElementById("TrabajadorEmpresaId").value
 
 
-            $('#form-examen').bootstrapValidator({
-                excluded: ':disabled',
-                feedbackIcons: faIcon,
-                fields: {
-                    validateFechaExamen: {
-                        validators: {
-                            notEmpty: {
-                                message: 'La fecha es requerido'
-                            }
-                        }
-                    }
-                }
-            }).on('success.field.bv', function (e, data) {
-                var $parent = data.element.parents('.form-group');
+        if (EmpresaPrincipalId == 'Backus') {
 
-                // Remove the has-success class
-                $parent.removeClass('has-success');
-            });
-        });
-
-        function CambiarFecha(idSeguimiento, idTrabajador) {
-            bootbox.prompt({
-                title: "Actualizar fecha de seguimiento",
-                inputType: 'date',
-                callback: function (result) {
-
-                    if (result) {
-                        var datos = { "SeguimientoId": idSeguimiento, "Fecha": result, "TrabajadorId": idTrabajador };
-                        $.ajax({
-                            type: "POST",
-                            url: "/MonitoringWorker/UpdateFechaSeguimiento",
-                            data: datos,
-                            success: function (data) {
-                                if (data == "") {
-                                    alert("Conflicto de fechas");
-                                }
-                                window.location = "/MonitoringWorker/RegisterMonitoring?id=" + idTrabajador
-
-                            },
-                            error: function (jqXHR, exception) {
-                                alert("Ocurrió un error en la operación")
-                            }
-                        });
-                    } else {
-                        $.niftyNoty({
-                            type: 'danger',
-                            icon: 'pli-cross icon-2x',
-                            message: 'Se canceló la operación.',
-                            container: 'floating',
-                            timer: 3000
-                        });
-                    };
-
-                }
-            });
-        }
-
-        function DisableControlInputOtros(id) {
-            if ($("#chk-Otros-" + id).val() == undefined) return;
-
-            var val = $("#chk-Otros-" + id).get(0).checked;
-            if (val) {
-                $("#txt-Otros-" + id).prop("disabled", false);
-            } else {
-                $("#txt-Otros-" + id).prop("disabled", true);
-                $("#txt-Otros-" + id).val('');
-            }
+            $("#chk-PrimerDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+            $("#chk-SegundoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+            $("#chk-TercerDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+            $("#chk-CuartoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+            $("#chk-QuintoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
+            $("#chk-SextoDescanso-" + TrabajadorEmpresaId).prop("disabled", false)
 
         }
 
-        function viewAltaMedica(idTrabajador, comentario) {
-            window.location.href = "/MonitoringWorker/ExportAltaMedica?id=" + idTrabajador + "&comentario=" + comentario;
+        else {
+            $("#chk-PrimerDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+            $("#chk-SegundoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+            $("#chk-TercerDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+            $("#chk-CuartoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+            $("#chk-QuintoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
+            $("#chk-SextoDescanso-" + TrabajadorEmpresaId).prop("disabled", true)
         }
 
 
-        // CODIGO PARA EL ENVIO DE LOS DATOS PARA EL ENVIO DE LA NOTIFICACION POR CORREO -  Creado por Saul Ramos
-
-
-        function checkFluency(seguimientoId) {
-            var Valordelchk = $("#chk-PAntigenos-" + seguimientoId).get(0).checked;
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-
-            var datos = { "TrabajadorId": registroTrabajadorId };
-
-
-            if (Valordelchk == true) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarSolicituddePruebas",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
-
-                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
-
-
-                    }
-                });
-
-
-            }
-        }
-
-
-        // CODIGO PARA EL ENVIO DE LOS DATOS PARA EL ENVIO DE LA NOTIFICACION POR CORREO PRUEBA 5DIAS - Creado por Saul Ramos
-
-        function checkFluency5(seguimientoId) {
-            var Valordelchk = $("#chk-PAntigenos5-" + seguimientoId).get(0).checked;
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-
-            var datos = { "TrabajadorId": registroTrabajadorId };
-
-
-            if (Valordelchk == true) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarSolicituddePruebas5dias",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
-
-                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
-
-
-                    }
-                });
-
-
-            }
-        }
-
-
-        //CODIGO ENVIO PULSOOXIMETRO -  Creado por Saul Ramos
-
-
-
-        function checkFluencyP(seguimientoId) {
-            var Valordelchk = $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked;
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-
-            var datos = { "TrabajadorId": registroTrabajadorId };
-
-
-            if (Valordelchk == true) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarSolicituddePruebasPulsoOximetro",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
-
-                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
-
-
-                    }
-                });
-
-
-            }
-        }
-
-        //CODIGO ENVIO DE DM
-
-        //function checkFluencypd1(trabajadorId) {
-        //    var Valordelchk = $("#chk-PrimerDescanso-" + trabajadorId).get(0).checked;
-        //    let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-        //    var Descripcion = "FechaPosibleAlta";
-        //    var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
-
-
-        //    if (Valordelchk == true) {
-
-        //        $.ajax({
-        //            type: "POST",
-        //            url: "/MonitoringWorker/EnviarDescansoMedico1",
-        //            data: datos,
-        //            success: function (data) {
-        //                $('.cargaEsperar').modal('hide');
-
-        //                //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-        //                //                //window.location = "/Home/index";
-        //            },
-        //            error: function (jqXHR, exception) {
-        //                alert("Ocurrió un error en la operación");
-        //                $('.cargaEsperar').modal('hide');
-
-
-        //            }
+        //window.location.hash = "no-back-button";
+        //window.location.hash = "Again-No-back-button";//esta linea es necesaria para chrome
+        //window.onhashchange = function (e) {
+        //    console.log("??",e);
+        //    if (ValidarProximoSeguimiento()) {
+        //        //window.location = "/Home/index";
+        //    } else {
+        //        window.location.hash = "no-back-button";
+        //        bootbox.alert({
+        //            size: 'extra-large',
+        //            title: "ES OBLIGATORIO",
+        //            message: "<h1 style='color:red'>INGRESAR PRÓXIMO SEGUIMIENTO</h1>"
         //        });
-
         //    }
-
         //}
 
+        ListarFechasImportantes();
+
+        //$.niftyNoty({
+        //    type: 'danger',
+        //    icon: 'pli-cross icon-2x',
+        //    message: 'Se canceló la operación.',
+        //    container: 'floating',
+        //    timer: 3000
+        //});
 
 
-        //CODIGO ENVIO DE DM - CAMBIO Saul Ramos Vega 14/07/2021
+        $('#txtFechaExamen').datepicker({ autoclose: true });
 
-        function checkFluencypd1(trabajadorId) {
-            var Valordelddl = $("#ddl-TipoRango" + "option:selected").val();
+        $("#btn-AgregarSeguimiento").on("click", function () {
 
-            //    //let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-            //    //var seguimientoId = seguimientoId;
+            bootbox.confirm("¿Está seguro de agregar nuevo seguimiento?", function (result) {
 
-            var datos = { "trabajadorId": trabajadorId, };
+                let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+                if (result) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/MonitoringWorker/NewRegisterMonitoring?id=" + registroTrabajadorId,
+                        success: function (data) {
+                            window.location = "/MonitoringWorker/RegisterMonitoring?id=" + registroTrabajadorId;
+                        },
+                        error: function (jqXHR, exception) {
+                            alert("Ocurrió un error en la operación")
+                        }
+                    });
+                } else {
+                    $.niftyNoty({
+                        type: 'danger',
+                        icon: 'pli-cross icon-2x',
+                        message: 'Se canceló la operación.',
+                        container: 'floating',
+                        timer: 3000
+                    });
+                };
+            });
 
+        });
 
-            //    console.log(trabajadorId);
-            //    //Habilitar para pruebas 22/06/2021
-            if (Valordelddl == 1) {
+        $("#form-examen").submit(function (ev) { ev.preventDefault(); });
 
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarDescansoMedico1",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
+        $("#btnRegistrarExamen").on("click", function () {
 
-                        //                //            //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //            //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
-
-
-                    }
-                });
-
+            if ($("#dtpFechaExamen").val() == undefined) {
+                alert("El campo fecha es requerido");
+                return;
             }
 
-        }
+            let fechaSeguimiento = $("#dtpFechaExamen").val();
+            let tipoExamen = $("#ddl-TipoExamen").val();
+            let resultadoExamen = $("#ddl-ExamenResultado").val();
+            let trabajadorId = $("#txtRegistroTrabajadoId").val();
 
-        function checkFluencypd2(trabajadorId) {
-            var Valordelchk = $("#chk-SegundoDescanso-" + trabajadorId).get(0).checked;
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-            var Descripcion = "FechaPosibleAlta2";
-            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+            var datos = { "FechaExamen": fechaSeguimiento, "TrabajadorId": trabajadorId, "TipoExamen": tipoExamen, "ResultadoExamen": resultadoExamen };
 
-
-            if (Valordelchk == true) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarDescansoMedico2",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
-
-                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
-
-
+            $.ajax({
+                type: "post",
+                url: "/examen/crearexamen",
+                data: datos,
+                success: function (data) {
+                    $("#modal-examen").modal("hide");
+                    if (!data) {
+                        alert("Acceso denegado");
+                    } else {
+                        tablaExamenes();
+                        ActualizarLineaTiempo();
                     }
+
+                },
+                error: function (jqxhr, exception) {
+                    alert("ocurrió un error en la operación")
+                }
+            });
+        });
+
+        $('#modal-examen')
+            .on('shown.bs.modal', function () {
+                $("#dtpFechaExamen").val(moment(Date.now()).format("DD/MM/yyyy"));
+                $('#form-examen').find('[name="dtpFechaExamen"]').focus();
+            })
+            .on('hidden.bs.modal', function () {
+                $('#form-examen').bootstrapValidator('resetForm', true);
+            });
+
+        // GRABAR EN TABLA FECHAS IMPORTANTES Y ENVIAR DATOS PARA EL DM - Saul Ramos Vega  20210714
+
+        $("#form-rango").submit(function (ev) { ev.preventDefault(); });
+
+        $("#btnRegistrarRango").on("click", function () {
+
+            var fini = $("#dtpFechaInicio").val();
+            var ffin = $("#dtpFechaFin").val();
+            let trango = $("#ddl-TipoRango").val();
+            var mensaje = $("#msjalerta").val();
+
+            if (fini > ffin) {
+
+                // $("#msjalerta").val('MENSAJE DE PRUEBA');
+
+                bootbox.alert({
+                    size: 'large',
+                    title: "CORREGIR:",
+                    message: "<h5 style='color:red'>La Fecha de Inicio debe de ser menor a la Fecha de Fin</h5>",
+
                 });
-
-
+                return;
             }
-        }
+            if (fini == "" || ffin == "") {
 
 
+                bootbox.alert({
+                    size: 'large',
+                    title: "CORREGIR:",
+                    message: "<h5 style='color:red'>Las Fechas no pueden estar en blanco</h5>",
 
-        function checkFluencypd3(trabajadorId) {
-            var Valordelchk = $("#chk-TercerDescanso-" + trabajadorId).get(0).checked;
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-            var Descripcion = "FechaPosibleAlta3";
-            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
-
-
-            if (Valordelchk == true) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarDescansoMedico3",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
-
-                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
-
-
-                    }
                 });
-
-
+                return;
             }
-        }
+
+            if (trango == 0) {
 
 
+                bootbox.alert({
+                    size: 'large',
+                    title: "CORREGIR:",
+                    message: "<h5 style='color:red'>Debe Seleccionar el Tipo de Rango</h5>",
 
-        function checkFluencypd4(trabajadorId) {
-            var Valordelchk = $("#chk-CuartoDescanso-" + trabajadorId).get(0).checked;
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-            var Descripcion = "FechaPosibleAlta4";
-            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
-
-
-            if (Valordelchk == true) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarDescansoMedico4",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
-
-                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
-
-
-                    }
                 });
-
-
+                return;
             }
-        }
+
+
+            var datas = [];
+
+            $("td.fechainicial").each(function () {
+
+
+                datas.push(parseFloat($(this).text()));
+
+                if ($(this).text() == fini) {
+                    bootbox.alert({
+                        size: 'large',
+                        title: "CORREGIR:",
+                        message: "<h5 style='color:red'>Favor, Debe registrar otra Fecha de Inicio</h5>",
+                    });
+                    
+                }
+             
+                    });
+            return;
+                                 
+                
+    
+                                
+           
+        
+
+            //$("td.fechainicial").each(function () {
+            //    var data = [];
+            ////    //alert(parseFloat($(this).text()));
+            //if ($(this).text() != '') {
+            //        data.push(parseFloat($(this).text()));
+            //        alert($(this).text());
+            //}
+            //    if ($(this).text() == fini) {
+            //        alert("Debe de Seleccionar otra Fecha de Inicio ")
+
+            //    }
+
+            //});
 
 
 
-        function checkFluencypd5(trabajadorId) {
-            var Valordelchk = $("#chk-QuintoDescanso-" + trabajadorId).get(0).checked;
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-            var Descripcion = "FechaPosibleAlta5";
-            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
 
 
-            if (Valordelchk == true) {
 
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarDescansoMedico5",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
-
-                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
+            let FechaInicio = $("#dtpFechaInicio").val();
+            let FechaFin = $("#dtpFechaFin").val();
+            let TipoRango = $("#ddl-TipoRango").val();
+            let trabajadorId = $("#txtRegistroTrabajadoId").val();
+            let Diagnostico = $("#ddl-Diagnostico").val();
+            var EmpresaPrincipalId = document.getElementById("EmpresaPrincipalId").value;
 
 
-                    }
-                });
+
+            //const fechaParseInicio = moment(FechaInicio, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+            //var fechaActualParseFin = moment(FechaFin, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+
+            let NroDias = (restaFechas(FechaInicio, FechaFin)) + 1;
+
+            console.log(NroDias);
 
 
+            if (TipoRango > 1) {
+
+                NroDias = 0;
             }
-        }
 
 
-        function checkFluencypd6(trabajadorId) {
-            var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-            var Descripcion = "FechaPosibleAlta6";
-            var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
-
-
-            if (Valordelchk == true) {
-
-                $.ajax({
-                    type: "POST",
-                    url: "/MonitoringWorker/EnviarDescansoMedico6",
-                    data: datos,
-                    success: function (data) {
-                        $('.cargaEsperar').modal('hide');
-
-                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                        //                //window.location = "/Home/index";
-                    },
-                    error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación");
-                        $('.cargaEsperar').modal('hide');
-
-
-                    }
-                });
-
-
-            }
-        }
-
-
-        //CODIGO PARA EL ENVIO DE LOS DATOS A GRABAR PARA LA RECETA MEDICA  creado por Saul Ramos
-        function Recetamedica(seguimientoId) {
-
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-            let RecetasMedicas = $("#txt-Receta-" + seguimientoId).val();
+            var datos = { "FechaInicio": FechaInicio, "FechaFin": FechaFin, "TipoRango": TipoRango, "TrabajadorId": trabajadorId, "Diagnostico": Diagnostico, "EmpresaPrincipalId": EmpresaPrincipalId, "NroDias": NroDias };
 
 
 
-            var datos = { "TrabajadorId": registroTrabajadorId, "SeguimientoId": seguimientoId, "Receta": RecetasMedicas };
             $.ajax({
                 type: "POST",
-                url: "/MonitoringWorker/DarRegistrarReceta",
+                url: "/MonitoringWorker/EnviarDescansoMedico1",
+                data: datos,
+                success: function (data) {
+                    $("#modal-rango").modal("hide");
+                    //window.location = "/Home/index";
+                    if (!data) {
+                        alert("Acceso denegado");
+                    } else {
+                        tablaTipoRango();
+                        notificarCambio2();
+                        //ActualizarLineaTiempo();
+                    }
+
+                },
+                error: function (jqxhr, exception) {
+                    alert("ocurrió un error en la operación")
+                }
+            });
+        });
+
+        $('#modal-examen')
+            .on('shown.bs.modal', function () {
+                $("#dtpFechaExamen").val(moment(Date.now()).format("DD/MM/yyyy"));
+                $('#form-examen').find('[name="dtpFechaExamen"]').focus();
+            })
+            .on('hidden.bs.modal', function () {
+                $('#form-examen').bootstrapValidator('resetForm', true);
+            });
+
+
+        $(".panel-body").on("click", ".panel-sintomas input", function (e) {
+            let checkId = $(e.target).attr("id");
+            let id = checkId.split('-')[2];
+            var labelText = $('label[for=' + checkId + ']').text();
+
+            DisableControlInputOtros(id);
+            SaveChange(id, labelText, "#" + checkId, "control-check");
+
+        });
+
+        $(".panel-body").on("blur", "textarea", function (e) {
+            let textAreaId = $(e.target).attr("id");
+            let id = textAreaId.split('-')[2];
+            SaveChange(id, "Comentario", "#" + textAreaId, "control-textarea");
+        });
+
+        $(".panel-body").on("blur", ".inputChange", function (e) {
+            let textOtrosId = $(e.target).attr("id");
+            let id = textOtrosId.split('-')[2];
+            SaveChange(id, "Otros", "#" + textOtrosId, "control-text");
+        });
+
+        $(".panel-body").on("change", ".fechaProximoSeguimiento", function (e) {
+            let fechaResultado = $($(e.target).get(0)).attr("id");
+            let id = fechaResultado.split('-')[2];
+            SaveChange(id, "Fecha Próximo Seguimiento", "#" + fechaResultado, "control-datepicker");
+
+            var valorFecha = $("#" + fechaResultado).val();
+
+            const fechaParse = moment(valorFecha, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+            var fechaActual = new Date($.now());
+            var fechaActualParse = moment(fechaActual, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+            if (fechaParse >= fechaActualParse) {
+                $("#validarFechaProgramada").val(valorFecha);
+            } else {
+                console.log("NADA");
+            }
+        });
+
+        $(".panel-body").on("change", ".fechas", function (e) {
+            let fechaImportante = $($(e.target).get(0)).attr("id");
+            let fechaNombre = fechaImportante.split('-')[1];
+            let id = fechaImportante.split('-')[2];
+            let fecha = $(this).val();
+
+
+            SaveFechaImportante(fechaNombre, fecha, fechaImportante);
+
+        });
+
+        $("select.selectTipoEstado").on("changed.bs.select", function (e) {
+
+            let ddlCalificacionId = $(e.target).attr("id");
+            let value = $("#" + ddlCalificacionId).val();
+
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+            var posibleAlta1 = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
+            var posibleAlta2 = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId).val();
+            var posibleAlta3 = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId).val();
+            var posibleAlta4 = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId).val();
+            var posibleAlta5 = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId).val();
+            var posibleAlta6 = $("#dtp-FechaPosibleAlta6-" + registroTrabajadorId).val();
+
+
+            var fecha = "";
+
+            if ((posibleAlta6 != undefined || posibleAlta6 != "") && fecha == "") {
+                fecha = posibleAlta6;
+
+            }
+
+
+
+            if ((posibleAlta5 != undefined || posibleAlta5 != "") && fecha == "") {
+                fecha = posibleAlta5;
+
+            }
+
+
+
+            if ((posibleAlta4 != undefined || posibleAlta4 != "") && fecha == "") {
+                fecha = posibleAlta4;
+
+            }
+
+
+
+
+            if ((posibleAlta3 != undefined || posibleAlta3 != "") && fecha == "") {
+                fecha = posibleAlta3;
+
+            }
+
+            if ((posibleAlta2 != undefined || posibleAlta2 != "") && fecha == "") {
+                fecha = posibleAlta2;
+
+            }
+
+            if ((posibleAlta1 != undefined || posibleAlta1 != "") && fecha == "") {
+                fecha = posibleAlta1;
+
+            }
+
+            var f = new Date();
+            let getDate = (f.getDate() + "/" + (f.getMonth() + 1) + "/" + f.getFullYear())
+
+            if (value == 5) {
+                bootbox.prompt({
+                    title: "¿Está seguro de dar de ALTA?",
+                    onEscape: true,
+                    inputType: 'textarea',
+                    placeholder: 'Ingresar comentario de alta',
+                    required: true,
+                    callback: function (result) {
+
+                        if (result === null) {
+                            alert("Debe ingresar un comentario.")
+                            return;
+                        } else if (result === '') {
+                            alert("Debe ingresar un comentario.")
+                            return false;
+                        }
+                        else {
+                            $('.cargaEsperar').modal('show');
+                            let idSeguimiento = ddlCalificacionId.split('-')[2];
+                            var datos = { "TrabajadorId": registroTrabajadorId, "SeguimientoId": idSeguimiento, "ComentarioAlta": result, "FechaAlta": getDate, "Fecha": fecha };
+                            $.ajax({
+                                type: "POST",
+                                url: "/MonitoringWorker/DarAltaTrabajador",
+                                data: datos,
+                                success: function (data) {
+                                    $('.cargaEsperar').modal('hide');
+                                    //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                                    window.location = "/Home/index";
+                                },
+                                error: function (jqXHR, exception) {
+                                    alert("Ocurrió un error en la operación");
+                                    $('.cargaEsperar').modal('hide');
+                                }
+                            });
+                        }
+
+                    }
+                });
+
+            } else {
+                let id = ddlCalificacionId.split('-')[2];
+                SaveChange(id, "Tipo Estado", "#" + ddlCalificacionId, "control-combo");
+            }
+
+        });
+
+        //$("#btn-Regresar-Index").on("click", function () {
+
+        //   let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        //   //var nroAltas = parseInt($(".nroDiasAlta").html());
+        //   var nroAltas = 12;
+        //   if (isNaN(nroAltas)) {
+        //        bootbox.alert({
+        //            size: 'extra-large',
+        //            title: "ES OBLIGATORIO",
+        //            message: "<h4 style='color:red'>INGRESAR FECHA DE INICIO AISLAMIENTO Y POSIBLE ALTA</h4>",
+        //       });
+        //    return;
+        // }
+
+
+        $("#btn-Regresar-Index").on("click", function () {
+
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            //var nroAltas = parseInt($(".nroDiasAlta").html());
+            var nroAltas = 12;
+            if (isNaN(nroAltas)) {
+                bootbox.alert({
+                    size: 'extra-large',
+                    title: "ES OBLIGATORIO",
+                    message: "<h4 style='color:red'>INGRESAR FECHA DE INICIO AISLAMIENTO Y POSIBLE ALTA</h4>",
+                });
+                return;
+            }
+
+
+
+            $.ajax({
+                type: "GET",
+                url: "/MonitoringWorker/ValidarAntesSalir?trabajadorId=" + registroTrabajadorId,
+                success: function (data) {
+                    if (!data.resultado) {
+                        bootbox.alert({
+                            size: 'extra-large',
+                            title: "VALIDACIÓN",
+                            message: "<h4 style='color:red'>" + data.mensaje + "</h4>",
+                        });
+                        return;
+                    } else {
+                        window.location = "/Home/index";
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+
+        });
+
+        function ValidarProximoSeguimiento() {
+            if ($("#validarFechaProgramada").val() == undefined || $("#validarFechaProgramada").val() == "") {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+
+
+        function notificarCambio(campo) {
+            $.niftyNoty({
+                type: 'info',
+                icon: 'pli-cross icon-2x',
+                message: 'Se  modificó ' + campo,
+                container: 'floating',
+                timer: 3000
+            });
+        }
+
+        function notificarCambio2() {
+            bootbox.dialog({
+                size: 'extra-large',
+                title: "IMPORTANTE",
+                message: "<h4 style='color:blue'>Se ha realizado el Registro con éxito</h4>",
+            });
+
+        }
+
+
+
+        function SaveFechaImportante(fechaNombre, fecha, fechaImportante) {
+
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+            var datos = { "TrabajadorId": registroTrabajadorId, "Descripcion": fechaNombre, "Fecha": fecha };
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/SaveFechaImportante",
+                data: datos,
+                success: function (data) {
+                    if (!data) {
+                        alert("Acceso denegado");
+                        $("#" + fechaImportante).val($.data("#" + fechaImportante, 'current'));
+                    } else {
+                        if (fechaNombre == "FechaPosibleAlta") {
+                            var fechaAislamiento = $("#dtp-FechaAislaminetoCuarentena-" + registroTrabajadorId).val();
+                            CalcularDiasAlta(registroTrabajadorId, fecha, fechaAislamiento);
+                        }
+                        else if (fechaNombre == "FechaPosibleAlta2") {
+                            var fechaAislamiento = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
+                            CalcularDiasAlta2(registroTrabajadorId, fecha, fechaAislamiento);
+                        } else if (fechaNombre == "FechaPosibleAlta3") {
+                            var fechaAislamiento = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId).val();
+                            CalcularDiasAlta3(registroTrabajadorId, fecha, fechaAislamiento);
+
+                        } else if (fechaNombre == "FechaPosibleAlta4") {
+                            var fechaAislamiento = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId).val();
+                            CalcularDiasAlta4(registroTrabajadorId, fecha, fechaAislamiento);
+
+                        } else if (fechaNombre == "FechaPosibleAlta5") {
+                            var fechaAislamiento = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId).val();
+                            CalcularDiasAlta5(registroTrabajadorId, fecha, fechaAislamiento);
+
+                        } else if (fechaNombre == "FechaPosibleAlta6") {
+                            var fechaAislamiento = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId).val();
+                            CalcularDiasAlta6(registroTrabajadorId, fecha, fechaAislamiento);
+
+
+                        } else if (fechaNombre = "FechaAltaMedica") {
+                            CalcularDiasAlta7(registroTrabajadorId, fecha, fechaImportante);
+                        } else if (fechaNombre == "FechaAislaminetoCuarentena") {
+                            var fechaPosibleAlta = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId).val();
+                            CalcularDiasAlta(registroTrabajadorId, fechaPosibleAlta, fecha);
+                        }
+
+                        notificarCambio("Fecha " + fechaNombre);
+                        // notificarCambio2();
+                        ActualizarLineaTiempo();
+                    }
+
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+
+        }
+
+        function UpdateEstadoClinico() {
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            let datos = { "TrabajadorId": registroTrabajadorId };
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/UpdateEstadoClinico",
+                data: datos,
+                success: function (data) {
+                    //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+        }
+
+        function UpdateComentarioAlta(comentario) {
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            let datos = { "TrabajadorId": registroTrabajadorId, "Comentario": comentario };
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/ComentarioAlta",
+                data: datos,
+                success: function (data) {
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+        }
+
+        function tablaExamenes() {
+
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+            $.ajax({
+                type: "GET",
+                url: "/Examen/ListarExamenesTrabajador?trabajadorId=" + registroTrabajadorId,
+                success: function (data) {
+                    $("#tabla-examenes").empty();
+                    var content = "";
+                    for (var i = 0; i < data.length; i++) {
+                        content += "<tr>";
+                        let fecha = moment(data[i].FechaExamen).format("DD/MM/yyyy");
+                        content += "<td> <a href='#fakelink' class='btn-link'>" + fecha + "</a></td>";
+                        content += "<td>" + data[i].TipoPrueba + "</td>";
+                        content += "<td>" + data[i].Resultado + "</td>";
+                        content += "</tr>";
+                    }
+                    $("#tabla-examenes").append(content);
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+        }
+
+
+
+        function SaveChange(seguimientoId, mensaje, idControl, controlCheck) {
+
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            let datos = {};
+            if ($("#chk-HipertensionArterial-" + seguimientoId).get(0) != undefined) {
+                datos = {
+                    "Id": seguimientoId,
+                    "RegistroTrabajadorId": registroTrabajadorId,
+                    "SensacionFiebre": $("#chk-SensacionFiebre-" + seguimientoId).get(0).checked,
+                    "Tos": $("#chk-Tos-" + seguimientoId).get(0).checked,
+                    "DolorGarganta": $("#chk-DolorGarganta-" + seguimientoId).get(0).checked,
+                    "DificultadRespiratoria": $("#chk-DificultadRespiratoria-" + seguimientoId).get(0).checked,
+                    "CongestionNasal": $("#chk-CongestionNasal-" + seguimientoId).get(0).checked,
+                    "Cefalea": $("#chk-Cefalea-" + seguimientoId).get(0).checked,
+                    "MalestarGeneral": $("#chk-MalestarGeneral-" + seguimientoId).get(0).checked,
+                    "PerdidaOlfato": $("#chk-PerdidaOlfato-" + seguimientoId).get(0).checked,
+                    "Asintomatico": $("#chk-Asintomatico-" + seguimientoId).get(0).checked,
+                    "Comentario": $("#txt-Comentario-" + seguimientoId).val(),
+                    "ProximoSeguimiento": $("#dtp-ProximoSeguimiento-" + seguimientoId).val(),
+                    "TipoEstadoId": $("#ddl-TipoEstado-" + seguimientoId + " option:selected").val(),
+                    "HipertensionArterial": $("#chk-HipertensionArterial-" + seguimientoId).get(0).checked,
+                    "HipertensionArterialNoControlada": $("#chk-HipertensionArterialNoControlada-" + seguimientoId).get(0).checked,
+                    "AsmaModeradoSevero": $("#chk-AsmaModeradoSevero-" + seguimientoId).get(0).checked,
+                    "Diabetes": $("#chk-Diabetes-" + seguimientoId).get(0).checked,
+                    "Mayor65": $("#chk-Mayor65-" + seguimientoId).get(0).checked,
+                    "Cancer": $("#chk-Cancer-" + seguimientoId).get(0).checked,
+                    "CardiovascularGrave": $("#chk-CardiovascularGrave-" + seguimientoId).get(0).checked,
+                    "ImcMayor40": $("#chk-ImcMayor40-" + seguimientoId).get(0).checked,
+                    "RenalDialisis": $("#chk-RenalDialisis-" + seguimientoId).get(0).checked,
+                    "PulmonarCronica": $("#chk-PulmonarCronica-" + seguimientoId).get(0).checked,
+                    "TratInmunosupresor": $("#chk-TratInmunosupresor-" + seguimientoId).get(0).checked,
+                    "CasoPositivo": $("#chk-CasoPositivo-" + seguimientoId).get(0).checked,
+                    "CasoSospechoso": $("#chk-CasoSospechoso-" + seguimientoId).get(0).checked,
+                    "RinofaringitisAguda": $("#chk-RinofaringitisAguda-" + seguimientoId).get(0).checked,
+                    "NeumoniaViral": $("#chk-NeumoniaViral-" + seguimientoId).get(0).checked,
+                    "ContactoEnfermedades": $("#chk-ContactoEnfermedades-" + seguimientoId).get(0).checked,
+                    "Aislamiento": $("#chk-Aislamiento-" + seguimientoId).get(0).checked,
+                    "Otros": $("#chk-Otros-" + seguimientoId).get(0).checked,
+                    "OtrosComentar": $("#txt-Otros-" + seguimientoId).val(),
+                    "PAntigeno": $("#chk-PAntigeno-" + seguimientoId).get(0).checked,
+                    "PAntigenos": $("#chk-PAntigenos-" + seguimientoId).get(0).checked,
+                    "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
+                    "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
+                    "Recetamedica": $("#txt-Receta-" + seguimientoId).val()
+                }
+            } else {
+                datos = {
+                    "Id": seguimientoId,
+                    "RegistroTrabajadorId": registroTrabajadorId,
+                    //"ClasificacionId": $("#ddl-Calificacion-" + seguimientoId + " option:selected").val(),
+                    "SensacionFiebre": $("#chk-SensacionFiebre-" + seguimientoId).get(0).checked,
+                    "Tos": $("#chk-Tos-" + seguimientoId).get(0).checked,
+                    "DolorGarganta": $("#chk-DolorGarganta-" + seguimientoId).get(0).checked,
+                    "DificultadRespiratoria": $("#chk-DificultadRespiratoria-" + seguimientoId).get(0).checked,
+                    "CongestionNasal": $("#chk-CongestionNasal-" + seguimientoId).get(0).checked,
+                    "Cefalea": $("#chk-Cefalea-" + seguimientoId).get(0).checked,
+                    "MalestarGeneral": $("#chk-MalestarGeneral-" + seguimientoId).get(0).checked,
+                    "PerdidaOlfato": $("#chk-PerdidaOlfato-" + seguimientoId).get(0).checked,
+                    "Asintomatico": $("#chk-Asintomatico-" + seguimientoId).get(0).checked,
+                    "Comentario": $("#txt-Comentario-" + seguimientoId).val(),
+                    "TipoEstadoId": $("#ddl-TipoEstado-" + seguimientoId + " option:selected").val(),
+                    "ProximoSeguimiento": $("#dtp-ProximoSeguimiento-" + seguimientoId).val(),
+                    //"PAntigeno": $("#chk-PAntigeno-" + seguimientoId).get(0).checked
+                    "PAntigenos": $("#chk-PAntigenos-" + seguimientoId).get(0).checked,
+                    "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
+                    "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
+                    "Recetamedica": $("#txt-Receta-" + seguimientoId).val()
+
+                }
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/UpdateSeguimiento",
+                data: datos,
+
+                success: function (data) {
+                    if (!data) {
+                        alert("Acceso denegado");
+                        if (controlCheck == "control-check") {
+                            if ($(idControl).get(0).checked) {
+                                $(idControl).prop('checked', false);
+                            } else {
+                                $(idControl).prop('checked', true);
+                            }
+                        } else if (controlCheck == "control-combo") {
+                            $(idControl).val($.data(idControl, 'current'));
+                            $(idControl).selectpicker('refresh');
+                        }
+
+                    } else {
+                        notificarCambio(mensaje);
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+        }
+
+        function BloquearSintomas(id) {
+
+            let tipoSeguimientoId = $("#ddl-TipoSeguimiento-" + id + " option:selected").val();
+
+            if (tipoSeguimientoId == 1) {
+                $("#panel-checkbox-sintomas-" + id).removeClass("disabledbutton");
+            }
+            else {
+                $("#panel-checkbox-sintomas-" + id).addClass("disabledbutton");
+
+                $("#chk-SensacionFiebre-" + id).prop('checked', false);
+                $("#chk-Tos-" + id).prop('checked', false);
+                $("#chk-DolorGarganta-" + id).prop('checked', false);
+                $("#chk-DificultadRespiratoria-" + id).prop('checked', false);
+            }
+        }
+
+        function CalcularDiasAlta(trabajadorId, fechaAlta, fechaAislamiento) {
+
+            if (fechaAlta == undefined || fechaAislamiento == undefined) {
+                return false;
+            }
+            console.log(fechaAislamiento, fechaAlta)
+            let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 1;
+            console.log("dias", dias);
+            if (dias < 0) {
+                dias = dias * (-1);
+
+                bootbox.alert({
+                    size: 'extra-large',
+                    title: "VALIDACIÓN",
+                    message: "<h4 style='color:red'>La fecha de ALTA debe ser mayor a la fecha de INICIO SÍNTOMAS</h4>",
+                });
+
+                return false;
+
+            }
+            $("#dtp-FechaPosibleAlta-" + trabajadorId).parent().next('td').html(dias);
+            return true;
+        }
+
+        function CalcularDiasAlta2(trabajadorId, fechaAlta, fechaAislamiento) {
+
+            if (fechaAlta == undefined || fechaAislamiento == undefined) {
+                return false;
+            }
+            console.log(fechaAislamiento, fechaAlta)
+            let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 0;
+            console.log("dias", dias);
+
+            $("#dtp-FechaPosibleAlta2-" + trabajadorId).parent().next('td').html(dias);
+            return true;
+        }
+
+        function CalcularDiasAlta3(trabajadorId, fechaAlta, fechaAlta2) {
+
+            if (fechaAlta == undefined || fechaAlta2 == undefined) {
+                return false;
+            }
+            console.log(fechaAlta2, fechaAlta)
+            let dias = (restaFechas(fechaAlta2, fechaAlta)) + 0;
+            console.log("dias", dias);
+
+            $("#dtp-FechaPosibleAlta3-" + trabajadorId).parent().next('td').html(dias);
+            return true;
+        }
+
+        function CalcularDiasAlta4(trabajadorId, fechaAlta, fechaAlta3) {
+
+            if (fechaAlta == undefined || fechaAlta3 == undefined) {
+                return false;
+            }
+            console.log(fechaAlta3, fechaAlta)
+            let dias = (restaFechas(fechaAlta3, fechaAlta)) + 0;
+            console.log("dias", dias);
+
+            $("#dtp-FechaPosibleAlta4-" + trabajadorId).parent().next('td').html(dias);
+            return true;
+        }
+
+        function CalcularDiasAlta5(trabajadorId, fechaAlta, fechaAlta4) {
+
+            if (fechaAlta == undefined || fechaAlta4 == undefined) {
+                return false;
+            }
+            console.log(fechaAlta4, fechaAlta)
+            let dias = (restaFechas(fechaAlta4, fechaAlta)) + 0;
+            console.log("dias", dias);
+
+            $("#dtp-FechaPosibleAlta5-" + trabajadorId).parent().next('td').html(dias);
+            return true;
+        }
+
+
+
+        function CalcularDiasAlta6(trabajadorId, fechaAlta, fechaAlta5) {
+
+            if (fechaAlta == undefined || fechaAlta5 == undefined) {
+                return false;
+            }
+            console.log(fechaAlta5, fechaAlta)
+            let dias = (restaFechas(fechaAlta5, fechaAlta)) + 0;
+            console.log("dias", dias);
+
+            $("#dtp-FechaPosibleAlta6-" + trabajadorId).parent().next('td').html(dias);
+            return true;
+        }
+
+
+        function CalcularDiasAlta7(trabajadorId, fechaAlta, fechaAislamiento) {
+
+            if (fechaAlta == undefined || fechaAislamiento == undefined) {
+                return false;
+            }
+            console.log(fechaAislamiento, fechaAlta)
+            let dias = (restaFechas(fechaAislamiento, fechaAlta)) + 0;
+            console.log("dias", dias);
+
+            $("#dtp-FechaAltaMedica-" + trabajadorId).parent().next('td').html(dias);
+            return true;
+        }
+
+        function CalcularDias(idControl, fecha) {
+            let fechaActual = moment(Date.now()).format("DD/MM/yyyy");
+            let dias = (restaFechas(fecha, fechaActual)) + 1;
+            if (dias < 0) {
+                dias = dias * (-1)
+            }
+            $(idControl).parent().next('td').html(dias);
+        }
+
+
+        function parseJsonDate(jsonDateString) {
+            return new Date(parseInt(jsonDateString.replace('/Date(', '')));
+        }
+
+        function ListarFechasImportantes() {
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+            $.ajax({
+                type: "GET",
+                url: "/MonitoringWorker/ListarFechasImportabtes?idTrabajador=" + registroTrabajadorId,
+                success: function (data) {
+                    var fechaAislamiento = data.filter((ele) => {
+                        return ele.Descripcion == 'FechaAislaminetoCuarentena'
+                    });
+
+                    var FechaAlta1 = data.filter((ele) => {
+                        return ele.Descripcion == 'FechaPosibleAlta'
+                    });
+
+                    var FechaAlta2 = data.filter((ele) => {
+                        return ele.Descripcion == 'FechaPosibleAlta2'
+                    });
+
+                    var FechaAlta3 = data.filter((ele) => {
+                        return ele.Descripcion == 'FechaPosibleAlta3'
+                    });
+
+                    var FechaAlta4 = data.filter((ele) => {
+                        return ele.Descripcion == 'FechaPosibleAlta4'
+                    });
+
+                    var FechaAlta5 = data.filter((ele) => {
+                        return ele.Descripcion == 'FechaPosibleAlta5'
+                    });
+
+                    var FechaAlta6 = data.filter((ele) => {
+                        return ele.Descripcion == 'FechaPosibleAlta6'
+                    });
+
+
+
+
+
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].Descripcion == 'FechaFinSintomas') {
+                            let idControl = $("#dtp-FechaFinSintomas-" + registroTrabajadorId);
+                            //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy") );
+                            idControl.val(data[i].Fecha);
+                        } else if (data[i].Descripcion == 'FechaInicioSintomas') {
+                            let idControl = $("#dtp-FechaInicioSintomas-" + registroTrabajadorId);
+                            //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy"));
+                            idControl.val(data[i].Fecha);
+                        } else if (data[i].Descripcion == 'FechaAislaminetoCuarentena') {
+
+                            let idControl = $("#dtp-FechaAislaminetoCuarentena-" + registroTrabajadorId);
+                            idControl.val(data[i].Fecha);
+
+                        } else if (data[i].Descripcion == 'FechaPosibleAlta') {
+
+                            let idControl = $("#dtp-FechaPosibleAlta-" + registroTrabajadorId);
+                            let fechaAlta = data[i].Fecha;
+
+                            idControl.val(data[i].Fecha);
+
+                            CalcularDiasAlta(registroTrabajadorId, fechaAlta, fechaAislamiento[0].Fecha);
+
+                        } else if (data[i].Descripcion == 'FechaUltimodiatrabajo') {
+                            let idControl = $("#dtp-FechaUltimodiatrabajo-" + registroTrabajadorId);
+                            //CalcularDias(idControl, moment(data[i].Fecha).format("DD/MM/yyyy"));
+                            idControl.val(data[i].Fecha);
+                        } else if (data[i].Descripcion == 'FechaPosibleAlta2') {
+
+                            let idControl = $("#dtp-FechaPosibleAlta2-" + registroTrabajadorId);
+                            let fechaAlta = data[i].Fecha;
+
+                            idControl.val(data[i].Fecha);
+
+                            CalcularDiasAlta2(registroTrabajadorId, fechaAlta, FechaAlta1[0].Fecha);
+
+                        } else if (data[i].Descripcion == 'FechaPosibleAlta3') {
+                            let idControl = $("#dtp-FechaPosibleAlta3-" + registroTrabajadorId);
+                            let fechaAlta = data[i].Fecha;
+
+                            idControl.val(data[i].Fecha);
+
+                            CalcularDiasAlta3(registroTrabajadorId, fechaAlta, FechaAlta2[0].Fecha);
+
+
+                        } else if (data[i].Descripcion == 'FechaPosibleAlta4') {
+                            let idControl = $("#dtp-FechaPosibleAlta4-" + registroTrabajadorId);
+                            let fechaAlta = data[i].Fecha;
+
+                            idControl.val(data[i].Fecha);
+
+                            CalcularDiasAlta4(registroTrabajadorId, fechaAlta, FechaAlta3[0].Fecha);
+
+
+                        } else if (data[i].Descripcion == 'FechaPosibleAlta5') {
+                            let idControl = $("#dtp-FechaPosibleAlta5-" + registroTrabajadorId);
+                            let fechaAlta = data[i].Fecha;
+
+                            idControl.val(data[i].Fecha);
+
+                            CalcularDiasAlta5(registroTrabajadorId, fechaAlta, FechaAlta4[0].Fecha);
+
+
+                        } else if (data[i].Descripcion == 'FechaPosibleAlta6') {
+                            let idControl = $("#dtp-FechaPosibleAlta6-" + registroTrabajadorId);
+                            let fechaAlta = data[i].Fecha;
+
+                            idControl.val(data[i].Fecha);
+
+                            CalcularDiasAlta6(registroTrabajadorId, fechaAlta, FechaAlta5[0].Fecha);
+
+                            // var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
+                            // $("#dtp-FechaPosibleAlta6-" + trabajadorId).parent().next('td').html(dias);
+
+                        } else if (data[i].Descripcion == 'FechaAltaMedica') {
+                            let idControl = $("#dtp-FechaAltaMedica-" + registroTrabajadorId);
+                            let fechaAlta = data[i].Fecha;
+
+                            idControl.val(data[i].Fecha);
+
+                            CalcularDiasAlta7(registroTrabajadorId, fechaAlta, FechaAlta6[0].Fecha);
+                        }
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+        }
+
+        function ActualizarLineaTiempo() {
+            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+            $.ajax({
+                type: "GET",
+                url: "/MonitoringWorker/GetFechasImportantesJson?trabajadorId=" + registroTrabajadorId,
+
+
+                success: function (data) {
+                    $(".cd-horizontal-timeline").empty();
+                    var content = "";
+
+                    content += "<div class='timeline'>";
+                    content += "<div class='events-wrapper'>";
+                    content += "<div class='events '>";
+                    content += "<ol id='linea-tiempo'>";
+                    for (var i = 0; i < data.length; i++) {
+                        if (i == 0) {
+                            content += "<li><a href='#0' data-date='" + moment(data[i].Fecha).format("DD/MM/yyyy") + "' class='selected'>" + data[i].DateLine + "</a></li>";
+                        } else {
+                            content += "<li><a href='#0' data-date='" + moment(data[i].Fecha).format("DD/MM/yyyy") + "'>" + data[i].DateLine + "</a></li>";
+                        }
+                    }
+                    content += "</ol>";
+                    content += "<span class='filling-line' aria-hidden='true'></span>";
+                    content += "</div>";
+                    content += "</div>";
+                    content += "<ul class='cd-timeline-navigation'>";
+                    content += "<li><a href='#0' class='prev inactive'>Prev</a></li>";
+                    content += "<li><a href='#0' class='next'>Next</a></li>";
+                    content += "</ul>";
+                    content += "</div>";
+
+                    $(".cd-horizontal-timeline").append(content);
+
+                    initTimeline($(".cd-horizontal-timeline"));
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación")
+                }
+            });
+        }
+
+    });
+
+    $(document).on('nifty.ready', function () {
+        $('#FechaInicioSintomas .input-group.date').datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
+        $("#dtpFechaExamen").datepicker({
+            autoclose: true, format: 'dd/mm/yyyy', onClose: function () {
+                this.focus();
+            }
+        });
+
+        $(".fechas").datepicker({
+            autoclose: true,
+            format: 'dd/mm/yyyy',
+            onClose: function (e) {
+                this.focus();
+            }
+        });
+
+
+        $(".fechaProximoSeguimiento").datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
+
+        var faIcon = {
+            valid: 'fa fa-check-circle fa-lg text-success',
+            invalid: 'fa fa-times-circle fa-lg',
+            validating: 'fa fa-refresh'
+        }
+
+
+
+        $(".kid").datepicker({
+            //autoclose: true, format: 'dd/mm/yyyy', minDate: '16/08/2021'
+
+            //len: "es",
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            minView: "year",
+            startDate:"16/08/2021",
+
+           
+            //monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            //monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+            //dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            //dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            //dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+
+        });
+
+        
+
+        var faIcon = {
+            valid: 'fa fa-check-circle fa-lg text-success',
+            invalid: 'fa fa-times-circle fa-lg',
+            validating: 'fa fa-refresh'
+
+        }
+
+        $(".dtpFechaFin").datepicker({
+
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            minView: "year",
+            startDate: "16/08/2021"
+        }).on('changeDate', function (e) {
+            Contadores();
+        });
+
+
+
+              
+
+        var faIcon = {
+            valid: 'fa fa-check-circle fa-lg text-success',
+            invalid: 'fa fa-times-circle fa-lg',
+            validating: 'fa fa-refresh'
+        }
+
+
+        $('#form-examen').bootstrapValidator({
+            excluded: ':disabled',
+            feedbackIcons: faIcon,
+            fields: {
+                validateFechaExamen: {
+                    validators: {
+                        notEmpty: {
+                            message: 'La fecha es requerido'
+                        }
+                    }
+                }
+            }
+        }).on('success.field.bv', function (e, data) {
+            var $parent = data.element.parents('.form-group');
+
+            // Remove the has-success class
+            $parent.removeClass('has-success');
+        });
+    });
+
+    function CambiarFecha(idSeguimiento, idTrabajador) {
+        bootbox.prompt({
+            title: "Actualizar fecha de seguimiento",
+            inputType: 'date',
+            callback: function (result) {
+
+                if (result) {
+                    var datos = { "SeguimientoId": idSeguimiento, "Fecha": result, "TrabajadorId": idTrabajador };
+                    $.ajax({
+                        type: "POST",
+                        url: "/MonitoringWorker/UpdateFechaSeguimiento",
+                        data: datos,
+                        success: function (data) {
+                            if (data == "") {
+                                alert("Conflicto de fechas");
+                            }
+                            window.location = "/MonitoringWorker/RegisterMonitoring?id=" + idTrabajador
+
+                        },
+                        error: function (jqXHR, exception) {
+                            alert("Ocurrió un error en la operación")
+                        }
+                    });
+                } else {
+                    $.niftyNoty({
+                        type: 'danger',
+                        icon: 'pli-cross icon-2x',
+                        message: 'Se canceló la operación.',
+                        container: 'floating',
+                        timer: 3000
+                    });
+                };
+
+            }
+        });
+    }
+
+    function DisableControlInputOtros(id) {
+        if ($("#chk-Otros-" + id).val() == undefined) return;
+
+        var val = $("#chk-Otros-" + id).get(0).checked;
+        if (val) {
+            $("#txt-Otros-" + id).prop("disabled", false);
+        } else {
+            $("#txt-Otros-" + id).prop("disabled", true);
+            $("#txt-Otros-" + id).val('');
+        }
+
+    }
+
+    function viewAltaMedica(idTrabajador, comentario) {
+        window.location.href = "/MonitoringWorker/ExportAltaMedica?id=" + idTrabajador + "&comentario=" + comentario;
+    }
+
+
+    // CODIGO PARA EL ENVIO DE LOS DATOS PARA EL ENVIO DE LA NOTIFICACION POR CORREO -  Creado por Saul Ramos
+
+
+    function checkFluency(seguimientoId) {
+        var Valordelchk = $("#chk-PAntigenos-" + seguimientoId).get(0).checked;
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+        var datos = { "TrabajadorId": registroTrabajadorId };
+
+
+        if (Valordelchk == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/EnviarSolicituddePruebas",
                 data: datos,
                 success: function (data) {
                     $('.cargaEsperar').modal('hide');
 
-                    //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                    //window.location = "/Home/index";
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
+                }
+            });
+
+
+        }
+    }
+
+
+    // CODIGO PARA EL ENVIO DE LOS DATOS PARA EL ENVIO DE LA NOTIFICACION POR CORREO PRUEBA 5DIAS - Creado por Saul Ramos
+
+    function checkFluency5(seguimientoId) {
+        var Valordelchk = $("#chk-PAntigenos5-" + seguimientoId).get(0).checked;
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+        var datos = { "TrabajadorId": registroTrabajadorId };
+
+
+        if (Valordelchk == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/EnviarSolicituddePruebas5dias",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
+                }
+            });
+
+
+        }
+    }
+
+
+    //CODIGO ENVIO PULSOOXIMETRO -  Creado por Saul Ramos
+
+
+
+    function checkFluencyP(seguimientoId) {
+        var Valordelchk = $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked;
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+        var datos = { "TrabajadorId": registroTrabajadorId };
+
+
+        if (Valordelchk == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/EnviarSolicituddePruebasPulsoOximetro",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
+                }
+            });
+
+
+        }
+    }
+
+    //CODIGO ENVIO DE DM
+
+    //function checkFluencypd1(trabajadorId) {
+    //    var Valordelchk = $("#chk-PrimerDescanso-" + trabajadorId).get(0).checked;
+    //    let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+    //    var Descripcion = "FechaPosibleAlta";
+    //    var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+    //    if (Valordelchk == true) {
+
+    //        $.ajax({
+    //            type: "POST",
+    //            url: "/MonitoringWorker/EnviarDescansoMedico1",
+    //            data: datos,
+    //            success: function (data) {
+    //                $('.cargaEsperar').modal('hide');
+
+    //                //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+    //                //                //window.location = "/Home/index";
+    //            },
+    //            error: function (jqXHR, exception) {
+    //                alert("Ocurrió un error en la operación");
+    //                $('.cargaEsperar').modal('hide');
+
+
+    //            }
+    //        });
+
+    //    }
+
+    //}
+
+
+
+    //CODIGO ENVIO DE DM - CAMBIO Saul Ramos Vega 14/07/2021
+
+    function checkFluencypd1(trabajadorId) {
+        var Valordelddl = $("#ddl-TipoRango" + "option:selected").val();
+
+        //    //let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        //    //var seguimientoId = seguimientoId;
+
+        var datos = { "trabajadorId": trabajadorId, };
+
+
+        //    console.log(trabajadorId);
+        //    //Habilitar para pruebas 22/06/2021
+        if (Valordelddl == 1) {
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/EnviarDescansoMedico1",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+
+                    //                //            //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //            //                //window.location = "/Home/index";
                 },
                 error: function (jqXHR, exception) {
                     alert("Ocurrió un error en la operación");
@@ -2632,235 +2529,433 @@
 
         }
 
-        //Actualizar Tabla de Rangos en la ventana : Saul Ramos Vega 20210715
-        function tablaTipoRango() {
+    }
 
-            let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+    function checkFluencypd2(trabajadorId) {
+        var Valordelchk = $("#chk-SegundoDescanso-" + trabajadorId).get(0).checked;
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        var Descripcion = "FechaPosibleAlta2";
+        var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+        if (Valordelchk == true) {
 
             $.ajax({
-                type: "GET",
-                url: "/MonitoringWorker/GetTipoRangoJson?trabajadorId=" + registroTrabajadorId,
+                type: "POST",
+                url: "/MonitoringWorker/EnviarDescansoMedico2",
+                data: datos,
                 success: function (data) {
-                    $("#tabla-TIPORANGO").empty();
-                    var content = "";
-                    for (var i = 0; i < data.length; i++) {
-                        content += "<tr>";
-                        let fecha1 = moment(data[i].FechaInicio).format("DD/MM/yyyy");
-                        let fecha2 = moment(data[i].FechaFin).format("DD/MM/yyyy");
-                        content += "<td> <a href='#fakelink' class='btn-link'>" + fecha1 + "</a></td>";
-                        content += "<td><a href='#fakelink' class='btn-link'>" + fecha2 + "</a></td>";
-                        content += "<td>" + data[i].Descripcion + "</td>";
-                        content += "</tr>";
-                    }
-                    $("#tabla-TIPORANGO").append(content);
+                    $('.cargaEsperar').modal('hide');
+
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
                 },
                 error: function (jqXHR, exception) {
-                    alert("Ocurrió un error en la operación")
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
                 }
             });
+
+
         }
-
-        //Validar fechas : : Saul Ramos Vega 20210715
-        function notificarCambio2() {
-            var FechaInicio = $("#dtpFechaInicio").val();
-            var FechaFin = $("#dtpFechaFin-").val();
+    }
 
 
 
-            const fechaParseInicio = moment(FechaInicio, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
-            var fechaActualParseFin = moment(FechaFin, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+    function checkFluencypd3(trabajadorId) {
+        var Valordelchk = $("#chk-TercerDescanso-" + trabajadorId).get(0).checked;
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        var Descripcion = "FechaPosibleAlta3";
+        var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
 
 
-            if (fechaParseInicio > fechaActualParseFin) {
+        if (Valordelchk == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/EnviarDescansoMedico3",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
 
 
-                bootbox.alert({
-                    size: 'extra-large',
-                    title: "IMPORTANTE",
-                    message: "<h4 style='color:blue'>La Fecha de Inicio, No debe ser mayor a la Fecha de Fin</h4>",
-
-                });
-
-            } else if (fechaActualParseFin < fechaParseInicio) {
-
-                bootbox.alert({
-                    size: 'extra-large',
-                    title: "IMPORTANTE",
-                    message: "<h4 style='color:blue'>La Fecha de Fin, No debe ser menor a la Fecha de Inicio</h4>",
-
-                });
-
-
-            }
-        }
-
-
-
-
-        //DESHABILITAR - HABILITAR OPCIONES EN POPUP  - Creado por Saul Ramos
-        function checkFluencyDD1() {
-            //var SelecDM = $("#ddl-TipoRango" + "option:selected").val();
-
-            var SelecDM = $("#ddl-TipoRango").val();
-
-            if (SelecDM == 1) {
-
-                $("#ddl-Diagnostico").prop("disabled", false);
-
-                $("#ddl-Diagnostico").focus;
-
-                //$("#ddl-Diagnostico").on("click", handler).
-
-                $("#MensajeDiagnostico").prop("hidden", false);
-
-                $("#MensajeDiagnostico").val("DEBE SELECCIONAR UN DIAGNOSTICO");
-            }
-            else {
-                $("#ddl-Diagnostico").prop("disabled", true);
-                
-                $("#MensajeDiagnostico").prop("hidden", true);
-
-                $("#ddl-Diagnostico").val("0");
-
-
-            }
-        }
-
-
-        //DESHABILITAR - HABILITAR OPCIONES EN POPUP  - Creado por Saul Ramos
-        function checkFluencyDD2() {
-            //var SelecDM = $("#ddl-TipoRango" + "option:selected").val();
-
-            var SelecDM = $("#ddl-Diagnostico").val();
-
-            if (SelecDM >= 1) {
-
-             
-                $("#MensajeDiagnostico").val("");
-            }
-            else {
-
-                $("#MensajeDiagnostico").val("DEBE SELECCIONAR UN DIAGNOSTICO");
-            }
-        }
-
-
-        function getTblTotal() {
-            let total = 0,
-                todos = $("#example").Datatable();
-            todos.rows().iterator('row', function (context, index) {
-                let node = $(this.row(index).node());
-                total += +(node.find('td').eq(4))
+                }
             });
-            return total;
-            
+
+
         }
+    }
 
 
-        //js/datatable.js
-        $(document).ready(function () {
-           $('#example').DataTable({
-                "columnDefs": [{
-                    "targets": 0
-                }],
+
+    function checkFluencypd4(trabajadorId) {
+        var Valordelchk = $("#chk-CuartoDescanso-" + trabajadorId).get(0).checked;
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        var Descripcion = "FechaPosibleAlta4";
+        var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
 
 
-               language: {
-                    "sProcessing": "Procesando...",
-                    "sLengthMenu": "Mostrar _MENU_ resultados",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "Ningún dato disponible en esta tabla",
-                    "sInfo": "Mostrando resultados _START_-_END_ de  _TOTAL_",
-                    "sInfoEmpty": "Mostrando resultados del 0 al 0 de un total de 0 registros",
-                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                    "sSearch": "Buscar:",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Último",
-                        "sNext": "Siguiente",
-                        "sPrevious": "Anterior"
-                           
-                   },
-               }
-           });
+        if (Valordelchk == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/EnviarDescansoMedico4",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
+                }
+            });
+
+
+        }
+    }
+
+
+
+    function checkFluencypd5(trabajadorId) {
+        var Valordelchk = $("#chk-QuintoDescanso-" + trabajadorId).get(0).checked;
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        var Descripcion = "FechaPosibleAlta5";
+        var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+        if (Valordelchk == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/EnviarDescansoMedico5",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
+                }
+            });
+
+
+        }
+    }
+
+
+    function checkFluencypd6(trabajadorId) {
+        var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        var Descripcion = "FechaPosibleAlta6";
+        var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
+
+
+        if (Valordelchk == true) {
+
+            $.ajax({
+                type: "POST",
+                url: "/MonitoringWorker/EnviarDescansoMedico6",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
+                }
+            });
+
+
+        }
+    }
+
+
+    //CODIGO PARA EL ENVIO DE LOS DATOS A GRABAR PARA LA RECETA MEDICA  creado por Saul Ramos
+    function Recetamedica(seguimientoId) {
+
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+        let RecetasMedicas = $("#txt-Receta-" + seguimientoId).val();
+
+
+
+        var datos = { "TrabajadorId": registroTrabajadorId, "SeguimientoId": seguimientoId, "Receta": RecetasMedicas };
+        $.ajax({
+            type: "POST",
+            url: "/MonitoringWorker/DarRegistrarReceta",
+            data: datos,
+            success: function (data) {
+                $('.cargaEsperar').modal('hide');
+
+                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                //window.location = "/Home/index";
+            },
+            error: function (jqXHR, exception) {
+                alert("Ocurrió un error en la operación");
+                $('.cargaEsperar').modal('hide');
+
+
+            }
+        });
+
+    }
+
+    //Actualizar Tabla de Rangos en la ventana : Saul Ramos Vega 20210715
+    function tablaTipoRango() {
+
+        let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+
+        $.ajax({
+            type: "GET",
+            url: "/MonitoringWorker/GetTipoRangoJson?trabajadorId=" + registroTrabajadorId,
+            success: function (data) {
+                $("#tabla-TIPORANGO").empty();
+                var content = "";
+                for (var i = 0; i < data.length; i++) {
+                    content += "<tr>";
+                    let fecha1 = moment(data[i].FechaInicio).format("DD/MM/yyyy");
+                    let fecha2 = moment(data[i].FechaFin).format("DD/MM/yyyy");
+                    content += "<td> <a href='#fakelink' class='btn-link'>" + fecha1 + "</a></td>";
+                    content += "<td><a href='#fakelink' class='btn-link'>" + fecha2 + "</a></td>";
+                    content += "<td>" + data[i].Descripcion + "</td>";
+                    content += "</tr>";
+                }
+                $("#tabla-TIPORANGO").append(content);
+            },
+            error: function (jqXHR, exception) {
+                alert("Ocurrió un error en la operación")
+            }
+        });
+    }
+
+    //Validar fechas : : Saul Ramos Vega 20210715
+    function notificarCambio2() {
+        var FechaInicio = $("#dtpFechaInicio").val();
+        var FechaFin = $("#dtpFechaFin-").val();
+
+
+
+        const fechaParseInicio = moment(FechaInicio, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+        var fechaActualParseFin = moment(FechaFin, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+
+
+        if (fechaParseInicio > fechaActualParseFin) {
+
+
+            bootbox.alert({
+                size: 'extra-large',
+                title: "IMPORTANTE",
+                message: "<h4 style='color:blue'>La Fecha de Inicio, No debe ser mayor a la Fecha de Fin</h4>",
+
+            });
+
+        } else if (fechaActualParseFin < fechaParseInicio) {
+
+            bootbox.alert({
+                size: 'extra-large',
+                title: "IMPORTANTE",
+                message: "<h4 style='color:blue'>La Fecha de Fin, No debe ser menor a la Fecha de Inicio</h4>",
+
+            });
+
+            
+
+
+        }
+    }
+
+
+
+
+    //DESHABILITAR - HABILITAR OPCIONES EN POPUP  - Creado por Saul Ramos
+    function checkFluencyDD1() {
+        //var SelecDM = $("#ddl-TipoRango" + "option:selected").val();
+
+        var SelecDM = $("#ddl-TipoRango").val();
+
+        if (SelecDM == 1) {
+
+            $("#ddl-Diagnostico").prop("disabled", false);
+
+            $("#ddl-Diagnostico").focus;
+
+            //$("#ddl-Diagnostico").on("click", handler).
+
+            $("#MensajeDiagnostico").prop("hidden", false);
+
+            $("#MensajeDiagnostico").val("DEBE SELECCIONAR UN DIAGNOSTICO");
+        }
+        else {
+            $("#ddl-Diagnostico").prop("disabled", true);
+
+            $("#MensajeDiagnostico").prop("hidden", true);
+
+            $("#ddl-Diagnostico").val("0");
+
+
+        }
+    }
+
+
+    //DESHABILITAR - HABILITAR OPCIONES EN POPUP  - Creado por Saul Ramos
+    function checkFluencyDD2() {
+        //var SelecDM = $("#ddl-TipoRango" + "option:selected").val();
+
+        var SelecDM = $("#ddl-Diagnostico").val();
+
+        if (SelecDM >= 1) {
+
+
+            $("#MensajeDiagnostico").val("");
+        }
+        else {
+
+            $("#MensajeDiagnostico").val("DEBE SELECCIONAR UN DIAGNOSTICO");
+        }
+    }
+
+
+
+
+    //js/datatable.js
+    $(document).ready(function () {
+        $('#example').DataTable({
+            "columnDefs": [{
+                "targets": 0
+            }],
+
+
+            language: {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ resultados",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando resultados _START_-_END_ de  _TOTAL_",
+                "sInfoEmpty": "Mostrando resultados del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+
+                },
+            }
+        });
+    });
+
+
+
+
+
+    //Descargar DM - 11082021  - Creado por Saul Ramos
+    function DescargarelDM(campo1, campo2, trabajadorId) {
+
+
+        var datos = { "Id": campo1, "comentario": campo2, "trabajadorId": trabajadorId };
+
+        var dialog = bootbox.dialog({
+            title: 'Importante: Descarga del Descanso Médico',
+
+            message: '<p><i class="fa fa-paper-plane fa-spin blackiconcolor"></i>Espere - Descargando...</p>'
+
+        });
+
+        dialog.init(function () {
+            setTimeout(function () {
+                dialog.find('.bootbox-body').html('SE DESCARGO EL ARCHIVO!');
+            }, 13000);
         });
 
 
 
-        function viewAltaMedica(idTrabajador) {
-            window.location.href = "/MonitoringWorker/ExportDescansoMedico?id=" + idTrabajador;
-        }
 
 
-        //Descargar DM - 11082021  Creado por Saul Ramos
-        function DescargarelDM(campo1, campo2, trabajadorId) {
-     
-                       
-            var datos = { "Id": campo1, "comentario": campo2, "trabajadorId": trabajadorId};
 
-             $.ajax({
-                 type: "POST",
-                 url: "/MonitoringWorker/ExportDescansoMedico",
-                 data: datos,
-                 xhrFields: {
-                     responseType: 'blob'
-                 },
-                  success: function (data) {
+        $.ajax({
+
+            type: "POST",
+            url: "/MonitoringWorker/ExportDescansoMedico",
+
+            data: datos,
+
+            xhrFields: {
+                responseType: 'blob'
+            },
+
+            success: function (data) {
+
+                const url = window.URL.createObjectURL(data);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                // the filename you want
+                a.download = 'Descanso Medico.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
 
 
-                      //$('.cargaEsperar').modal('hide');
-
-                     // window.location = "/Home/Index";
-
-                      const url = window.URL.createObjectURL(data);
-                      const a = document.createElement('a');
-                      a.style.display = 'none';
-                      a.href = url;
-                      // the filename you want
-                      a.download = 'Descanso Medico.pdf';
-                      document.body.appendChild(a);
-                      a.click();
-                      window.URL.revokeObjectURL(url);
-
-                     
-                      //window.location = "/MonitoringWorker/RegisterMonitoring?id=" + trabajadorId
-
-                   },
-                   error: function (jqXHR, exception) {
-                        alert("Ocurrió un error en la operación")
-                    }
-                });
-            
-           }   
-                   
-        $("#example").on('click', 'tr', function (e) {
-            e.preventDefault();
-            var renglon = $(this);
-            var campo1, campo2, campo3;
-            $(this).children("td").each(function (i) {
-                switch (i) {
-                    case 0:
-                        campo1 = $(this).text();
-                        break;
-                    case 3:
-                      campo2 = $(this).text();
-                      break;
-                }
-                $(this).css("background-color", "#ECF8E0");
-            })
-            var textoRenglon = campo1
-            //var dmDescripcion = campo2
-            //console.log(textoRenglon);
-            $("#IdFechaImportante").val(textoRenglon);
-            let trabajadorId = $("#txtRegistroTrabajadoId").val();
-            //alert(renglon);
-
-            DescargarelDM(campo1, campo2, trabajadorId);
-
+            },
+            error: function (jqXHR, exception) {
+                alert("Ocurrió un error en la operación")
+            }
         });
-     
-           
+
+    }
+
+    $("#example").on('click', 'tr', function (e) {
+        e.preventDefault();
+        var renglon = $(this);
+        var campo1, campo2, campo3;
+        $(this).children("td").each(function (i) {
+            switch (i) {
+                case 0:
+                    campo1 = $(this).text();
+                    break;
+                case 3:
+                    campo2 = $(this).text();
+                    break;
+            }
+            $(this).css("background-color", "#ECF8E0");
+        })
+        var textoRenglon = campo1
+        //var dmDescripcion = campo2
+        //console.log(textoRenglon);
+        $("#IdFechaImportante").val(textoRenglon);
+        let trabajadorId = $("#txtRegistroTrabajadoId").val();
+        //alert(renglon);
+
+        DescargarelDM(campo1, campo2, trabajadorId);
+
+    });
+
+  
 
 
-    </script>
+</script>

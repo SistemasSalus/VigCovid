@@ -1068,6 +1068,7 @@ namespace VigCovidApp.Controllers
                     cell.Value = "Fecha Ultimo Dia Trabajo";
                     cell.Style.Font.Bold = true;
                     cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                     
 
                     fill = cell.Style.Fill;
                     fill.PatternType = ExcelFillStyle.LightGray;
@@ -1165,6 +1166,7 @@ namespace VigCovidApp.Controllers
                     fill.BackgroundColor.SetColor(System.Drawing.Color.LightBlue);
                     border = cell.Style.Border;
                     border.Bottom.Style = border.Top.Style = border.Left.Style = border.Right.Style = ExcelBorderStyle.Thin;
+                                      
 
                     cell = sheet.Cells[rowIndex, 23];
                     cell.Value = "FECHA DE FIN";
@@ -1190,17 +1192,19 @@ namespace VigCovidApp.Controllers
                     fill.BackgroundColor.SetColor(System.Drawing.Color.LightBlue);
                     border = cell.Style.Border;
                     border.Bottom.Style = border.Top.Style = border.Left.Style = border.Right.Style = ExcelBorderStyle.Thin;
-
+                    
                     cell = sheet.Cells[rowIndex, 25];
                     cell.Value = "Fecha Alta Médica";
                     cell.Style.Font.Bold = true;
                     fill = cell.Style.Fill;
+                   
                     fill.PatternType = ExcelFillStyle.LightGray;
                     fill.BackgroundColor.SetColor(System.Drawing.Color.LightBlue);
                     border = cell.Style.Border;
                     border.Bottom.Style = border.Top.Style = border.Left.Style = border.Right.Style = ExcelBorderStyle.Thin;
+                    
 
-                      
+
 
                     cell = sheet.Cells[rowIndex, 26];
                     cell.Value = "MEDICO";
@@ -1212,13 +1216,21 @@ namespace VigCovidApp.Controllers
                     fill.BackgroundColor.SetColor(System.Drawing.Color.LightBlue);
                     border = cell.Style.Border;
                     border.Bottom.Style = border.Top.Style = border.Left.Style = border.Right.Style = ExcelBorderStyle.Thin;
-
+                    
                     #endregion Table header
 
                     rowIndex = rowIndex + 1;
                     foreach (var item in datos)
                     {
                         cell = sheet.Cells[rowIndex, 2];
+
+
+//                        Worksheets("Sheet1").Range("A17").NumberFormat = "General"
+//Worksheets("Sheet1").Rows(1).NumberFormat = "hh:mm:ss"
+//Worksheets("Sheet1").Columns("C")._
+// NumberFormat = "$#,##0.00_);[Red]($#,##0.00)"
+
+
                         cell.Value = item.ApellidosNombres;
 
                         cell = sheet.Cells[rowIndex, 3];
