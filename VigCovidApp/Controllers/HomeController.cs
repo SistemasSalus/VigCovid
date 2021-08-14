@@ -769,7 +769,7 @@ namespace VigCovidApp.Controllers
             {
                 Subject = "INGRESO A VIGILANCIA, " + datosAlta.Trabajador,
                 IsBodyHtml = true,
-                Body = "Se informa mediante la presente que el Sr(a) " + datosAlta.Trabajador + "--ha sido ingresado a Vigilancia"
+                Body = "Se informa mediante la presente que el Sr(a) " + datosAlta.Trabajador + "--ha sido ingresado a Vigilancia" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje"
             };
 
             //SmtpClient smtpClientNotif = new SmtpClient
@@ -830,7 +830,7 @@ namespace VigCovidApp.Controllers
             {
                 Subject = "CASO QUE REQUIERE IDENTIFICACIÓN DE CONTACTOS", 
                 IsBodyHtml = true,
-                Body = "Estimada(o) Bussiness Partner:" + "<br>" + "Se hace de su conocimiento que el trabajador" + " " + datosAlta.Trabajador + "<br>" + " ha sido ingresado a la Vigilancia Médica como caso" + datosAlta.ModoIngreso + " "+  datosAlta.ViaIngreso + "<br>" + "por lo que requiere que se identifiquen los trabajadores que cumplen con los criterios de contacto directo establecidos" + "<br>" + "en la RM - 972 - 2020 - MINSA: trabajos a distancia menor de un metro por más de 15 minutos."
+                Body = "Estimada(o) Bussiness Partner:" + "<br>" + "Se hace de su conocimiento que el trabajador" + " " + datosAlta.Trabajador + "<br>" + " ha sido ingresado a la Vigilancia Médica como caso" + datosAlta.ModoIngreso + " "+  datosAlta.ViaIngreso + "<br>" + "por lo que requiere que se identifiquen los trabajadores que cumplen con los criterios de contacto directo establecidos" + "<br>" + "en la RM - 972 - 2020 - MINSA: trabajos a distancia menor de un metro por más de 15 minutos." + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje"
             };
 
             //SmtpClient smtpClientNotif = new SmtpClient

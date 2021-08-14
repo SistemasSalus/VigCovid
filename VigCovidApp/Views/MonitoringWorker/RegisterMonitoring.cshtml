@@ -1338,25 +1338,40 @@
 
             var datas = [];
 
-            $("td.fechainicial").each(function () {
+            var Ini = 0;
+
+           $("td.fechainicial").each(function () {
+               
+               
+               datas.push(parseFloat($(this).text()));
+
+              
+
+               if ($(this).text() == fini) {
+                                   
+                   Ini = 1;
+                 // return;
+                   return datas = false;
+               }
+
+               
+         });
 
 
-                datas.push(parseFloat($(this).text()));
 
-                if ($(this).text() == fini) {
+            if (Ini == 1) {
+
                     bootbox.alert({
-                        size: 'large',
-                        title: "CORREGIR:",
-                        message: "<h5 style='color:red'>Favor, Debe registrar otra Fecha de Inicio</h5>",
-                    });
-                    
-                }
-             
-                    });
-            return;
-                                 
-                
-    
+                    size: 'large',
+                    title: "CORREGIR:",
+                    message: "<h5 style='color:red'>Favor, Debe registrar otra Fecha de Inicio</h5>",
+                });
+
+                return;
+            }
+
+
+
                                 
            
         
@@ -1374,10 +1389,6 @@
             //    }
 
             //});
-
-
-
-
 
 
             let FechaInicio = $("#dtpFechaInicio").val();
@@ -2265,13 +2276,11 @@
             autoclose: true,
             minView: "year",
             startDate: "16/08/2021"
-        }).on('changeDate', function (e) {
-            Contadores();
+      
         });
 
 
-
-              
+                     
 
         var faIcon = {
             valid: 'fa fa-check-circle fa-lg text-success',
