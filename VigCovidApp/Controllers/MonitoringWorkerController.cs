@@ -43,6 +43,9 @@ namespace VigCovidApp.Controllers
 
             ViewBag.EXAMENES = ListarExamenesTrabajador(id);
 
+            //ViewBag.HISTORICOSEGUIMIENTOS = GetHistSeguimiento(id);
+
+
             var seguimientos = Seguimientos(id);
             if (seguimientos.Count() == 0) return View(new List<SeguimientosViewModel>());
 
@@ -97,6 +100,17 @@ namespace VigCovidApp.Controllers
             var oLineaTiempoBL = new LineaTiempoBL();
             return oLineaTiempoBL.GetAllTipoRango(trabajadorId);
         }
+
+
+        //ACTIVAR PARA LA CONSULTA DE HISTORICOS SEGUIMIENTO
+        //public List<LineaTiempo> GetHistSeguimiento(int trabajadorId)
+        //{
+        //    var oLineaTiempoBL = new LineaTiempoBL();
+        //    return oLineaTiempoBL.GetAllSeguimientos(trabajadorId);
+        //}
+
+
+
 
 
 

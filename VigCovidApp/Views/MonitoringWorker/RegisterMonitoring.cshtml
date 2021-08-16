@@ -459,6 +459,22 @@
                     </div>
                 </div>
             </div>
+
+            <div class="panel-heading">
+                @*<h4 class="panel-title">
+                        <a data-parent="#demo-acc-info-outline" data-toggle="collapse" href="#demo-acd-info-outline-2" class="collapsed" aria-expanded="true">Fechas importantes</a>
+
+                    </h4>*@
+                <h4 class="panel-title">
+                    <button id="btnVerHistorico" data-toggle="modal" data-target="#modal-historicoSE" class="btn btn-primary btn-lg btn-block"><i class="demo-pli-folder-search"></i> Ver Histórico de Seguimientos</button>
+                
+                
+                </h4>
+            </div>
+
+
+
+
             <div class="panel-body">
                 <hr class="new-section-xs">
                 <!-- Timeline header -->
@@ -1023,14 +1039,14 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label class="control-label">Fecha de Inicio</label>
-                                    <input type="text" class="form-control kid" id="dtpFechaInicio"  autocomplete="off">
+                                    <input type="text" class="form-control kid" id="dtpFechaInicio" autocomplete="off">
                                 </div>
                             </div>
 
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <label class="control-label">Fecha de Fin</label>
-                                    <input type="text" class="form-control dtpFechaFin" id="dtpFechaFin"  autocomplete="off">
+                                    <input type="text" class="form-control dtpFechaFin" id="dtpFechaFin" autocomplete="off">
                                 </div>
                             </div>
                             <div class="col-sm-3">
@@ -1082,6 +1098,78 @@
         </div>
     </div>
 </div>
+
+
+
+<!--Modal Consulta Histórico Seguimientos-->
+<!--===================================================-->
+<!--===================================================-->
+<!--End Default Bootstrap Modal-->
+<!--===================================================-->
+<!--End page content-->
+<!--Modal info altas-->
+<!--===================================================-->
+<div class="modal fade"
+     id="modal-historicoSE"
+     role="dialog"
+     tabindex="-1"
+     aria-labelledby="modal-historicoSE"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!--Modal header-->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="pci-cross pci-circle"></i>
+                </button>
+                <h4 class="modal-title" style="color:Highlight" >SEGUIMIENTOS REGISTRADOS</h4>
+            </div>
+
+            <!--Modal body-->
+            <div class="modal-body">
+                <form id="form-descarga">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+
+
+                            @*<table id="" data-page-size="1000" class="table table-striped">*@
+                            <table id="table-historico-seguimientos" data-page-size="1000" class="display">
+                                @*class="table table-sm table-striped table-hover table-bordered">*@
+                                @*data-order='[[ 1, "asc" ]]'*@
+
+
+                                <thead>
+                                    <tr>
+                                        <th>#Nro</th>
+                                        <th>Trabajador</th>
+                                        @*//<th data-toggle="true">Trabajador</th>*@
+                                        <th>DNI</th>
+                                        <th>Empresa Empleadora</th>
+                                        <th>Sede</th>
+                                        <th>Edad</th>
+                                        <th>Fecha INGRESO</th>
+                                        <th>Fecha ALTA</th>
+                                        <th>Modo de ingreso</th>
+                                        <th>Estado Actual</th>
+                                        <th>Médico Asignado</th>
+
+                                    </tr>
+                                </thead>
+                               
+
+
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+    
 
 
 <!--===================================================-->
@@ -1137,7 +1225,7 @@
             //alert(parseFloat($(this).text()));
             if ($(this).text() != '') {
                 data.push(parseFloat($(this).text()));
-               //alert($(this).text());
+                //alert($(this).text());
             }
 
         });
@@ -1146,7 +1234,7 @@
         //alert(suma);
         $("#totaldias").html("Total dias de Descanso:  " + suma)
 
-        
+
 
 
         //var table = $('#example').DataTable();
@@ -1158,7 +1246,7 @@
         //        console.log('Data in index: ' + index + ' is: ' + value);
         //    });
 
-     
+
 
         var EmpresaPrincipalId = document.getElementById("EmpresaPrincipalId").value
         var TrabajadorEmpresaId = document.getElementById("TrabajadorEmpresaId").value
@@ -1340,28 +1428,28 @@
 
             var Ini = 0;
 
-           $("td.fechainicial").each(function () {
-               
-               
-               datas.push(parseFloat($(this).text()));
+            $("td.fechainicial").each(function () {
 
-              
 
-               if ($(this).text() == fini) {
-                                   
-                   Ini = 1;
-                 // return;
-                   return datas = false;
-               }
+                datas.push(parseFloat($(this).text()));
 
-               
-         });
+
+
+                if ($(this).text() == fini) {
+
+                    Ini = 1;
+                    // return;
+                    return datas = false;
+                }
+
+
+            });
 
 
 
             if (Ini == 1) {
 
-                    bootbox.alert({
+                bootbox.alert({
                     size: 'large',
                     title: "CORREGIR:",
                     message: "<h5 style='color:red'>Favor, Debe registrar otra Fecha de Inicio</h5>",
@@ -1372,9 +1460,9 @@
 
 
 
-                                
-           
-        
+
+
+
 
             //$("td.fechainicial").each(function () {
             //    var data = [];
@@ -2250,9 +2338,9 @@
             format: "dd/mm/yyyy",
             autoclose: true,
             minView: "year",
-            startDate:"16/08/2021",
+            startDate: "16/08/2021",
 
-           
+
             //monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             //monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
             //dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
@@ -2261,7 +2349,7 @@
 
         });
 
-        
+
 
         var faIcon = {
             valid: 'fa fa-check-circle fa-lg text-success',
@@ -2276,11 +2364,11 @@
             autoclose: true,
             minView: "year",
             startDate: "16/08/2021"
-      
+
         });
 
 
-                     
+
 
         var faIcon = {
             valid: 'fa fa-check-circle fa-lg text-success',
@@ -2790,7 +2878,7 @@
 
             });
 
-            
+
 
 
         }
@@ -2951,7 +3039,7 @@
                     campo2 = $(this).text();
                     break;
             }
-            $(this).css("background-color", "#ECF8E0");
+            $(this).css("background-color", "#D6EAF8");
         })
         var textoRenglon = campo1
         //var dmDescripcion = campo2
@@ -2960,11 +3048,23 @@
         let trabajadorId = $("#txtRegistroTrabajadoId").val();
         //alert(renglon);
 
+        if (campo2 == 'Descanso Médico')  
+        {
+
         DescargarelDM(campo1, campo2, trabajadorId);
+
+        } else {
+
+            bootbox.dialog({
+                size: 'extra-large',
+                title: "CORREGIR:",
+                message: "<h4 style='color:red'>Favor, Debe dar clic en el botón de Descarga</h4>",
+            });
+        }
 
     });
 
-  
+
 
 
 </script>
