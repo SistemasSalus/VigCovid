@@ -10,4 +10,5 @@ namespace VigCovidApp.ViewModels
         public string TipoPrueba { get; set; }
         public string Resultado { get; set; }
     }
+
 }

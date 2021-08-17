@@ -232,50 +232,50 @@ style{
                                         {
 
                                         }
-                                        <tr>
-                                            @*SI ES PROPIETARIO PUEDE MODIFICAR*@
-                                            <td>@trabajador.Indice</td>
-                                            @if (trabajador.Propietario)
+                                    <tr>
+                                        @*SI ES PROPIETARIO PUEDE MODIFICAR*@
+                                        <td>@trabajador.Indice</td>
+                                        @if (trabajador.Propietario)
+                                        {
+                                            <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
+                                        }
+                                        else
+                                        {
+                                            if (trabajador.PermisoLectura && !trabajador.Propietario)
                                             {
                                                 <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
                                             }
                                             else
                                             {
-                                                if (trabajador.PermisoLectura && !trabajador.Propietario)
-                                                {
-                                                    <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
-                                                }
-                                                else
-                                                {
-                                                    <td>@Html.DisplayFor(modelItem => trabajador.NombreCompleto)</td>
-                                                }
+                                                <td>@Html.DisplayFor(modelItem => trabajador.NombreCompleto)</td>
                                             }
+                                        }
 
-                                            <td>@Html.DisplayFor(modelItem => trabajador.Dni)</td>
-                                            <td>@Html.DisplayFor(modelItem => trabajador.EmpresaEmpleadora)</td>
-                                            <td>@Html.DisplayFor(modelItem => trabajador.Sede)</td>
-                                            <td><span class="text-muted">@Html.DisplayFor(modelItem => trabajador.Edad)</span></td>
-                                            <td>@Html.DisplayFor(modelItem => trabajador.FechaIngreso)</td>
-                                            <td>@Html.DisplayFor(modelItem => trabajador.FechaAlta)</td>
-                                            <td class="text-center text-uppercase">
-                                                @Html.DisplayFor(modelItem => trabajador.ModoIngreso)
-                                            </td>
-                                            <td class="text-center">@Html.DisplayFor(modelItem => trabajador.EstadoDiario)</td>
-                                            <td class="text-center">@Html.DisplayFor(modelItem => trabajador.MedicoVigila)</td>
-                                            <td class="text-center">
-                                                @*<div id="btn-editar-@trabajador.RegistroTrabajadorId" class="label label-table label-success cursor-pointer" data-toggle="modal" data-target="#modal-editar-trabajador">Editar registro</div>
-                                                    <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label label-table label-danger cursor-pointer btn-elimnar-registro">Eliminar</div>*@
+                                        <td>@Html.DisplayFor(modelItem => trabajador.Dni)</td>
+                                        <td>@Html.DisplayFor(modelItem => trabajador.EmpresaEmpleadora)</td>
+                                        <td>@Html.DisplayFor(modelItem => trabajador.Sede)</td>
+                                        <td><span class="text-muted">@Html.DisplayFor(modelItem => trabajador.Edad)</span></td>
+                                        <td>@Html.DisplayFor(modelItem => trabajador.FechaIngreso)</td>
+                                        <td>@Html.DisplayFor(modelItem => trabajador.FechaAlta)</td>
+                                        <td class="text-center text-uppercase">
+                                            @Html.DisplayFor(modelItem => trabajador.ModoIngreso)
+                                        </td>
+                                        <td class="text-center">@Html.DisplayFor(modelItem => trabajador.EstadoDiario)</td>
+                                        <td class="text-center">@Html.DisplayFor(modelItem => trabajador.MedicoVigila)</td>
+                                        <td class="text-center">
+                                            @*<div id="btn-editar-@trabajador.RegistroTrabajadorId" class="label label-table label-success cursor-pointer" data-toggle="modal" data-target="#modal-editar-trabajador">Editar registro</div>
+            <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label label-table label-danger cursor-pointer btn-elimnar-registro">Eliminar</div>*@
 
-                                                @*Modificado por Saul Ramos V - 13072021*@
-                                                <div id="btn-editar-@trabajador.RegistroTrabajadorId" data-toggle="modal" data-target="#modal-editar-trabajador" class="label cursor-pointer"><img src="~/img/editarREGISTROS.png" title="EDITAR" width="22" height="20" /></div>
-                                                <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label cursor-pointer btn-elimnar-registro"><img src="~/img/eliminarREGISTRO.png" title="ELIMINAR" width="22" height="20" /></div>
+                                            @*Modificado por Saul Ramos V - 13072021*@
+                                            <div id="btn-editar-@trabajador.RegistroTrabajadorId" data-toggle="modal" data-target="#modal-editar-trabajador" class="label cursor-pointer"><img src="~/img/editarREGISTROS.png" title="EDITAR" width="22" height="20" /></div>
+                                            <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label cursor-pointer btn-elimnar-registro"><img src="~/img/eliminarREGISTRO.png" title="ELIMINAR" width="22" height="20" /></div>
 
 
 
-                                            </td>
-                                            <td class="text-center">
-                                            </td>
-                                        </tr>
+                                        </td>
+                                        <td class="text-center">
+                                        </td>
+                                    </tr>
                                     }
                                 </tbody>
 

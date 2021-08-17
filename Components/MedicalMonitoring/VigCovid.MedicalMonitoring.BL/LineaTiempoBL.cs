@@ -3,6 +3,7 @@ using System.Linq;
 using VigCovid.Common.AccessData;
 using VigCovid.Common.BE;
 
+
 namespace VigCovid.MedicalMonitoring.BL
 {
     public class LineaTiempoBL
@@ -144,74 +145,6 @@ namespace VigCovid.MedicalMonitoring.BL
 
 
         //CODIGO PARA TRAER LOS DATOS DE SEGUIMIENTO
-        //public List<LineaTiempo> GetAllSeguimientos(int trabajadorId)
-        //{
-
-
-        //    //var fechasImportantes = (from A in db.FechaImportante where A.TrabajadorId == trabajadorId && A.TipoRango >= 1 select A).ToList();
-        //    //var fechas = new List<LineaTiempo>();
-            
-        //    var Seguimientos = (from A in db.RegistroTrabajador join B in db.Seguimiento on A.Id equals B.RegistroTrabajadorId  select A).ToList();
-        //    var SeguimientosHist  = new List<LineaTiempo>();
-
-
-        //    var query = (from A in db.RegistroTrabajador
-        //                 join B in db.Parametro on new { a = A.ModoIngreso, b = 100 } equals new { a = B.i_ParameterId, b = B.i_GroupId } into B_join
-        //                 from B in B_join.DefaultIfEmpty()
-        //                 join C in db.Parametro on new { a = A.ViaIngreso, b = 101 } equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
-        //                 from C in C_join.DefaultIfEmpty()
-        //                 join D in db.Sede on A.SedeId equals D.Id
-        //                 where A.Id == trabajadorId
-
-
-
-
-        //    foreach (var item in fechasImportantes)
-        //    {
-        //        var oFechaInicioSintomas = new LineaTiempo();
-
-
-        //        oFechaInicioSintomas.Id = item.Id;
-        //        oFechaInicioSintomas.FechaInicio = item.FechaInicio.Value;
-        //        oFechaInicioSintomas.FechaFin = item.FechaFin;
-        //        //== DbNull.Value ? (DateTime?)null : item.FechaFin.Value;
-
-
-
-        //        //oFechaInicioSintomas.FechaFin = Nullable<item.FechaFin>;
-        //        oFechaInicioSintomas.Descripcion = item.Descripcion;
-        //        oFechaInicioSintomas.TipoRango = item.TipoRango;
-        //        oFechaInicioSintomas.NroDias = item.NroDias;
-
-        //        fechas.Add(oFechaInicioSintomas);
-
-
-        //        //fechas.Sort((x, y) => x.Fecha.CompareTo(y.Fecha));
-        //        //var result = fechas.GroupBy(g => g.Fecha)
-        //        //    .Select(s => new LineaTiempo
-        //        //    {
-        //        //       Fecha = s.Key,
-        //        //        DateLine = s.Select(ss => ss.DateLine).FirstOrDefault(),
-        //        //        DateDate = s.Select(ss => ss.DateDate).FirstOrDefault()
-        //        //  }).ToList();
-        //    }
-        //    return fechas;
-
-        //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

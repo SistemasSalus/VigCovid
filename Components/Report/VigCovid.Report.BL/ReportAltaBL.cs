@@ -1122,7 +1122,7 @@ namespace VigCovid.Report.BL
                              CorreosMedicoZona = D.CorreosMedico,
                              CorreosMedicoCoord = D.CorreosCoordinador,
                              Direccion = A.Direccion, 
-                             Telefono = A.TelfReferencia,
+                             Telefono = A.Celular,
 
                              CorreosTodaslasSedes = D.CorreosTodaslasSedes,
                              CorreosSedesProvincia = D.CorreosSedesProvincia,

@@ -8,6 +8,7 @@
     var TipoRango = ViewBag.TIPOSDERANGO;
     var activo = false;
     var fechadeHoy = DateTime.Today;
+    var HistoricoSeguimientos = ViewBag.HISTORICOSEGUIMIENTOS;
 
 }
 <style>
@@ -466,13 +467,11 @@
 
                     </h4>*@
                 <h4 class="panel-title">
-                    <button id="btnVerHistorico" data-toggle="modal" data-target="#modal-historicoSE" class="btn btn-primary btn-lg btn-block"><i class="demo-pli-folder-search"></i> Ver Histórico de Seguimientos</button>
-                
-                
+                    <button id="btnVerHistorico" data-toggle="modal" class="btn btn-primary btn-lg btn-block"><i class="demo-pli-folder-search"></i> Ver Histórico de Seguimientos</button>
+                    @*data-target="#modal-historicoSE"*@
+
                 </h4>
             </div>
-
-
 
 
             <div class="panel-body">
@@ -1140,25 +1139,28 @@
 
                                 <thead>
                                     <tr>
-                                        <th>#Nro</th>
+                                        <th>ID</th>
                                         <th>Trabajador</th>
                                         @*//<th data-toggle="true">Trabajador</th>*@
                                         <th>DNI</th>
-                                        <th>Empresa Empleadora</th>
+                                        @*<th>Empresa Empleadora</th>
                                         <th>Sede</th>
                                         <th>Edad</th>
                                         <th>Fecha INGRESO</th>
                                         <th>Fecha ALTA</th>
                                         <th>Modo de ingreso</th>
                                         <th>Estado Actual</th>
-                                        <th>Médico Asignado</th>
+                                        <th>Médico Asignado</th>*@
 
                                     </tr>
                                 </thead>
-                               
+
+                   
+                                </table>
 
 
-                            </table>
+
+                           
                         </div>
                     </div>
                 </form>
@@ -1382,10 +1384,13 @@
 
         $("#btnRegistrarRango").on("click", function () {
 
-            var fini = $("#dtpFechaInicio").val();
-            var ffin = $("#dtpFechaFin").val();
+            
             let trango = $("#ddl-TipoRango").val();
-            var mensaje = $("#msjalerta").val();
+            var FechaInicioP = $("#dtpFechaInicio").val();
+            var FechaFinP = $("#dtpFechaFin").val();
+
+            const fini = moment(FechaInicioP, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+            var ffin = moment(FechaFinP, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
 
             if (fini > ffin) {
 
@@ -1399,6 +1404,7 @@
                 });
                 return;
             }
+
             if (fini == "" || ffin == "") {
 
 
@@ -1460,23 +1466,21 @@
 
 
 
+            //Temoporizador Carga.... Saul Ramos Vega -- 2021-08-17 
 
+            var dialog = bootbox.dialog({
+                title: 'Importante: Envío de Información',
 
+                message: '<p><i class="fa fa-paper-plane fa-spin blackiconcolor"></i>Espere - Preparando Información...</p>'
 
+            });
 
-            //$("td.fechainicial").each(function () {
-            //    var data = [];
-            ////    //alert(parseFloat($(this).text()));
-            //if ($(this).text() != '') {
-            //        data.push(parseFloat($(this).text()));
-            //        alert($(this).text());
-            //}
-            //    if ($(this).text() == fini) {
-            //        alert("Debe de Seleccionar otra Fecha de Inicio ")
+            dialog.init(function () {
+                setTimeout(function () {
+                    dialog.find('.bootbox-body').html('INFORMACION ENVIADA!');
+                }, 15000);
+            });
 
-            //    }
-
-            //});
 
 
             let FechaInicio = $("#dtpFechaInicio").val();
@@ -1505,7 +1509,6 @@
             var datos = { "FechaInicio": FechaInicio, "FechaFin": FechaFin, "TipoRango": TipoRango, "TrabajadorId": trabajadorId, "Diagnostico": Diagnostico, "EmpresaPrincipalId": EmpresaPrincipalId, "NroDias": NroDias };
 
 
-
             $.ajax({
                 type: "POST",
                 url: "/MonitoringWorker/EnviarDescansoMedico1",
@@ -1518,6 +1521,10 @@
                     } else {
                         tablaTipoRango();
                         notificarCambio2();
+                        $(".modal-body input").val('');
+                        $("#ddl-TipoRango").val('0');
+                        $("#ddl-Diagnostico").val('0');
+
                         //ActualizarLineaTiempo();
                     }
 
@@ -1527,6 +1534,7 @@
                 }
             });
         });
+
 
         $('#modal-examen')
             .on('shown.bs.modal', function () {
@@ -2988,9 +2996,6 @@
                 dialog.find('.bootbox-body').html('SE DESCARGO EL ARCHIVO!');
             }, 13000);
         });
-
-
-
 
 
 

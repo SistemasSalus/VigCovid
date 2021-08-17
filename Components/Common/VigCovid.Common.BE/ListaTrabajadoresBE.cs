@@ -1,4 +1,7 @@
-﻿namespace VigCovid.Common.BE
+﻿using System;
+using System.Collections.Generic;
+
+namespace VigCovid.Common.BE
 {
     public class ListaTrabajadoresBE
     {
@@ -59,5 +62,6 @@
         public string FechaAlta { get; set; }
 
         public int TipoEmpresaId { get; set; }
+
     }
 }

@@ -3,6 +3,8 @@ using iTextSharp.text.pdf;
 using NetPdf;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -43,7 +45,7 @@ namespace VigCovidApp.Controllers
 
             ViewBag.EXAMENES = ListarExamenesTrabajador(id);
 
-            //ViewBag.HISTORICOSEGUIMIENTOS = GetHistSeguimiento(id);
+            //ViewBag.SEGUIMIENTOSHIST  = ListarHistSeguimientos(id);
 
 
             var seguimientos = Seguimientos(id);
@@ -99,17 +101,14 @@ namespace VigCovidApp.Controllers
         {
             var oLineaTiempoBL = new LineaTiempoBL();
             return oLineaTiempoBL.GetAllTipoRango(trabajadorId);
+              
         }
 
 
         //ACTIVAR PARA LA CONSULTA DE HISTORICOS SEGUIMIENTO
-        //public List<LineaTiempo> GetHistSeguimiento(int trabajadorId)
-        //{
-        //    var oLineaTiempoBL = new LineaTiempoBL();
-        //    return oLineaTiempoBL.GetAllSeguimientos(trabajadorId);
-        //}
-
-
+        
+       
+        //private List<ListaTrabajadoresViewModel> ToTrabajadoresViewModel(List<ListaTrabajadoresBE> trabajadores)
 
 
 
@@ -225,6 +224,9 @@ namespace VigCovidApp.Controllers
 
 
 
+
+
+
         private bool PermisosModificacion(int trabajadorId)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
@@ -242,6 +244,46 @@ namespace VigCovidApp.Controllers
 
             return true;
         }
+
+
+        //private List<ListaTrabajadoresViewModel> ToTrabajadoresViewModel(List<ListaTrabajadoresBE> trabajadores)
+        //{
+        //    var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
+        //    var listaTrabajadores = new List<ListaTrabajadoresViewModel>();
+        //    foreach (var trabajador in trabajadores)
+        //    {
+        //        var oListaTrabajadoresViewModel = new ListaTrabajadoresViewModel();
+        //        oListaTrabajadoresViewModel.RegistroTrabajadorId = trabajador.RegistroTrabajadorId;
+        //        oListaTrabajadoresViewModel.NombreCompleto = trabajador.ApellidosNombres;
+        //        oListaTrabajadoresViewModel.Dni = trabajador.Dni;
+        //        oListaTrabajadoresViewModel.Empresa = trabajador.NombreEmpresa;
+        //        oListaTrabajadoresViewModel.Sede = trabajador.NombreSede;
+        //        oListaTrabajadoresViewModel.Edad = trabajador.Edad;
+        //        oListaTrabajadoresViewModel.FechaIngreso = trabajador.FechaIngreso;
+        //        oListaTrabajadoresViewModel.EstadoDiario = trabajador.EstadoDiario;
+        //        oListaTrabajadoresViewModel.ModoIngreso = trabajador.ModoIngreso;
+        //        oListaTrabajadoresViewModel.ContadorSeguimiento = trabajador.ContadorSeguimiento;
+        //        oListaTrabajadoresViewModel.DiaSinSintomas = trabajador.DiaSinSintomas;
+        //        oListaTrabajadoresViewModel.MedicoVigila = trabajador.MedicoVigila;
+        //        oListaTrabajadoresViewModel.Propietario = trabajador.MedicoVigila == sessione.UserName;
+        //        oListaTrabajadoresViewModel.EstadoClinicoId = trabajador.EstadoClinicoId;
+        //        oListaTrabajadoresViewModel.FechaAlta = trabajador.FechaAlta;
+        //        oListaTrabajadoresViewModel.EmpresaEmpleadora = trabajador.Empleadora;
+        //        oListaTrabajadoresViewModel.EmpresaId = trabajador.EmpresaId;
+        //        oListaTrabajadoresViewModel.TipoEmpresaId = trabajador.TipoEmpresaId;
+        //        if (sessione.AccesoOtrosPacientesLectura)
+        //        {
+        //            oListaTrabajadoresViewModel.PermisoLectura = true;
+        //        }
+        //        else
+        //        {
+        //            oListaTrabajadoresViewModel.PermisoLectura = false;
+        //        }
+        //        listaTrabajadores.Add(oListaTrabajadoresViewModel);
+        //    }
+        //    return listaTrabajadores;
+        //}
+
 
         private bool PacienteConAlta(int trabajadorId)
         {
@@ -983,6 +1025,178 @@ namespace VigCovidApp.Controllers
             return examenes;
         }
 
+
+
+        ////SERVICIO PARA TRAER EL HISTORICO DE SEGUIMIENTOS
+
+        //public List<ListaTrabajadoresViewModel> ListarHistSeguimientos(int id)
+        //{
+        //    List<ListaTrabajadoresViewModel> serviceDatas = new List<ListaTrabajadoresViewModel>();
+
+        //    try
+        //    {
+        //        using (SqlConnection con = new SqlConnection(Constants.CONEXION))
+        //        {
+        //            //DataTable dt = new DataTable();
+        //            using (SqlCommand cmd = new SqlCommand("ObtenerHistoricosSeg", con))
+        //            {
+        //                cmd.CommandType = CommandType.StoredProcedure;
+
+        //                cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
+        //                cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+
+        //                SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //                da.Fill(dt);
+
+        //                foreach (DataRow dr in dt.Rows)
+        //                {
+        //                    ListaTrabajadoresBE data = new ListaTrabajadoresBE();
+        //                    data.RegistroTrabajadorId = dr.Field<int>("RegistroTrabajadorId");
+        //                    data.ModoIngresoId = dr.Field<int>("ModoIngresoId");
+        //                    data.ModoIngreso = dr.Field<string>("ModoIngreso");
+        //                    data.ViaIngresoId = dr.Field<int>("ViaIngresoId");
+        //                    data.ViaIngreso = dr.Field<string>("ViaIngreso");
+        //                    data.FechaIngreso = dr.Field<string>("FechaIngreso");
+        //                    data.NombreCompleto = dr.Field<string>("NombreCompleto");
+        //                    data.ApePaterno = dr.Field<string>("ApePaterno");
+        //                    data.ApeMaterno = dr.Field<string>("ApeMaterno");
+        //                    data.Dni = dr.Field<string>("Dni");
+        //                    data.Edad = dr.Field<int>("Edad");
+        //                    data.PuestoTrabajo = dr.Field<string>("PuestoTrabajo");
+        //                    data.Celular = dr.Field<string>("Celular");
+        //                    data.TelfReferencia = dr.Field<string>("TelfReferencia");
+        //                    data.Email = dr.Field<string>("Email");
+        //                    data.Direccion = dr.Field<string>("Direccion");
+        //                    data.Sexo = dr.Field<string>("Sexo");
+        //                    data.EmpresaId = dr.Field<int>("EmpresaId");
+        //                    data.NombreEmpresa = dr.Field<string>("NombreEmpresa");
+        //                    data.Empleadora = dr.Field<string>("Empleadora");
+        //                    data.SedeId = dr.Field<int>("SedeId");
+        //                    data.NombreSede = dr.Field<string>("NombreSede");
+        //                    data.MedicoVigilaId = dr.Field<int>("MedicoVigilaId");
+        //                    data.MedicoVigila = dr.Field<string>("MedicoVigila");
+        //                    data.EstadoClinicoId = dr.Field<Nullable<int>>("EstadoClinicoId");
+        //                    data.ComentarioAlta = dr.Field<string>("ComentarioAlta");
+        //                    data.NombreContacto = dr.Field<string>("NombreContacto");
+        //                    data.TipoContactoId = dr.Field<Nullable<int>>("TipoContactoId");
+        //                    data.TipoContacto = dr.Field<string>("TipoContacto");
+        //                    data.Eliminado = dr.Field<int>("Eliminado");
+        //                    data.UsuarioIngresa = dr.Field<int>("UsuarioIngresa");
+        //                    data.FechaIngresa = dr.Field<string>("FechaIngresa");
+        //                    data.UsuarioActualiza = dr.Field<int>("UsuarioActualiza");
+        //                    data.FechaActualiza = dr.Field<string>("FechaActualiza");
+        //                    data.HCM = dr.Field<string>("HCM");
+        //                    data.DivisionPersonal = dr.Field<string>("DivisionPersonal");
+        //                    data.CentroCoste = dr.Field<string>("CentroCoste");
+        //                    data.ApellidosNombres = dr.Field<string>("ApellidosNombres");
+        //                    data.EstadoDiario = dr.Field<string>("EstadoActual");
+        //                    serviceDatas.Add(data);
+        //                }
+        //            }
+        //        }
+
+        //        return serviceDatas;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //private List<ListaTrabajadoresViewModel> ListarHistSeguimientos(int id)
+        //{
+        //    var NombreCompleto =  (from N in db.RegistroTrabajador where N.Id == id select N).FirstOrDefault().NombreCompleto; ;
+           
+        //    var query = (from A in db.RegistroTrabajador join B in db.Seguimiento on A.Id equals B.RegistroTrabajadorId
+        //                 where A.NombreCompleto == NombreCompleto
+        //                 select A).ToList();
+           
+           
+        //  //  var result = (from c in Customers
+        //  //                join oi in OrderItems on c.Id equals oi.Order.Customer.Id into g
+        //  //Select new { customer = c, orderItems = g });
+
+        //    //var agrupacion = from p in DataLists.ListaPedidos
+        //    //                 join c in DataLists.ListaClientes on p.IdCliente equals c.Id
+        //    //                 group p by new { p.IdCliente, c.Nombre } into grupo
+        //    //                 select grupo;
+
+
+
+        //    //group student by student.LastName into newGroup
+
+        //    var HistSeguimientos = new List<ListaTrabajadoresViewModel>();
+
+        //    foreach (var item in query)
+        //    {
+        //        var HistSeguimiento = new ListaTrabajadoresViewModel();
+        //        HistSeguimiento.RegistroTrabajadorId = item.Id;
+        //        HistSeguimiento.NombreCompleto = item.NombreCompleto;
+        //        HistSeguimiento.Dni = item.Dni;
+        //        HistSeguimiento.Empresa = item.Empleadora;
+        //        // HistSeguimiento.ContadorSeguimiento = item.;
+        //        //HistSeguimiento.Sede = item.SedeId;
+        //        //HistSeguimiento.Edad
+        //        //HistSeguimiento.FechaIngreso
+        //        //HistSeguimiento.EstadoDiario
+        //        //HistSeguimiento.ModoIngreso
+        //        //HistSeguimiento.ContadorSeguimiento
+        //        //HistSeguimiento.DiaSinSintomas
+        //        //HistSeguimiento.MedicoVigila
+        //        //HistSeguimiento.Propietario
+        //        //HistSeguimiento.EstadoClinicoId
+        //        //HistSeguimiento.FechaAlta
+        //        //HistSeguimiento.EmpresaEmpleadora
+        //        //HistSeguimiento.EmpresaId
+        //        //HistSeguimiento.TipoEmpresaId
+        //        // HistSeguimiento.Resultado = ObtenerResultado(item.Resultado);
+
+        //        HistSeguimientos.Add(HistSeguimiento);
+        //    }
+
+        //    return HistSeguimientos;
+        //}
+
+        
         private string ObtenerResultado(int resultado)
         {
             if (resultado == 0)
