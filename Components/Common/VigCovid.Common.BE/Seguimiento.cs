@@ -63,6 +63,9 @@ namespace VigCovid.Common.BE
 
         public bool? PulsoOximetro { get; set; }
 
-        
+        public int? TipoDiagnostico { get; set; }
+
+
+
     }
 }

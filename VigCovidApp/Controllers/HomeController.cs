@@ -125,8 +125,8 @@ namespace VigCovidApp.Controllers
                 if (!sessione.AsignarPacientes) return null;
 
                 var oWorkerRegisterBL = new WorkerRegisterBL();
-                //Deshabilitado por Saul Ramos Vega - 06042021
-                //registrarTrabajador.Sexo = "MASCULINO";
+                //Modioficado por Saul Ramos Vega - 06042021 - Valida si se realiza el registro y envía la notificaiones respectivas
+                
                 registrarTrabajador.UsuarioIngresa = sessione.IdUser;
                 string rpta = oWorkerRegisterBL.VerificarDuplicidadRegistro(registrarTrabajador);
 

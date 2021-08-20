@@ -45,7 +45,7 @@ namespace VigCovidApp.Controllers
 
             ViewBag.EXAMENES = ListarExamenesTrabajador(id);
 
-            //ViewBag.SEGUIMIENTOSHIST  = ListarHistSeguimientos(id);
+            ViewBag.SEGUIMIENTOSHIST  = ListarHistSeguimientos(id);
 
 
             var seguimientos = Seguimientos(id);
@@ -364,6 +364,7 @@ namespace VigCovidApp.Controllers
                     result.PAntigenos = entidad.PAntigenos;
                     result.PAntigenos5 = entidad.PAntigenos5;
                     result.PulsoOximetro = entidad.PulsoOximetro;
+                    result.TipoDiagnostico = entidad.TipoDiagnostico;
                     result.Eliminado = 0;
                     result.UsuarioActualiza = sessione.IdUser;
                     result.FechaActualiza = DateTime.Now;
@@ -791,6 +792,7 @@ namespace VigCovidApp.Controllers
                         oSeguimiento.ProximoSeguimiento = seguimiento.ProximoSeguimiento.Value.ToString("dd/MM/yyyy");
                     }
                     oSeguimiento.TipoEstadoId = seguimiento.TipoEstadoId.Value;
+                    oSeguimiento.TipoDiagnostico = seguimiento.TipoDiagnostico.Value;
                     oSeguimiento.NroSeguimiento = seguimiento.NroSeguimiento;
                     //-----------------------------------------------------
                     oSeguimiento.HipertensionArterial = seguimiento.HipertensionArterial == true ? "checked" : "";
@@ -1027,30 +1029,30 @@ namespace VigCovidApp.Controllers
 
 
 
-        ////SERVICIO PARA TRAER EL HISTORICO DE SEGUIMIENTOS
+        //SERVICIO PARA TRAER EL HISTORICO DE SEGUIMIENTOS - 20210820
 
         //public List<ListaTrabajadoresViewModel> ListarHistSeguimientos(int id)
         //{
-        //    List<ListaTrabajadoresViewModel> serviceDatas = new List<ListaTrabajadoresViewModel>();
+        // List<ListaTrabajadoresViewModel> serviceDatas = new List<ListaTrabajadoresViewModel>();
 
-        //    try
+        //   try
         //    {
         //        using (SqlConnection con = new SqlConnection(Constants.CONEXION))
         //        {
-        //            //DataTable dt = new DataTable();
-        //            using (SqlCommand cmd = new SqlCommand("ObtenerHistoricosSeg", con))
-        //            {
-        //                cmd.CommandType = CommandType.StoredProcedure;
+        //            DataTable dt = new DataTable();
+        //           using (SqlCommand cmd = new SqlCommand("ObtenerHistoricosSeg", con))
+        //           {
+        //               cmd.CommandType = CommandType.StoredProcedure;
 
-        //                cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
-        //                cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+        //               cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = id;
+        //              // cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
 
-        //                SqlDataAdapter da = new SqlDataAdapter(cmd);
-        //                da.Fill(dt);
+        //               SqlDataAdapter da = new SqlDataAdapter(cmd);
+        //               da.Fill(dt);
 
-        //                foreach (DataRow dr in dt.Rows)
-        //                {
-        //                    ListaTrabajadoresBE data = new ListaTrabajadoresBE();
+        //               foreach (DataRow dr in dt.Rows)
+        //               {
+        //                    ListaTrabajadoresViewModel data = new ListaTrabajadoresViewModel();
         //                    data.RegistroTrabajadorId = dr.Field<int>("RegistroTrabajadorId");
         //                    data.ModoIngresoId = dr.Field<int>("ModoIngresoId");
         //                    data.ModoIngreso = dr.Field<string>("ModoIngreso");
@@ -1092,7 +1094,7 @@ namespace VigCovidApp.Controllers
         //                    data.EstadoDiario = dr.Field<string>("EstadoActual");
         //                    serviceDatas.Add(data);
         //                }
-        //            }
+        //           }
         //        }
 
         //        return serviceDatas;
@@ -1106,9 +1108,43 @@ namespace VigCovidApp.Controllers
 
 
 
+        public List<ListaTrabajadoresBE> ListarHistSeguimientos(int Id)
+        {
+            List<ListaTrabajadoresBE> serviceDatas = new List<ListaTrabajadoresBE>();
 
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Constants.CONEXION))
+                {
+                    DataTable dt = new DataTable();
+                    using (SqlCommand cmd = new SqlCommand("ObtenerHistoricosSeg", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
 
+                        cmd.Parameters.Add("@trabajador", SqlDbType.Int).Value = Id;
+                       // cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
 
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(dt);
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            ListaTrabajadoresBE data = new ListaTrabajadoresBE();
+                            data.RegistroTrabajadorId = dr.Field<int>("RegistroTrabajadorId");
+                            data.FechaIngreso = dr.Field<string>("FechaIngreso");
+
+                            serviceDatas.Add(data);
+                        }
+                    }
+                }
+
+                return serviceDatas;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
 
 
@@ -1145,12 +1181,12 @@ namespace VigCovidApp.Controllers
         //private List<ListaTrabajadoresViewModel> ListarHistSeguimientos(int id)
         //{
         //    var NombreCompleto =  (from N in db.RegistroTrabajador where N.Id == id select N).FirstOrDefault().NombreCompleto; ;
-           
+
         //    var query = (from A in db.RegistroTrabajador join B in db.Seguimiento on A.Id equals B.RegistroTrabajadorId
         //                 where A.NombreCompleto == NombreCompleto
         //                 select A).ToList();
-           
-           
+
+
         //  //  var result = (from c in Customers
         //  //                join oi in OrderItems on c.Id equals oi.Order.Customer.Id into g
         //  //Select new { customer = c, orderItems = g });
@@ -1196,7 +1232,7 @@ namespace VigCovidApp.Controllers
         //    return HistSeguimientos;
         //}
 
-        
+
         private string ObtenerResultado(int resultado)
         {
             if (resultado == 0)
@@ -1598,7 +1634,7 @@ namespace VigCovidApp.Controllers
                 }
                 if (string.IsNullOrEmpty(datosAlta.CorreosMedicoZona))
                 {
-                    datosAlta.CorreosMedicoZona = "saulroach@hotmail.com";
+                    datosAlta.CorreosMedicoZona = "pedro.maldonado@saluslaboris.com.pe";
                 }
                 if (string.IsNullOrEmpty(datosAlta.CorreosMedicoCoord))
                 {

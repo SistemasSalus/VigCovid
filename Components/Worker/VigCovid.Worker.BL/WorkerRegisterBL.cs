@@ -61,6 +61,7 @@ namespace VigCovid.Worker.BL
 
         public bool WorkerRegister(RegistroTrabajador registrarTrabajador)
         {
+            
             try
             {
                 registrarTrabajador.FechaIngreso = DateTime.Now.Date;
@@ -68,6 +69,7 @@ namespace VigCovid.Worker.BL
                 registrarTrabajador.Eliminado = 0;
                 registrarTrabajador.FechaIngresa = DateTime.Now;
                 registrarTrabajador.UsuarioIngresa = registrarTrabajador.UsuarioIngresa;
+                registrarTrabajador.TipoIngreso = 1;
 
                 db.RegistroTrabajador.Add(registrarTrabajador);
                 db.SaveChanges();
@@ -121,6 +123,7 @@ namespace VigCovid.Worker.BL
                 entidadTrabjador.TipoEmpresaId = registrarTrabajador.TipoEmpresaId;
                 entidadTrabjador.FechaActualiza = DateTime.Now.Date;
                 entidadTrabjador.UsuarioActualiza = registrarTrabajador.UsuarioActualiza;
+                registrarTrabajador.TipoIngreso = registrarTrabajador.TipoIngreso;
 
                 //db.RegistroTrabajador.Add(registrarTrabajador);
                 db.SaveChanges();

@@ -54,6 +54,7 @@ namespace VigCovidApp.ViewModels
 
         public string PulsoOximetro { get; set; }
 
+        public int TipoDiagnostico { get; set; }
 
     }
 }

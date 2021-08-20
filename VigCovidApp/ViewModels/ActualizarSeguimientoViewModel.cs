@@ -53,6 +53,7 @@ namespace VigCovidApp.ViewModels
 
         public bool? PulsoOximetro { get; set; }
 
+        public int? TipoDiagnostico { get; set; }
 
     }
 }
