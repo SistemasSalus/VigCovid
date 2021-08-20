@@ -423,8 +423,8 @@ namespace VigCovid.Dashboard.BL
             {
                 var altasTotalHoy = (from A in db.FechaImportante
                                      join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
-                                     where A.Fecha == fechaActual
-                                     && A.Descripcion.Contains("alta")
+                                     where A.FechaFin == fechaActual
+                                     //&& A.Descripcion.Contains("alta")
                                      && sedesId.Contains(B.SedeId)
 
                                      select A).ToList();
@@ -438,15 +438,15 @@ namespace VigCovid.Dashboard.BL
                     var condicion = (from A in db.FechaImportante
                                      join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
                                      where A.TrabajadorId == item.TrabajadorId
-                                     && A.Fecha == fechaActual
+                                     && A.FechaFin == fechaActual
                                      && sedesId.Contains(B.SedeId)
-                                     && A.Descripcion.Contains("alta")
+                                     //&& A.Descripcion.Contains("alta")
                                      && B.EstadoClinicoId == null
 
                                      select A).ToList();
                     if (condicion.Count == 1)
                     {
-                        var fechaPosterior = (from A in db.FechaImportante where A.TrabajadorId == item.TrabajadorId && A.Fecha > fechaActual select A).ToList();
+                        var fechaPosterior = (from A in db.FechaImportante where A.TrabajadorId == item.TrabajadorId && A.FechaFin > fechaActual select A).ToList();
                         if (fechaPosterior.Count > 0)
                         {
 
@@ -463,8 +463,8 @@ namespace VigCovid.Dashboard.BL
             {
                 var altasTotalHoy = (from A in db.FechaImportante
                                 join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
-                                where A.Fecha == fechaActual
-                                && A.Descripcion.Contains("alta")
+                                where A.FechaFin == fechaActual
+                                //&& A.Descripcion.Contains("alta")
                                 && sedesId.Contains(B.SedeId)
                                 && B.MedicoVigilaId == medicoVigilaId
                                 //&& B.EstadoClinicoId == null
@@ -480,17 +480,17 @@ namespace VigCovid.Dashboard.BL
                     var condicion = (from A in db.FechaImportante
                                      join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
                                      where A.TrabajadorId == item.TrabajadorId
-                                     && A.Fecha == fechaActual
+                                     && A.FechaFin == fechaActual
                                      && sedesId.Contains(B.SedeId)
                                      && B.MedicoVigilaId == medicoVigilaId
-                                     && A.Descripcion.Contains("alta")
+                                     //&& A.Descripcion.Contains("alta")
                                      && B.EstadoClinicoId == null
                                      select A).ToList();
 
 
                     if (condicion.Count == 1)
                     {
-                        var fechaPosterior = (from A in db.FechaImportante where A.TrabajadorId == item.TrabajadorId && A.Fecha > fechaActual select A).ToList();
+                        var fechaPosterior = (from A in db.FechaImportante where A.TrabajadorId == item.TrabajadorId && A.FechaFin > fechaActual select A).ToList();
                         if (fechaPosterior.Count > 0)
                         {
                             
@@ -525,8 +525,8 @@ namespace VigCovid.Dashboard.BL
             {
                 var altasTotalHoy = (from A in db.FechaImportante
                                 join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
-                                where A.Fecha == fechaActual                                
-                                && A.Descripcion.Contains("alta")
+                                where A.FechaFin == fechaActual                                
+                                //&& A.Descripcion.Contains("alta")
                                 && sedesId.Contains(B.SedeId)
 
                                 select A).ToList();
@@ -541,15 +541,15 @@ namespace VigCovid.Dashboard.BL
                     var condicion = (from A in db.FechaImportante
                                      join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
                                      where A.TrabajadorId == item.TrabajadorId
-                                     && A.Fecha == fechaActual
+                                     && A.FechaFin == fechaActual
                                      && sedesId.Contains(B.SedeId)
-                                     && A.Descripcion.Contains("alta")
+                                     //&& A.Descripcion.Contains("alta")
                                      && B.EstadoClinicoId == null 
 
                                      select A).ToList();
                     if (condicion.Count == 1)
                     {
-                        var fechaPosterior = (from A in db.FechaImportante where A.TrabajadorId == item.TrabajadorId && A.Fecha > fechaActual select A).ToList();
+                        var fechaPosterior = (from A in db.FechaImportante where A.TrabajadorId == item.TrabajadorId && A.FechaFin > fechaActual select A).ToList();
                         if (fechaPosterior.Count > 0)
                         {
 
@@ -568,8 +568,8 @@ namespace VigCovid.Dashboard.BL
             {
                 var altasHoy = (from A in db.FechaImportante
                                 join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
-                                where A.Fecha == fechaActual
-                                && A.Descripcion.Contains("alta")
+                                where A.FechaFin == fechaActual
+                                //&& A.Descripcion.Contains("alta")
                                 && sedesId.Contains(B.SedeId)
                                 && B.MedicoVigilaId == medicoVigilaId
                                 select A).ToList();
@@ -583,16 +583,16 @@ namespace VigCovid.Dashboard.BL
                     var condicion = (from A in db.FechaImportante
                                      join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
                                      where A.TrabajadorId == item.TrabajadorId
-                                     && A.Fecha == fechaActual
+                                     && A.FechaFin == fechaActual
                                      && sedesId.Contains(B.SedeId)
                                      && B.MedicoVigilaId == medicoVigilaId
-                                     && A.Descripcion.Contains("alta")
+                                     //&& A.Descripcion.Contains("alta")
                                      && B.EstadoClinicoId == null
                                      select A).ToList();
                     
                     if (condicion.Count == 1)
                     {
-                        var fechaPosterior = (from A in db.FechaImportante where A.TrabajadorId == item.TrabajadorId && A.Fecha > fechaActual select A).ToList();
+                        var fechaPosterior = (from A in db.FechaImportante where A.TrabajadorId == item.TrabajadorId && A.FechaFin > fechaActual select A).ToList();
                         if (fechaPosterior.Count > 0)
                         {
 
