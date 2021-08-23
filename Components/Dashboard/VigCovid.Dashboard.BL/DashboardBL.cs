@@ -424,7 +424,7 @@ namespace VigCovid.Dashboard.BL
                 var altasTotalHoy = (from A in db.FechaImportante
                                      join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
                                      where A.FechaFin == fechaActual
-                                     //&& A.Descripcion.Contains("alta")
+                                     && A.Descripcion.Contains("Descanso")
                                      && sedesId.Contains(B.SedeId)
 
                                      select A).ToList();
@@ -440,7 +440,7 @@ namespace VigCovid.Dashboard.BL
                                      where A.TrabajadorId == item.TrabajadorId
                                      && A.FechaFin == fechaActual
                                      && sedesId.Contains(B.SedeId)
-                                     //&& A.Descripcion.Contains("alta")
+                                     && A.Descripcion.Contains("Descanso")
                                      && B.EstadoClinicoId == null
 
                                      select A).ToList();
@@ -464,7 +464,7 @@ namespace VigCovid.Dashboard.BL
                 var altasTotalHoy = (from A in db.FechaImportante
                                 join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
                                 where A.FechaFin == fechaActual
-                                //&& A.Descripcion.Contains("alta")
+                                && A.Descripcion.Contains("Descanso")
                                 && sedesId.Contains(B.SedeId)
                                 && B.MedicoVigilaId == medicoVigilaId
                                 //&& B.EstadoClinicoId == null
@@ -483,7 +483,7 @@ namespace VigCovid.Dashboard.BL
                                      && A.FechaFin == fechaActual
                                      && sedesId.Contains(B.SedeId)
                                      && B.MedicoVigilaId == medicoVigilaId
-                                     //&& A.Descripcion.Contains("alta")
+                                     && A.Descripcion.Contains("Descanso")
                                      && B.EstadoClinicoId == null
                                      select A).ToList();
 
@@ -525,8 +525,8 @@ namespace VigCovid.Dashboard.BL
             {
                 var altasTotalHoy = (from A in db.FechaImportante
                                 join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
-                                where A.FechaFin == fechaActual                                
-                                //&& A.Descripcion.Contains("alta")
+                                where A.FechaFin == fechaActual
+                                && A.Descripcion.Contains("Descanso")
                                 && sedesId.Contains(B.SedeId)
 
                                 select A).ToList();
@@ -543,7 +543,7 @@ namespace VigCovid.Dashboard.BL
                                      where A.TrabajadorId == item.TrabajadorId
                                      && A.FechaFin == fechaActual
                                      && sedesId.Contains(B.SedeId)
-                                     //&& A.Descripcion.Contains("alta")
+                                     && A.Descripcion.Contains("Descanso")
                                      && B.EstadoClinicoId == null 
 
                                      select A).ToList();
@@ -569,7 +569,8 @@ namespace VigCovid.Dashboard.BL
                 var altasHoy = (from A in db.FechaImportante
                                 join B in db.RegistroTrabajador on A.TrabajadorId equals B.Id
                                 where A.FechaFin == fechaActual
-                                //&& A.Descripcion.Contains("alta")
+                                
+                                && A.Descripcion.Contains("Descanso")
                                 && sedesId.Contains(B.SedeId)
                                 && B.MedicoVigilaId == medicoVigilaId
                                 select A).ToList();
@@ -586,7 +587,7 @@ namespace VigCovid.Dashboard.BL
                                      && A.FechaFin == fechaActual
                                      && sedesId.Contains(B.SedeId)
                                      && B.MedicoVigilaId == medicoVigilaId
-                                     //&& A.Descripcion.Contains("alta")
+                                     && A.Descripcion.Contains("Descanso")
                                      && B.EstadoClinicoId == null
                                      select A).ToList();
                     

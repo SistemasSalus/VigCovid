@@ -792,7 +792,18 @@ namespace VigCovidApp.Controllers
                         oSeguimiento.ProximoSeguimiento = seguimiento.ProximoSeguimiento.Value.ToString("dd/MM/yyyy");
                     }
                     oSeguimiento.TipoEstadoId = seguimiento.TipoEstadoId.Value;
-                    oSeguimiento.TipoDiagnostico = seguimiento.TipoDiagnostico.Value;
+
+                    if (seguimiento.TipoDiagnostico == null)
+                    {
+                        oSeguimiento.TipoDiagnostico = 0;
+                    }
+                    else
+                    {
+                        oSeguimiento.TipoDiagnostico = seguimiento.TipoDiagnostico.Value;
+                    }
+
+
+                    
                     oSeguimiento.NroSeguimiento = seguimiento.NroSeguimiento;
                     //-----------------------------------------------------
                     oSeguimiento.HipertensionArterial = seguimiento.HipertensionArterial == true ? "checked" : "";
@@ -2262,7 +2273,7 @@ namespace VigCovidApp.Controllers
                 {
                     Subject = "ALTA VIGILANCIA COVID, " + datosAlta.Trabajador + ", " + datosAlta.FechaAltaMedica,
                     IsBodyHtml = true,
-                    Body = "Se informa mediante la presente que el Sr(a) " + datosAlta.Trabajador + "--ha sido dado de alta de la vigilancia médica de COVID en el sistema VIGCOVID, el día " + datosAlta.FechaAltaMedica
+                    Body = "Se informa mediante la presente que el Sr(a) " + datosAlta.Trabajador + "--ha sido dado de alta de la vigilancia médica de COVID en el sistema VIGCOVID, el día " + datosAlta.FechaAltaMedica + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje"
                 };
 
                 SmtpClient smtpClientNotif = new SmtpClient

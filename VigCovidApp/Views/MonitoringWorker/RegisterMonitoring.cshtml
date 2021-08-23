@@ -430,7 +430,7 @@
                                         <div class="pad-btm form-inline">
                                             <div class="row">
                                                 <div class="col-sm-6 table-toolbar-left">
-                                                    <button id="btnModalNuevoExamen" data-toggle="modal" data-target="#modal-examen" class="btn btn-purple"><i class="demo-pli-add"></i> Agregar examen</button>
+                                                    <button id="btnModalNuevoExamen" data-toggle="modal" data-target="#modal-examen" class="btn btn-mint"><i class="demo-pli-add"></i> Agregar examen</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -966,7 +966,6 @@
                                             </div>
 
 
-
                                             <div class="col-md-6">
                                                 <input id="chk-PAntigenos5-@seguimiento.SeguimientoId" onclick="checkFluency5(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos5>
                                                 <label for="chk-PAntigenos5-@seguimiento.SeguimientoId">Prueba Antígeno en 5 dias</label>
@@ -981,14 +980,12 @@
 
 
                                                     <textarea id="txt-Receta-@seguimiento.SeguimientoId" placeholder="Ingresar receta medica" rows="4" class="form-control" data-width="100%">@seguimiento.Recetamedica</textarea>
-
-                                                    <input type="image" id="btn-Receta" onclick="Recetamedica(@seguimiento.SeguimientoId)" name="btn-Receta" src="~/img/enviarreceta.jpg" alt="Enviar Correos">
+                                                    
+                                                    <input type="image" id="btn-Receta" onclick="Recetamedica(@seguimiento.SeguimientoId)" name="btn-Receta" src="~/img/enviarreceta.jpg" alt="Enviar Correos" style="width:150px">
 
                                                 </div>
                                             </div>
                                         </div>
-
-
 
 
                                         <p class="text-bold pad-top"><a href="#" class="text-warning">Próximo Seguimiento</a></p>
@@ -997,8 +994,6 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <input type="text" class="form-control fechaProximoSeguimiento" id="dtp-ProximoSeguimiento-@seguimiento.SeguimientoId" value="@seguimiento.ProximoSeguimiento">
-
-
                                                 </div>
                                             </div>
                                         </div>
