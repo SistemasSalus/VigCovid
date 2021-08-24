@@ -1302,14 +1302,15 @@ namespace VigCovidApp.Controllers
 
 
 
-        public async Task<FileResult> ExportDescansoMedico(int id, string comentario, int trabajadorId)
+        public async Task<FileResult> ExportDescansoMedico(int id, string comentario, int trabajadorId, string EmpresaPrincipalId)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
             var oReportAltaBL = new ReportAltaBL();
-
-            if (comentario == "Descanso Médico")
+            var EI = EmpresaPrincipalId;
+            
+            if (comentario == "Descanso Médico" && EI == "BACKUS" || EI == "Backus" || EI == "UCP" || EI == "CERVECERIA" || EI == "San")
             {
-
+                         
                 var datosAlta = oReportAltaBL.EnviarDocumentoDMex(id, sessione.IdUser,trabajadorId);
 
 
@@ -1330,17 +1331,17 @@ namespace VigCovidApp.Controllers
                 int port = int.Parse(configEmail[1].v_Value1);
                 string from = configEmail[2].v_Value1.ToLower();
                 string fromPassword = configEmail[4].v_Value1;
-                if (datosAlta.CorreosTrabajador == null)
+                if (datosAlta.CorreosMedicoZona == null)
                 {
-                    datosAlta.CorreosTrabajador = "saulroach@hotmail.com";
+                    datosAlta.CorreosMedicoZona = "saulroach@hotmail.com";
                 }
-                if (datosAlta.CorreosChampios == null)
+                if (datosAlta.CorreosMedicoCoord == null)
                 {
-                    datosAlta.CorreosChampios = "saulroach@hotmail.com";
+                    datosAlta.CorreosMedicoCoord = "saulroach@hotmail.com";
                 }
 
                 //using (var mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios))
-                using (var mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador))
+                using (var mailMessage = new MailMessage(from, datosAlta.CorreosMedicoZona))
                 {
                     mailMessage.Subject = "Descanso Médico Descarga";
                     mailMessage.IsBodyHtml = true;
@@ -1367,6 +1368,192 @@ namespace VigCovidApp.Controllers
 
                 return File(archivoPDFDescarga, "application/pdf", fileName);
             }
+
+            if (comentario == "Descanso Médico" && EI == "TRANSPORTE")
+            {
+
+                var datosAlta = oReportAltaBL.EnviarDocumentoDMex(id, sessione.IdUser, trabajadorId);
+
+
+                MemoryStream memoryStream = GetPdfDescansoMedicoTransporte(datosAlta);
+
+                // Hacer una copia en memoria, una sera usada para el correo y el proceso de devoler el PDF - Saul Ramos Vega
+                var position = memoryStream.Position;
+                var archivoPDFDescarga = new MemoryStream();
+                memoryStream.CopyTo(archivoPDFDescarga);
+                memoryStream.Position = position;
+                archivoPDFDescarga.Position = position;
+
+
+                #region Envio correos
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+                if (datosAlta.CorreosMedicoZona == null)
+                {
+                    datosAlta.CorreosMedicoZona = "saulroach@hotmail.com";
+                }
+                if (datosAlta.CorreosMedicoCoord == null)
+                {
+                    datosAlta.CorreosMedicoCoord = "saulroach@hotmail.com";
+                }
+
+                //using (var mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios))
+                using (var mailMessage = new MailMessage(from, datosAlta.CorreosMedicoZona))
+                {
+                    mailMessage.Subject = "Descanso Médico Descarga";
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted podrá <b>reincorporarse</b> a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ",la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b><u>Nota</u></b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje";
+
+
+                    mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                    SmtpClient smtpClient = new SmtpClient
+                    {
+                        Host = smtp,
+                        Port = port,
+                        EnableSsl = true,
+                        Credentials = new NetworkCredential(from, fromPassword)
+                    };
+
+                    await smtpClient.SendMailAsync(mailMessage);
+                };
+
+                #endregion Envio correos
+
+
+                DateTime fileCreationDatetime = DateTime.Now;
+                string fileName = string.Format("{0}_{1}.pdf", "Descanso Médico" + datosAlta.Trabajador, fileCreationDatetime.ToString(@"yyyyMMdd") + "_" + fileCreationDatetime.ToString(@"HHmmss"));
+
+                return File(archivoPDFDescarga, "application/pdf", fileName);
+            }
+
+            if (comentario == "Descanso Médico" && EI == "NAO")
+            {
+
+                var datosAlta = oReportAltaBL.EnviarDocumentoDMex(id, sessione.IdUser, trabajadorId);
+
+
+                MemoryStream memoryStream = GetPdfDescansoMedicoNAO(datosAlta);
+
+                // Hacer una copia en memoria, una sera usada para el correo y el proceso de devoler el PDF - Saul Ramos Vega
+                var position = memoryStream.Position;
+                var archivoPDFDescarga = new MemoryStream();
+                memoryStream.CopyTo(archivoPDFDescarga);
+                memoryStream.Position = position;
+                archivoPDFDescarga.Position = position;
+
+
+                #region Envio correos
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+                if (datosAlta.CorreosMedicoZona == null)
+                {
+                    datosAlta.CorreosMedicoZona = "saulroach@hotmail.com";
+                }
+                if (datosAlta.CorreosMedicoCoord == null)
+                {
+                    datosAlta.CorreosMedicoCoord = "saulroach@hotmail.com";
+                }
+
+                //using (var mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios))
+                using (var mailMessage = new MailMessage(from, datosAlta.CorreosMedicoZona))
+                {
+                    mailMessage.Subject = "Descanso Médico Descarga";
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted podrá <b>reincorporarse</b> a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ",la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b><u>Nota</u></b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje";
+
+
+                    mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                    SmtpClient smtpClient = new SmtpClient
+                    {
+                        Host = smtp,
+                        Port = port,
+                        EnableSsl = true,
+                        Credentials = new NetworkCredential(from, fromPassword)
+                    };
+
+                    await smtpClient.SendMailAsync(mailMessage);
+                };
+
+                #endregion Envio correos
+
+
+                DateTime fileCreationDatetime = DateTime.Now;
+                string fileName = string.Format("{0}_{1}.pdf", "Descanso Médico" + datosAlta.Trabajador, fileCreationDatetime.ToString(@"yyyyMMdd") + "_" + fileCreationDatetime.ToString(@"HHmmss"));
+
+                return File(archivoPDFDescarga, "application/pdf", fileName);
+            }
+
+
+            if (comentario == "Descanso Médico" && EI == "AMBEV")
+            {
+
+                var datosAlta = oReportAltaBL.EnviarDocumentoDMex(id, sessione.IdUser, trabajadorId);
+
+
+                MemoryStream memoryStream = GetPdfDescansoMedicoAMBEV(datosAlta);
+
+                // Hacer una copia en memoria, una sera usada para el correo y el proceso de devoler el PDF - Saul Ramos Vega
+                var position = memoryStream.Position;
+                var archivoPDFDescarga = new MemoryStream();
+                memoryStream.CopyTo(archivoPDFDescarga);
+                memoryStream.Position = position;
+                archivoPDFDescarga.Position = position;
+
+
+                #region Envio correos
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+                if (datosAlta.CorreosMedicoZona == null)
+                {
+                    datosAlta.CorreosMedicoZona = "saulroach@hotmail.com";
+                }
+                if (datosAlta.CorreosMedicoCoord == null)
+                {
+                    datosAlta.CorreosMedicoCoord = "saulroach@hotmail.com";
+                }
+
+                //using (var mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios))
+                using (var mailMessage = new MailMessage(from, datosAlta.CorreosMedicoZona))
+                {
+                    mailMessage.Subject = "Descanso Médico Descarga";
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted podrá <b>reincorporarse</b> a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ",la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b><u>Nota</u></b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje";
+
+
+                    mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                    SmtpClient smtpClient = new SmtpClient
+                    {
+                        Host = smtp,
+                        Port = port,
+                        EnableSsl = true,
+                        Credentials = new NetworkCredential(from, fromPassword)
+                    };
+
+                    await smtpClient.SendMailAsync(mailMessage);
+                };
+
+                #endregion Envio correos
+
+
+                DateTime fileCreationDatetime = DateTime.Now;
+                string fileName = string.Format("{0}_{1}.pdf", "Descanso Médico" + datosAlta.Trabajador, fileCreationDatetime.ToString(@"yyyyMMdd") + "_" + fileCreationDatetime.ToString(@"HHmmss"));
+
+                return File(archivoPDFDescarga, "application/pdf", fileName);
+            }
+
+
             return null;
         }
 
@@ -1779,6 +1966,206 @@ namespace VigCovidApp.Controllers
                 #endregion
 
             }
+
+            if (empresa == "TRANSPORTE")
+            {
+                var datosAlta = oReportAltaBL.EnviarDocumentoDM1(id, sessione.IdUser, Diagnostico);
+
+                //if (comentario != null)
+                //{
+                //   datosAlta.ComentarioAlta = comentario;
+                //}
+
+                MemoryStream memoryStream = GetPdfDescansoMedicoTransporte(datosAlta);
+
+                //if (comentario != null)
+                //{
+                #region Envio correos
+
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosTrabajador))
+                {
+                    datosAlta.CorreosTrabajador = "administrador@saluslaboris.com.pe";
+                }
+               
+                if (string.IsNullOrEmpty(datosAlta.CorreosPeople))
+                {
+                    datosAlta.CorreosPeople = "administrador@saluslaboris.com.pe";
+                }
+               
+
+                //NOTIFICACION DM
+
+
+                //Enviar Correo y DM al Trabajador
+                MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosPeople)
+
+
+                //datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios
+
+
+                {
+                    Subject = "DESCANSO MEDICO, " + datosAlta.Trabajador,
+
+                    IsBodyHtml = true,
+                    Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted podrá <b>reincorporarse</b> a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ",la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b><u>Nota</u></b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje"
+                    //"Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + "<br>" + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada" + "<br>" + "<br>" + "el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
+                };
+
+                mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                SmtpClient smtpClient = new SmtpClient
+                {
+                    Host = smtp,
+                    Port = port,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(from, fromPassword)
+                };
+
+                smtpClient.Send(mailMessage);
+                #endregion
+
+            }
+
+
+            if (empresa == "NAO")
+            {
+                var datosAlta = oReportAltaBL.EnviarDocumentoDM1(id, sessione.IdUser, Diagnostico);
+
+                //if (comentario != null)
+                //{
+                //   datosAlta.ComentarioAlta = comentario;
+                //}
+
+                MemoryStream memoryStream = GetPdfDescansoMedicoNAO(datosAlta);
+
+                //if (comentario != null)
+                //{
+                #region Envio correos
+
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosTrabajador))
+                {
+                    datosAlta.CorreosTrabajador = "administrador@saluslaboris.com.pe";
+                }
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosPeople))
+                {
+                    datosAlta.CorreosPeople = "administrador@saluslaboris.com.pe";
+                }
+
+
+                //NOTIFICACION DM
+
+
+                //Enviar Correo y DM al Trabajador
+                MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosPeople)
+
+
+                //datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios
+
+
+                {
+                    Subject = "DESCANSO MEDICO, " + datosAlta.Trabajador,
+
+                    IsBodyHtml = true,
+                    Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted podrá <b>reincorporarse</b> a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ",la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b><u>Nota</u></b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje"
+                    //"Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + "<br>" + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada" + "<br>" + "<br>" + "el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
+                };
+
+                mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                SmtpClient smtpClient = new SmtpClient
+                {
+                    Host = smtp,
+                    Port = port,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(from, fromPassword)
+                };
+
+                smtpClient.Send(mailMessage);
+                #endregion
+
+            }
+
+            if (empresa == "AMBEV")
+            {
+                var datosAlta = oReportAltaBL.EnviarDocumentoDM1(id, sessione.IdUser, Diagnostico);
+
+                //if (comentario != null)
+                //{
+                //   datosAlta.ComentarioAlta = comentario;
+                //}
+
+                MemoryStream memoryStream = GetPdfDescansoMedicoAMBEV(datosAlta);
+
+                //if (comentario != null)
+                //{
+                #region Envio correos
+
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosTrabajador))
+                {
+                    datosAlta.CorreosTrabajador = "administrador@saluslaboris.com.pe";
+                }
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosPeople))
+                {
+                    datosAlta.CorreosPeople = "administrador@saluslaboris.com.pe";
+                }
+
+
+                //NOTIFICACION DM
+
+
+                //Enviar Correo y DM al Trabajador
+                MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosPeople)
+
+
+                //datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios
+
+
+                {
+                    Subject = "DESCANSO MEDICO, " + datosAlta.Trabajador,
+
+                    IsBodyHtml = true,
+                    Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted podrá <b>reincorporarse</b> a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ",la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b><u>Nota</u></b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje"
+                    //"Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + "<br>" + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada" + "<br>" + "<br>" + "el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
+                };
+
+                mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                SmtpClient smtpClient = new SmtpClient
+                {
+                    Host = smtp,
+                    Port = port,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(from, fromPassword)
+                };
+
+                smtpClient.Send(mailMessage);
+                #endregion
+
+            }
+
+
+
+
         }
 
 
@@ -2431,9 +2818,6 @@ namespace VigCovidApp.Controllers
                     //}
 
 
-
-
-
                     //columnWidths = new float[] { 30f, 70f, 30f };
                     columnWidths = new float[] { 100f };
 
@@ -2446,6 +2830,626 @@ namespace VigCovidApp.Controllers
 
                         new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
+
+                        // new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE , Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("Nombre del médico responsable - CMP " + datos.Colegiatura, fontSubTitle)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE},
+
+                       // ----> new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+                    };
+                    table = HandlingItextSharp.GenerateTableFromCells(Firma, columnWidths, null, fontTitleTable);
+
+                    document.Add(table);
+
+                    #endregion Firma Médico
+
+                    document.NewPage();
+
+                    document.Close();
+
+                    byte[] byteInfo = memoryStream.ToArray();
+                    memoryStream.Write(byteInfo, 0, byteInfo.Length);
+                    memoryStream.Position = 0;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                return memoryStream;
+            }
+        }
+
+        //GENERAR PDF DM - AMBEV
+        //GetPdfDescansoMedicoAMBEV
+
+        private MemoryStream GetPdfDescansoMedicoAMBEV(ReporteAltaBE datos)
+        {
+            using (Document document = new Document(PageSize.A4)) //Tamaño de Hoja
+
+            {
+                MemoryStream memoryStream = new MemoryStream();
+                try
+                {
+                    PdfWriter pdfWriter = PdfWriter.GetInstance(document, memoryStream);
+                    pdfWriter.CloseStream = false;
+                    pdfWriter.PageEvent = new pdfPage();
+                    document.SetMargins(58.34f, 58.34f, 58.34f, 58.34f);
+                    document.Open();
+
+                    #region Declaration Tables
+
+                    var subTitleBackGroundColor = new BaseColor(System.Drawing.Color.White);
+                    string include = string.Empty;
+                    List<PdfPCell> cells = null;
+                    float[] columnWidths = null;
+                    //string[] columnHeaders = null;
+                    PdfPTable filiationWorker = new PdfPTable(8);
+
+                    PdfPTable table = null;
+
+                    PdfPTable whiteline = null;
+
+
+                    // PdfPCell cell = null;
+
+                    // #endregion Declaration Tables
+
+                    // #region Fonts
+
+                    //Font fontTitle1 = FontFactory.GetFont(FontFactory.HELVETICA, 14, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitle2 = FontFactory.GetFont(FontFactory.HELVETICA, 12, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitleTable = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitleTableNegro = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontSubTitle = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.White));
+                    //Font fontSubTitleNegroNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontColumnValue = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontColumnValueNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontAptitud = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+
+
+                    Font fontTitle1 = FontFactory.GetFont(FontFactory.HELVETICA, 15, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitle2 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitle44 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitleTable = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitleTableNegro = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontSubTitle = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.White));
+                    Font fontSubTitleNegroNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontColumnValue = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    Font fontColumnValueNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontAptitud = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+
+
+                    #endregion Fonts
+
+                    #region Title
+
+                    cells = new List<PdfPCell>();
+
+                    var fechaHoy = DateTime.Now;
+
+                    var fechaFormat = fechaHoy.ToString("dd/MM/yyyy");
+
+
+                    //columnWidths = new float[] { 30f, 70f, 30f };
+                    columnWidths = new float[] { 100f };
+                    var logo = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\logoSalus.jpg");
+                    var cellsTit = new List<PdfPCell>()
+                    {
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(logo),null,null,150,36)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("DESCANSO MÉDICO", fontTitle1)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        //new PdfPCell(new Phrase(fechaFormat, fontTitle1)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "El médico que suscribe certifica que:", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "El(la)  señor(a):" +" "+ datos.Trabajador +" " + "con" + " " + " DNI Nro. " + "    " + datos.Dni + " ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "de la empresa COMPAÑIA CERVECERA AMBEV PERU S.A.C., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("  " + "   " + " " + datos.DetalleDiagnostico,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("-Z29.0 Aislamiento",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "Por lo que se indica" + " " + " " + datos.DiasTotalDescanso + " " + " " + "días de descanso médico, del" + " " +  " " + datos.FechaAislaminetoCuarentena + " " + "al" + " " + datos.FechaPosibleAlta, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "Se emite el presente certificado para los fines que crea conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase(" " + "conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+
+                        new PdfPCell(new Phrase("Lima" +" "+ " " + datos.FechaAislaminetoCuarentena,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+
+
+                        //new PdfPCell(new Phrase(datos.Receta, fontTitle2)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6},
+                        //new PdfPCell(new Phrase(datos.Receta, fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase(datos.Receta, fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                    };
+
+                    table = HandlingItextSharp.GenerateTableFromCells(cellsTit, columnWidths, null, fontTitleTable);
+
+                    document.Add(table);
+
+                    cells = new List<PdfPCell>();
+
+                    //columnWidths = new float[] { 50f, 50f };
+                    columnWidths = new float[] { 100f };
+                    string firma;
+
+                    string path = Path.Combine(HttpRuntime.AppDomainAppPath, "img");
+                    string fileName = datos.DoctorId.ToString() + ".png";
+
+                    if (!System.IO.File.Exists(Path.Combine(path, fileName)))
+                    {
+                        firma = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\logoSalus.jpg");
+                    }
+                    else
+                    {
+                        firma = System.IO.Path.Combine(path, fileName);
+                    }
+
+
+
+
+
+
+
+                    columnWidths = new float[] { 100f };
+
+                    var Firma = new List<PdfPCell>()
+                    {
+                        //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+
+
+
+
+
+                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+
+
+
+
+
+                        //new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("SALUS LABORIS SAC - USE BACKUS", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+
+                        // new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE , Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("Nombre del médico responsable - CMP " + datos.Colegiatura, fontSubTitle)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE},
+
+                       // ----> new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+                    };
+                    table = HandlingItextSharp.GenerateTableFromCells(Firma, columnWidths, null, fontTitleTable);
+
+                    document.Add(table);
+
+                    #endregion Firma Médico
+
+                    document.NewPage();
+
+                    document.Close();
+
+                    byte[] byteInfo = memoryStream.ToArray();
+                    memoryStream.Write(byteInfo, 0, byteInfo.Length);
+                    memoryStream.Position = 0;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                return memoryStream;
+            }
+        }
+
+
+
+
+
+
+
+        //GENERAR PDF DM  - NAO
+        //GetPdfDescansoMedicoNAO
+        private MemoryStream GetPdfDescansoMedicoNAO(ReporteAltaBE datos)
+        {
+            using (Document document = new Document(PageSize.A4)) //Tamaño de Hoja
+
+            {
+                MemoryStream memoryStream = new MemoryStream();
+                try
+                {
+                    PdfWriter pdfWriter = PdfWriter.GetInstance(document, memoryStream);
+                    pdfWriter.CloseStream = false;
+                    pdfWriter.PageEvent = new pdfPage();
+                    document.SetMargins(58.34f, 58.34f, 58.34f, 58.34f);
+                    document.Open();
+
+                    #region Declaration Tables
+
+                    var subTitleBackGroundColor = new BaseColor(System.Drawing.Color.White);
+                    string include = string.Empty;
+                    List<PdfPCell> cells = null;
+                    float[] columnWidths = null;
+                    //string[] columnHeaders = null;
+                    PdfPTable filiationWorker = new PdfPTable(8);
+
+                    PdfPTable table = null;
+
+                    PdfPTable whiteline = null;
+
+
+                    // PdfPCell cell = null;
+
+                    // #endregion Declaration Tables
+
+                    // #region Fonts
+
+                    //Font fontTitle1 = FontFactory.GetFont(FontFactory.HELVETICA, 14, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitle2 = FontFactory.GetFont(FontFactory.HELVETICA, 12, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitleTable = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitleTableNegro = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontSubTitle = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.White));
+                    //Font fontSubTitleNegroNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontColumnValue = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontColumnValueNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontAptitud = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+
+
+                    Font fontTitle1 = FontFactory.GetFont(FontFactory.HELVETICA, 15, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitle2 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitle44 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitleTable = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitleTableNegro = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontSubTitle = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.White));
+                    Font fontSubTitleNegroNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontColumnValue = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    Font fontColumnValueNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontAptitud = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+
+
+                    #endregion Fonts
+
+                    #region Title
+
+                    cells = new List<PdfPCell>();
+
+                    var fechaHoy = DateTime.Now;
+
+                    var fechaFormat = fechaHoy.ToString("dd/MM/yyyy");
+
+
+                    //columnWidths = new float[] { 30f, 70f, 30f };
+                    columnWidths = new float[] { 100f };
+                    var logo = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\logoSalus.jpg");
+                    var cellsTit = new List<PdfPCell>()
+                    {
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(logo),null,null,150,36)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("DESCANSO MÉDICO", fontTitle1)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        //new PdfPCell(new Phrase(fechaFormat, fontTitle1)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "El médico que suscribe certifica que:", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "El(la)  señor(a):" +" "+ datos.Trabajador +" " + "con" + " " + " DNI Nro. " + "    " + datos.Dni + " ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "de la empresa NAVIERA ORIENTE S.A.C., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("  " + "   " + " " + datos.DetalleDiagnostico,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("-Z29.0 Aislamiento",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "Por lo que se indica" + " " + " " + datos.DiasTotalDescanso + " " + " " + "días de descanso médico, del" + " " +  " " + datos.FechaAislaminetoCuarentena + " " + "al" + " " + datos.FechaPosibleAlta, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "Se emite el presente certificado para los fines que crea conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase(" " + "conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+
+                        new PdfPCell(new Phrase("Lima" +" "+ " " + datos.FechaAislaminetoCuarentena,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+
+
+                        //new PdfPCell(new Phrase(datos.Receta, fontTitle2)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6},
+                        //new PdfPCell(new Phrase(datos.Receta, fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase(datos.Receta, fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                    };
+
+                    table = HandlingItextSharp.GenerateTableFromCells(cellsTit, columnWidths, null, fontTitleTable);
+
+                    document.Add(table);
+
+                    cells = new List<PdfPCell>();
+
+                    //columnWidths = new float[] { 50f, 50f };
+                    columnWidths = new float[] { 100f };
+                    string firma;
+
+                    string path = Path.Combine(HttpRuntime.AppDomainAppPath, "img");
+                    string fileName = datos.DoctorId.ToString() + ".png";
+
+                    if (!System.IO.File.Exists(Path.Combine(path, fileName)))
+                    {
+                        firma = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\logoSalus.jpg");
+                    }
+                    else
+                    {
+                        firma = System.IO.Path.Combine(path, fileName);
+                    }
+
+
+
+
+
+
+
+                    columnWidths = new float[] { 100f };
+
+                    var Firma = new List<PdfPCell>()
+                    {
+                        //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+
+
+
+
+
+                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+
+
+
+
+
+                        //new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("SALUS LABORIS SAC - USE BACKUS", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+
+                        // new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE , Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("Nombre del médico responsable - CMP " + datos.Colegiatura, fontSubTitle)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE},
+
+                       // ----> new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+                    };
+                    table = HandlingItextSharp.GenerateTableFromCells(Firma, columnWidths, null, fontTitleTable);
+
+                    document.Add(table);
+
+                    #endregion Firma Médico
+
+                    document.NewPage();
+
+                    document.Close();
+
+                    byte[] byteInfo = memoryStream.ToArray();
+                    memoryStream.Write(byteInfo, 0, byteInfo.Length);
+                    memoryStream.Position = 0;
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                return memoryStream;
+            }
+        }
+
+
+
+
+
+
+
+        //GENERAR PDF DM - TRANSPORTE 77
+        //GetPdfDescansoMedicoTransporte
+
+        private MemoryStream GetPdfDescansoMedicoTransporte(ReporteAltaBE datos)
+        {
+            using (Document document = new Document(PageSize.A4)) //Tamaño de Hoja
+
+            {
+                MemoryStream memoryStream = new MemoryStream();
+                try
+                {
+                    PdfWriter pdfWriter = PdfWriter.GetInstance(document, memoryStream);
+                    pdfWriter.CloseStream = false;
+                    pdfWriter.PageEvent = new pdfPage();
+                    document.SetMargins(58.34f, 58.34f, 58.34f, 58.34f);
+                    document.Open();
+
+                    #region Declaration Tables
+
+                    var subTitleBackGroundColor = new BaseColor(System.Drawing.Color.White);
+                    string include = string.Empty;
+                    List<PdfPCell> cells = null;
+                    float[] columnWidths = null;
+                    //string[] columnHeaders = null;
+                    PdfPTable filiationWorker = new PdfPTable(8);
+
+                    PdfPTable table = null;
+
+                    PdfPTable whiteline = null;
+
+
+                    // PdfPCell cell = null;
+
+                    // #endregion Declaration Tables
+
+                    // #region Fonts
+
+                    //Font fontTitle1 = FontFactory.GetFont(FontFactory.HELVETICA, 14, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitle2 = FontFactory.GetFont(FontFactory.HELVETICA, 12, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitleTable = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontTitleTableNegro = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontSubTitle = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.White));
+                    //Font fontSubTitleNegroNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontColumnValue = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontColumnValueNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    //Font fontAptitud = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+
+
+                    Font fontTitle1 = FontFactory.GetFont(FontFactory.HELVETICA, 15, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitle2 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitle44 = FontFactory.GetFont(FontFactory.HELVETICA, 11, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitleTable = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontTitleTableNegro = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontSubTitle = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.White));
+                    Font fontSubTitleNegroNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontColumnValue = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.NORMAL, new BaseColor(System.Drawing.Color.Black));
+                    Font fontColumnValueNegrita = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+                    Font fontAptitud = FontFactory.GetFont(FontFactory.HELVETICA, 9, iTextSharp.text.Font.BOLD, new BaseColor(System.Drawing.Color.Black));
+
+
+                    #endregion Fonts
+
+                    #region Title
+
+                    cells = new List<PdfPCell>();
+
+                    var fechaHoy = DateTime.Now;
+
+                    var fechaFormat = fechaHoy.ToString("dd/MM/yyyy");
+
+
+                    //columnWidths = new float[] { 30f, 70f, 30f };
+                    columnWidths = new float[] { 100f };
+                    var logo = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\logoSalus.jpg");
+                    var cellsTit = new List<PdfPCell>()
+                    {
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(logo),null,null,150,36)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("DESCANSO MÉDICO", fontTitle1)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        //new PdfPCell(new Phrase(fechaFormat, fontTitle1)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "El médico que suscribe certifica que:", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "El(la)  señor(a):" +" "+ datos.Trabajador +" " + "con" + " " + " DNI Nro. " + "    " + datos.Dni + " ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "de la empresa TRANSPORTES 77 S.A., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("  " + "   " + " " + datos.DetalleDiagnostico,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("-Z29.0 Aislamiento",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "Por lo que se indica" + " " + " " + datos.DiasTotalDescanso + " " + " " + "días de descanso médico, del" + " " +  " " + datos.FechaAislaminetoCuarentena + " " + "al" + " " + datos.FechaPosibleAlta, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(new Phrase(" " + "Se emite el presente certificado para los fines que crea conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase(" " + "conveniente",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+
+                        new PdfPCell(new Phrase("Lima" +" "+ " " + datos.FechaAislaminetoCuarentena,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+
+
+                        //new PdfPCell(new Phrase(datos.Receta, fontTitle2)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6},
+                        //new PdfPCell(new Phrase(datos.Receta, fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase(datos.Receta, fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                    };
+
+                    table = HandlingItextSharp.GenerateTableFromCells(cellsTit, columnWidths, null, fontTitleTable);
+
+                    document.Add(table);
+
+                    cells = new List<PdfPCell>();
+
+                    //columnWidths = new float[] { 50f, 50f };
+                    columnWidths = new float[] { 100f };
+                    string firma;
+
+                    string path = Path.Combine(HttpRuntime.AppDomainAppPath, "img");
+                    string fileName = datos.DoctorId.ToString() + ".png";
+
+                    if (!System.IO.File.Exists(Path.Combine(path, fileName)))
+                    {
+                        firma = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\logoSalus.jpg");
+                    }
+                    else
+                    {
+                        firma = System.IO.Path.Combine(path, fileName);
+                    }
+
+
+
+
+
+
+
+                    columnWidths = new float[] { 100f };
+
+                    var Firma = new List<PdfPCell>()
+                    {
+                        //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+
+
+
+
+
+                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+
+
+
+
+
+                        //new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("SALUS LABORIS SAC - USE BACKUS", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
                         // new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE , Border = PdfPCell.NO_BORDER},
 
@@ -2620,32 +3624,35 @@ namespace VigCovidApp.Controllers
                     }
 
 
-                    // var firma = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\logoSalus.jpg");
-
-                    //firma = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\" + datos.DoctorId.ToString() + ".png");
-
-                    //if (string.IsNullOrEmpty(firma))
-                    //{
-                    //    firma = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"img\logoSalus.jpg");
-                    //}
 
 
 
 
 
-                    //columnWidths = new float[] { 30f, 70f, 30f };
                     columnWidths = new float[] { 100f };
 
                     var Firma = new List<PdfPCell>()
                     {
                         //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
 
 
-                        new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase("SALUS LABORIS SAC - USE BACKUS", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+
+
+                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+
+
+
+
+
+                        //new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase("SALUS LABORIS SAC - USE BACKUS", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
                         // new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE , Border = PdfPCell.NO_BORDER},
 
@@ -2919,17 +3926,19 @@ namespace VigCovidApp.Controllers
 
                     var Firma = new List<PdfPCell>()
                     {
-                        new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
                         new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
 
 
-                        new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-
+                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
                         // new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE , Border = PdfPCell.NO_BORDER},
 
-                        //new PdfPCell(new Phrase("Nombre del médico responsable - CMP " + datos.Colegiatura, fontSubTitle)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE},
+                        
 
                        // ----> new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
                     };

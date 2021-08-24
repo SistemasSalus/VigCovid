@@ -203,7 +203,7 @@ namespace VigCovid.Worker.BL
         }
 
 
-        public List<ReporteAcumuladoManualBE> ListarTrabajadoresPorSedesReporteAcumulado(List<int> sedesId, int EmpresaId, DateTime FechaInicio, DateTime FechaFin)
+        public List<ReporteAcumuladoManualBE> ListarTrabajadoresPorSedesReporteAcumulado(List<int> sedesId, int EP, DateTime FechaInicio, DateTime FechaFin)
         {
             List<ReporteAcumuladoManualBE> serviceDatas = new List<ReporteAcumuladoManualBE>();
             List<ReporteAcumuladoManualBE> serviceDatasModificado = new List<ReporteAcumuladoManualBE>();
@@ -217,7 +217,7 @@ namespace VigCovid.Worker.BL
                 using (SqlCommand cmd = new SqlCommand("ObtenerReporteTrabajadoresAcumulado", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@EmpresaPrincipal", SqlDbType.Int).Value = EmpresaId;
+                    cmd.Parameters.Add("@EmpresaPrincipal", SqlDbType.Int).Value = EP;
                     cmd.Parameters.Add("@FechaInicio", SqlDbType.Date).Value = FechaInicio;
                     cmd.Parameters.Add("@FechaFin", SqlDbType.Date).Value = FechaFin;
                     cmd.CommandTimeout = 0;

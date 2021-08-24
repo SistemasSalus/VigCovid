@@ -10,8 +10,7 @@
         //PRODUCCION
         //public static string CONEXION = "Data Source=192.168.2.2;Initial Catalog=VigCovid;Persist Security Info=True;User ID=sa;Password=SA@2019";
 
-
-        
+               
 
         //<add name = "ApplicationDbContext" connectionString="data source=181.224.231.3;initial catalog=VigCovid20210626;user id=sa;password=SA@2019;MultipleActiveResultSets=True;App=EntityFramework" providerName="System.Data.SqlClient" />
 

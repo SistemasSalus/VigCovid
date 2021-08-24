@@ -998,8 +998,6 @@
                                             </div>
                                         </div>
 
-
-
                                     </div>
                                 </div>
                                 @*</div>*@
@@ -1447,7 +1445,7 @@
 
         $("#btnRegistrarRango").on("click", function () {
 
-            
+
             let trango = $("#ddl-TipoRango").val();
             let tdiagnostico = $("#ddl-Diagnostico").val();
             var FechaInicioP = $("#dtpFechaInicio").val();
@@ -1487,7 +1485,7 @@
                 bootbox.alert({
                     size: 'large',
                     title: "CORREGIR:",
-                    message: "<h5 style='color:red'>Debe Seleccionar el Tipo de Rango</h5>",
+                    message: "<h5 style='color:red'>Debe Seleccionar el Tipo de Rango Respectivo</h5>",
 
                 });
                 return;
@@ -1500,7 +1498,7 @@
                 bootbox.alert({
                     size: 'large',
                     title: "CORREGIR:",
-                    message: "<h5 style='color:red'>Debe Seleccionar el Diagnóstico</h5>",
+                    message: "<h5 style='color:red'>Debe Seleccionar el Diagnóstico Respectivo</h5>",
 
                 });
                 return;
@@ -1543,7 +1541,7 @@
 
 
 
-            //Temoporizador Carga.... Saul Ramos Vega -- 2021-08-17 
+            //Temoporizador Carga.... Saul Ramos Vega -- 2021-08-17
 
             var dialog = bootbox.dialog({
                 title: 'Importante: Envío de Información',
@@ -1732,20 +1730,24 @@
 
             if (value == 5) {
                 bootbox.prompt({
-                    title: "¿Está seguro de dar de ALTA?",
+                    title: "Debe de Ingresar el Comentario - Es Obligatorio",
                     onEscape: true,
                     inputType: 'textarea',
                     placeholder: 'Ingresar comentario de alta',
+                    closeButton: false,
                     required: true,
                     callback: function (result) {
 
                         if (result === null) {
-                            alert("Debe ingresar un comentario.")
+                            alert("Debe ingresar el comentario.")
+                            $("#ddl-TipoEstado-" + seguimientoId).val(-1)
                             return;
                         } else if (result === '') {
-                            alert("Debe ingresar un comentario.")
+                            alert("Debe ingresar el comentario.")
+                            $("#ddl-TipoEstado-" + seguimientoId).val(-1)
                             return false;
                         }
+
                         else {
                             $('.cargaEsperar').modal('show');
                             let idSeguimiento = ddlCalificacionId.split('-')[2];
@@ -1769,10 +1771,13 @@
                     }
                 });
 
+
             } else {
                 let id = ddlCalificacionId.split('-')[2];
                 SaveChange(id, "Tipo Estado", "#" + ddlCalificacionId, "control-combo");
+
             }
+
 
         });
 
@@ -2024,7 +2029,7 @@
                     "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
                     "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
                     "Recetamedica": $("#txt-Receta-" + seguimientoId).val(),
-                    "TipoDiagnostico": $("#ddl-Diagnosticos-" + seguimientoId + " option:selected").val() 
+                    "TipoDiagnostico": $("#ddl-Diagnosticos-" + seguimientoId + " option:selected").val()
 
                 }
             } else {
@@ -2049,7 +2054,7 @@
                     "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
                     "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
                     "Recetamedica": $("#txt-Receta-" + seguimientoId).val(),
-                    "TipoDiagnostico": $("#ddl-Diagnosticos-" + seguimientoId + " option:selected").val() 
+                    "TipoDiagnostico": $("#ddl-Diagnosticos-" + seguimientoId + " option:selected").val()
                 }
             }
 
@@ -2610,8 +2615,6 @@
 
     //CODIGO ENVIO PULSOOXIMETRO -  Creado por Saul Ramos
 
-
-
     function checkFluencyP(seguimientoId) {
         var Valordelchk = $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked;
         let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
@@ -3058,10 +3061,10 @@
 
 
     //Descargar DM - 11082021  - Creado por Saul Ramos
-    function DescargarelDM(campo1, campo2, trabajadorId) {
+    function DescargarelDM(campo1, campo2, trabajadorId, EmpresaPrincipalId) {
 
 
-        var datos = { "Id": campo1, "comentario": campo2, "trabajadorId": trabajadorId };
+        var datos = { "Id": campo1, "comentario": campo2, "trabajadorId": trabajadorId, "EmpresaPrincipalId": EmpresaPrincipalId};
 
         var dialog = bootbox.dialog({
             title: 'Importante: Descarga del Descanso Médico',
@@ -3130,12 +3133,14 @@
         //console.log(textoRenglon);
         $("#IdFechaImportante").val(textoRenglon);
         let trabajadorId = $("#txtRegistroTrabajadoId").val();
-        //alert(renglon);
+        let EmpresaPrincipalId = $("#EmpresaPrincipalId").val();
 
-        if (campo2 == 'Descanso Médico')  
+       //alert(renglon);
+
+        if (campo2 == 'Descanso Médico')
         {
 
-        DescargarelDM(campo1, campo2, trabajadorId);
+            DescargarelDM(campo1, campo2, trabajadorId, EmpresaPrincipalId);
 
         } else {
 

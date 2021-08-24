@@ -792,7 +792,8 @@ namespace VigCovidApp.Controllers
         public void DATOSVACIOS()
         {
         }
-        //NOTIFICACION A BP Busqueda de contactos directos- Creado por Saul Ramos 28-05-2021
+        
+        //NOTIFICACION A BP Búsqueda de contactos directos- Creado por Saul Ramos 28-05-2021
 
         public void GenerarNotificacionContactosDirectos(int id)
         {
@@ -1225,10 +1226,10 @@ namespace VigCovidApp.Controllers
                         cell = sheet.Cells[rowIndex, 2];
 
 
-//                        Worksheets("Sheet1").Range("A17").NumberFormat = "General"
+//Worksheets("Sheet1").Range("A17").NumberFormat = "General"
 //Worksheets("Sheet1").Rows(1).NumberFormat = "hh:mm:ss"
 //Worksheets("Sheet1").Columns("C")._
-// NumberFormat = "$#,##0.00_);[Red]($#,##0.00)"
+//NumberFormat = "$#,##0.00_);[Red]($#,##0.00)"
 
 
                         cell.Value = item.ApellidosNombres;
@@ -1577,7 +1578,7 @@ namespace VigCovidApp.Controllers
 
         //SE DEHABILITA PARA ENVIO DE DM - - 20210720  Saul Ramos Vega
 
-        public void ReporteExcelManual(string cadena, string FechaInicio, string FechaFin)
+        public void ReporteExcelManual(string cadena, string FechaInicio, string FechaFin, int EP)
         {
             var FechaFin1 = Convert.ToDateTime(FechaFin);
             var FechaInicio1 = Convert.ToDateTime(FechaInicio);
@@ -1597,7 +1598,7 @@ namespace VigCovidApp.Controllers
                  
                                        
                 var xobj = cadena;
-                var listaTrabajadores = ListaTrabajadoresReporte(empresasCodigos, sessione.EmpresaId, sessione.IdUser, FechaInicio1, FechaFin1).ToList();
+                var listaTrabajadores = ListaTrabajadoresReporte(empresasCodigos, EP, sessione.IdUser, FechaInicio1, FechaFin1).ToList();
                 
                 listaTrabajadores = listaTrabajadores.OrderBy(x => x.ApellidosNombres).ToList();
 
@@ -1717,11 +1718,11 @@ namespace VigCovidApp.Controllers
 
         //Se modifica para que filtre por empresa -- Saul RV -- 13052021
         //Se añade opciones de filtro por Fecha de Inicio y Fecha de Fin -- Saul RV -- 20-07-2021
-        private IEnumerable<ReporteAcumuladoManualBE> ListaTrabajadoresReporte(List<int> sedesId, int EmpresaId, int IdUser, DateTime FechaInicio, DateTime FechaFin)
+        private IEnumerable<ReporteAcumuladoManualBE> ListaTrabajadoresReporte(List<int> sedesId, int EP, int IdUser, DateTime FechaInicio, DateTime FechaFin)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
             var oWorkerRegisterBL = new WorkerRegisterBL();
-            var trabajadores = oWorkerRegisterBL.ListarTrabajadoresPorSedesReporteAcumulado(sedesId, EmpresaId, FechaInicio, FechaFin);
+            var trabajadores = oWorkerRegisterBL.ListarTrabajadoresPorSedesReporteAcumulado(sedesId, EP, FechaInicio, FechaFin);
 
             if (sessione.IdTipoUsuario == (int)TipoUsuario.MedicoVigilancia)
             {
@@ -1885,8 +1886,7 @@ namespace VigCovidApp.Controllers
             else
             {
                 //var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario);
-
-                
+                                
 
                 var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario);
 

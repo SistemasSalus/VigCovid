@@ -866,43 +866,55 @@ style{
                         <button type="button" class="close" data-dismiss="modal">
                             <i class="pci-cross pci-circle"></i>
                         </button>
-                        <h4 class="modal-title">Favor Seleccionar Rango de Fechas</h4>
+                        <h4 class="modal-title" style="text-align:center" ><b>--Seleccionar la Empresa y el Rango de Fechas Respectivo--</b></h4>
                     </div>
+                    
+                        <div style="text-align:center">
 
-                    <!--Modal body-->
-                    <div class="modal-body">
-                        <form id="form-descarga">
-                            <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Fecha de Inicio</th>
-                                                <th>Fecha de Fin</th>
+                         <select class="selectpicker" id="ddlEmpresaPrincipal" name="validateEmpresaRegistro" data-width="90%">
+                            <option value="0" selected>Seleccione la Empresa...</option>
 
-                                            </tr>
-                                            <tr>
-                                                <th><input type="text" class="form-control fechaRFechaInicio" id="dtp-rFechaInicio" autocomplete="off"></th>
-                                                <th><input type="text" class="form-control fechaRFin" id="dtp-rFechaFin" autocomplete="off"></th>
+                            @foreach (var item in @ViewBag.EmpresasRegistro)
+                            {
 
-                                                <th><button class="btn btn-success" id="btnDescargartodoexcel">Descargar</button></th>
-                                            </tr>
+                                <option value="@item.EmpresaId">@item.EmpresaNombre</option>
+                            }
+                        </select>
+                    </div>
+                        <!--Modal body-->
+                        <div class="modal-body">
+                            <form id="form-descarga">
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha de Inicio</th>
+                                                    <th>Fecha de Fin</th>
+
+                                                </tr>
+                                                <tr>
+                                                    <th><input type="text" class="form-control fechaRFechaInicio" id="dtp-rFechaInicio" autocomplete="off"></th>
+                                                    <th><input type="text" class="form-control fechaRFin" id="dtp-rFechaFin" autocomplete="off"></th>
+
+                                                    <th><button class="btn btn-success" id="btnDescargartodoexcel">Descargar</button></th>
+                                                </tr>
 
 
-                                        </thead>
+                                            </thead>
 
-                                        <tbody id="table-altas">
-                                        </tbody>
-                                    </table>
+                                            <tbody id="table-altas">
+                                            </tbody>
+                                        </table>
 
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
+
                     </div>
 
                 </div>
-
-            </div>
 
         </div>
     </div>
@@ -1038,15 +1050,17 @@ style{
             $("#form-descarga").submit(function (ev) { ev.preventDefault(); });
 
 
-
+            //Implementado por Saul Ramos Vega - Reporte Excel Acumulado - por Empresas y Rango de Fechas
 
             $("#btnDescargartodoexcel").on('click', function () {
 
                 let FechaInicio = $("#dtp-rFechaInicio").val();
                 let FechaFin = $("#dtp-rFechaFin").val();
+                let EMPRESAPRINCIPAL = $("#ddlEmpresaPrincipal").val();
+                console.log(EMPRESAPRINCIPAL);
                 var St = "sss";
 
-                window.location.href = "/Home/ReporteExcelManual?cadena=" + St + "&FechaInicio=" + FechaInicio + "&FechaFin=" + FechaFin;
+                window.location.href = "/Home/ReporteExcelManual?cadena=" + St + "&FechaInicio=" + FechaInicio + "&FechaFin=" + FechaFin + "&EP=" + EMPRESAPRINCIPAL;
 
                 //window.location.href = "/Home/ReporteExcelManual?cadena=" + 'sss' + "&FechaInicio=" + '01-07-2021' + "&FechaFin=" + '30-07-2021';
 
