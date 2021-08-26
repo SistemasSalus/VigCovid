@@ -9,6 +9,9 @@ namespace VigCovidApp.ViewModels
         public string Fecha { get; set; }
         public int ClasificacionId { get; set; }
         public string ProximoSeguimiento { get; set; }
+
+        public string FechaProgramada { get; set; }
+
         public string SensacionFiebre { get; set; }
         public string Tos { get; set; }
         public string DolorGarganta { get; set; }

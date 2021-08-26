@@ -291,7 +291,12 @@ namespace VigCovid.Report.BL
                 D1 = "A09 Diarrea diarreico(a)(de presunto origen infeccioso)";
                 D2= "(Sintomatología gastrointestinal que podría tener relación con COVID19)";
             }
+            else if (Diag1 == "6")
+            {
 
+                D1 = "U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado";
+                D2 = "";
+            }
 
             var query = (from A in db.RegistroTrabajador
                          join B in db.Parametro on new { a = A.ModoIngreso, b = 100 } equals new { a = B.i_ParameterId, b = B.i_GroupId } into B_join
@@ -370,26 +375,6 @@ namespace VigCovid.Report.BL
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public ReporteAltaBE EnviarDocumentoDM1(int trabajadorId, int usuarioId, string Diagnostico)
         {
 
@@ -449,6 +434,13 @@ namespace VigCovid.Report.BL
 
                 D1 = "A09 Diarrea diarreico(a)(de presunto origen infeccioso)";
                 D2 = "(Sintomatología gastrointestinal que podría tener relación con COVID19)";
+            }
+
+            else if (Diag1 == "6")
+            {
+
+                D1 = "U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado";
+                D2 = "";
             }
 
             var query = (from A in db.RegistroTrabajador
@@ -1049,7 +1041,7 @@ namespace VigCovid.Report.BL
         }
 
 
-        public ReporteAltaBE ObtenerDatosPrueba(int trabajadorId, int usuarioId)
+        public ReporteAltaBE ObtenerDatosPrueba(int trabajadorId, int usuarioId, int seguimientoId)
         {
             //var fechaHoy = DateTime.Now;
             //var fechaPrimerSeguiento = (from A4 in db.Seguimiento where A4.RegistroTrabajadorId == trabajadorId && A4.NroSeguimiento == 1 select A4).FirstOrDefault().Fecha;
@@ -1058,6 +1050,10 @@ namespace VigCovid.Report.BL
             //var dias = Decimal.Round(rDias).ToString();
             //var fechaAltaMedica = (from AM in db.FechaImportante where AM.TrabajadorId == trabajadorId && AM.Descripcion == "FechaAltaMedica" select AM).FirstOrDefault().Fecha;
             //var fechaFormat = fechaAltaMedica.Value.ToString("dd/MM/yyyy");
+
+
+            var FechaProgramada = (from A4 in db.Seguimiento where A4.RegistroTrabajadorId == trabajadorId && A4.Id == seguimientoId select A4).FirstOrDefault().FechaProgramada;
+            var FechaProgramadaP = FechaProgramada.Value.ToString("dd/MM/yyyy");
 
             var query = (from A in db.RegistroTrabajador
                          join B in db.Parametro on new { a = A.ModoIngreso, b = 100 } equals new { a = B.i_ParameterId, b = B.i_GroupId } into B_join
@@ -1123,7 +1119,7 @@ namespace VigCovid.Report.BL
                              CorreosMedicoCoord = D.CorreosCoordinador,
                              Direccion = A.Direccion, 
                              Telefono = A.Celular,
-
+                             FechaProgramada = FechaProgramadaP,
                              CorreosTodaslasSedes = D.CorreosTodaslasSedes,
                              CorreosSedesProvincia = D.CorreosSedesProvincia,
                              CorreosSedesLima = D.CorreosSedesLima,
@@ -1134,7 +1130,6 @@ namespace VigCovid.Report.BL
 
             return query;
         }
-
 
 
         //ObtenerDatosPrueba

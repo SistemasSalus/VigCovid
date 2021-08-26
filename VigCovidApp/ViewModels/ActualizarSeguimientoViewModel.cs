@@ -43,6 +43,8 @@ namespace VigCovidApp.ViewModels
         public bool? Otros { get; set; }
         public string OtrosComentar { get; set; }
         public DateTime? ProximoSeguimiento { get; set; }
+
+       public DateTime? FechaProgramada { get; set; }
         public string Recetamedica { get; set; }
 
         public bool? PAntigeno { get; set; }

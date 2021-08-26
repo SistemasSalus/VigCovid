@@ -744,7 +744,7 @@
                         <hr class="new-section-xs">
                         <div class="row">
                             <div class="col-sm-4">
-                                <select id="ddl-Diagnosticos-@seguimiento.SeguimientoId" class="selectpicker selectTipoEstado" data-width="100%" >
+                                <select id="ddl-Diagnosticos-@seguimiento.SeguimientoId" class="selectpicker selectTipoEstado" data-width="100%">
                                     @*class="selectpicker selectTipoEstado"*@
 
                                     <option value="-1">  </option>
@@ -756,7 +756,8 @@
                                         <option value="2">U07.2 COVID-19 virus no identificado</option>
                                         <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
                                         <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
-                                        <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="7">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="6">U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado</option>
                                     }
                                     else if (seguimiento.TipoDiagnostico == 2)
                                     {
@@ -765,7 +766,8 @@
                                         <option value="2" selected>U07.2 COVID-19 virus no identificado</option>
                                         <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
                                         <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
-                                        <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="7">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="6">U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado</option>
                                     }
                                     else if (seguimiento.TipoDiagnostico == 3)
                                     {
@@ -774,7 +776,8 @@
                                         <option value="2">U07.2 COVID-19 virus no identificado</option>
                                         <option value="3" selected>J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
                                         <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
-                                        <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="7">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="6">U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado</option>
                                     }
                                     else if (seguimiento.TipoDiagnostico == 4)
                                     {
@@ -783,18 +786,31 @@
                                         <option value="2">U07.2 COVID-19 virus no identificado</option>
                                         <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
                                         <option value="4" selected>Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
-                                        <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="7">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="6">U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado</option>
                                     }
 
-                                    else if (seguimiento.TipoDiagnostico == 4)
+                                    else if (seguimiento.TipoDiagnostico == 7)
                                     {
                                         <option value="0">Seleccione...</option>
                                         <option value="1">U07.1 COVID-19 virus identificado</option>
                                         <option value="2">U07.2 COVID-19 virus no identificado</option>
                                         <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
                                         <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
-                                        <option value="5" selected>A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="7" selected>A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="6">U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado</option>
                                     }
+                                    else if (seguimiento.TipoDiagnostico == 6)
+                                    {
+                                        <option value="0">Seleccione...</option>
+                                        <option value="1">U07.1 COVID-19 virus identificado</option>
+                                        <option value="2">U07.2 COVID-19 virus no identificado</option>
+                                        <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
+                                        <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
+                                        <option value="7">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="6" selected>U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado</option>
+                                    }
+
                                     else
                                     {
 
@@ -802,203 +818,223 @@
                                         <option value="2">U07.2 COVID-19 virus no identificado</option>
                                         <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
                                         <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
-                                        <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="7">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
+                                        <option value="6">U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado</option>
                                     }
                                 </select>
                             </div>
                         </div>
                     </div>
 
-                                    <div class="timeline-label">
-                                        <p class="text-bold pad-top"><a href="#" class="text-warning">Estado y comentario diario</a></p>
-                                        <hr class="new-section-xs">
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <select id="ddl-TipoEstado-@seguimiento.SeguimientoId" class="selectpicker selectTipoEstado" data-width="95%" onchange="Posicionarelcursor()">
-                                                    <option value="-1">  </option>
-                                                    @if (seguimiento.TipoEstadoId == 1)
-                                                    {
-                                                        <option value="1" selected>Cuarentena (Contacto Directo) </option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
+                    <div class="timeline-label">
+                        <p class="text-bold pad-top"><a href="#" class="text-warning">Estado y comentario diario</a></p>
+                        <hr class="new-section-xs">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <select id="ddl-TipoEstado-@seguimiento.SeguimientoId" class="selectpicker selectTipoEstado" data-width="95%" onchange="Posicionarelcursor()">
+                                    <option value="-1">  </option>
+                                    @if (seguimiento.TipoEstadoId == 1)
+                                    {
+                                        <option value="1" selected>Cuarentena (Contacto Directo) </option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
 
 
 
-                                                    }
-                                                    else if (seguimiento.TipoEstadoId == 2)
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2" selected>Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
-                                                    }
-                                                    else if (seguimiento.TipoEstadoId == 3)
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3" selected>Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
-                                                    }
-                                                    else if (seguimiento.TipoEstadoId == 4)
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4" selected>Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
-                                                    }
-                                                    else if (seguimiento.TipoEstadoId == 5)
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5" selected>Alta Epidemiológica</option>
-                                                    }
-                                                    else if (seguimiento.TipoEstadoId == 6)
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6" selected>Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
-                                                    }
-                                                    else if (seguimiento.TipoEstadoId == 7)
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7" selected>Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
-                                                    }
-                                                    else if (seguimiento.TipoEstadoId == 8)
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8" selected>Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
+                                    }
+                                    else if (seguimiento.TipoEstadoId == 2)
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2" selected>Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
+                                    }
+                                    else if (seguimiento.TipoEstadoId == 3)
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3" selected>Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
+                                    }
+                                    else if (seguimiento.TipoEstadoId == 4)
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4" selected>Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
+                                    }
+                                    else if (seguimiento.TipoEstadoId == 5)
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5" selected>Alta Epidemiológica</option>
+                                    }
+                                    else if (seguimiento.TipoEstadoId == 6)
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6" selected>Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
+                                    }
+                                    else if (seguimiento.TipoEstadoId == 7)
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7" selected>Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
+                                    }
+                                    else if (seguimiento.TipoEstadoId == 8)
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8" selected>Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
 
-                                                    }
-                                                    else if (seguimiento.TipoEstadoId == 9)
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9" selected>Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
+                                    }
+                                    else if (seguimiento.TipoEstadoId == 9)
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9" selected>Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
 
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="1">Cuarentena (Contacto Directo)</option>
-                                                        <option value="2">Hospitalizado</option>
-                                                        <option value="3">Fallecido</option>
-                                                        <option value="8">Aislamiento-Caso asintomático</option>
-                                                        <option value="4">Aislamiento-Caso Leve</option>
-                                                        <option value="6">Aislamiento-Caso Moderado</option>
-                                                        <option value="7">Aislamiento-Caso Severo</option>
-                                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
-                                                        <option value="5">Alta Epidemiológica</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <textarea id="txt-Comentario-@seguimiento.SeguimientoId" placeholder="Ingresar comentario" rows="4" class="form-control" data-width="100%">@seguimiento.Comentario</textarea>
-                                            </div>
-                                        </div>
-
-
-                                        <br>
-                                        <p class="text-bold pad-top"><a href="#" class="text-warning">Solicitud de Adicionales</a></p>
-                                        <hr class="new-section-xs">
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-
-                                                <input id="chk-PulsoOximetro-@seguimiento.SeguimientoId" onclick="checkFluencyP(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PulsoOximetro>
-                                                <label for="chk-PulsoOximetro-@seguimiento.SeguimientoId">Pulso Oximetro</label>
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input id="chk-PAntigenos-@seguimiento.SeguimientoId" onclick="checkFluency(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos>
-                                                <label for="chk-PAntigenos-@seguimiento.SeguimientoId">Prueba Antígeno a la brevedad</label>
-                                            </div>
+                                    }
+                                    else
+                                    {
+                                        <option value="1">Cuarentena (Contacto Directo)</option>
+                                        <option value="2">Hospitalizado</option>
+                                        <option value="3">Fallecido</option>
+                                        <option value="8">Aislamiento-Caso asintomático</option>
+                                        <option value="4">Aislamiento-Caso Leve</option>
+                                        <option value="6">Aislamiento-Caso Moderado</option>
+                                        <option value="7">Aislamiento-Caso Severo</option>
+                                        <option value="9">Aislamiento-Caso Post Hospitalario</option>
+                                        <option value="5">Alta Epidemiológica</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-8">
+                                <textarea id="txt-Comentario-@seguimiento.SeguimientoId" placeholder="Ingresar comentario" rows="4" class="form-control" data-width="100%">@seguimiento.Comentario</textarea>
+                            </div>
+                        </div>
 
 
-                                            <div class="col-md-6">
-                                                <input id="chk-PAntigenos5-@seguimiento.SeguimientoId" onclick="checkFluency5(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos5>
-                                                <label for="chk-PAntigenos5-@seguimiento.SeguimientoId">Prueba Antígeno en 5 dias</label>
-                                            </div>
-                                        </div>
+                        <br>
+                        <p class="text-bold pad-top"><a href="#" class="text-warning">Solicitud de Adicionales</a></p>
+                        <hr class="new-section-xs">
 
-                                        <p class="text-bold pad-top"><a href="#" class="text-warning">Receta Médica</a></p>
-                                        <hr class="new-section-xs">
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <input id="chk-PulsoOximetro-@seguimiento.SeguimientoId" onclick="checkFluencyP(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PulsoOximetro>
+                                <label for="chk-PulsoOximetro-@seguimiento.SeguimientoId">Pulso Oximetro</label>
+
+                            </div>
+                            <div class="col-md-6">
+                                <input id="chk-PAntigenos-@seguimiento.SeguimientoId" onclick="checkFluency(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos>
+                                <label for="chk-PAntigenos-@seguimiento.SeguimientoId">Prueba Antígeno a la brevedad</label>
+
+                            </div>
+                        </div>
+                        @*<div class="col-md-6">
+         <input id="chk-PAntigenos5-@seguimiento.SeguimientoId" onclick="checkFluency5(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos5>
+         <label for="chk-PAntigenos5-@seguimiento.SeguimientoId">Prueba Antígeno en 5 dias</label>
+        </div>*@
 
 
-                                                    <textarea id="txt-Receta-@seguimiento.SeguimientoId" placeholder="Ingresar receta medica" rows="4" class="form-control" data-width="100%">@seguimiento.Recetamedica</textarea>
-                                                    
-                                                    <input type="image" id="btn-Receta" onclick="Recetamedica(@seguimiento.SeguimientoId)" name="btn-Receta" src="~/img/enviarreceta.jpg" alt="Enviar Correos" style="width:150px">
+                        @* PROGRAMAR FECHA DE PRUEBA - Creado por Saul Ramos Vega - 26082021*@
 
-                                                </div>
-                                            </div>
-                                        </div>
+                        <p class="text-bold pad-top"><a href="#" class="text-bold">Programar Fecha de Prueba:</a></p>
+                        @*<hr class="new-section-xs">*@
+                        <div class="row" style="align-content:center">
 
 
-                                        <p class="text-bold pad-top"><a href="#" class="text-warning">Próximo Seguimiento</a></p>
-                                        <hr class="new-section-xs">
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control fechaProximoSeguimiento" id="dtp-ProximoSeguimiento-@seguimiento.SeguimientoId" value="@seguimiento.ProximoSeguimiento">
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="col-md-6">
 
-                                    </div>
+                                <input type="text" class="form-control FechaProgramadaP" id="dtp-FechaProgramadaP-@seguimiento.SeguimientoId" value="@seguimiento.FechaProgramada">
+                                
+                                <button id="EnviarProgramacion" class="btn btn-primary" onclick="checkFluency5(@seguimiento.SeguimientoId)"><i class="demo-pli-calendar-4"></i> Enviar Programación</button>
+
+                                @*value="@seguimiento.FechaProgramada"*@
+
+                            </div>
+
+                        </div>
+
+                        <p class="text-bold pad-top"><a href="#" class="text-warning">Receta Médica</a></p>
+                        <hr class="new-section-xs">
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+
+
+                                    <textarea id="txt-Receta-@seguimiento.SeguimientoId" placeholder="Ingresar receta medica" rows="4" class="form-control" data-width="100%">@seguimiento.Recetamedica</textarea>
+
+                                    <input type="image" id="btn-Receta" onclick="Recetamedica(@seguimiento.SeguimientoId)" name="btn-Receta" src="~/img/enviarreceta.jpg" alt="Enviar Correos" style="width:150px">
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <p class="text-bold pad-top"><a href="#" class="text-warning">Próximo Seguimiento</a></p>
+                        <hr class="new-section-xs">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <input type="text" class="form-control fechaProximoSeguimiento" id="dtp-ProximoSeguimiento-@seguimiento.SeguimientoId" value="@seguimiento.ProximoSeguimiento">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                                 </div>
                                 @*</div>*@
                                 }
@@ -1135,7 +1171,8 @@
                                         <option value="3">J39.9 Enfermedad del tracto respiratorio superior, no especificada</option>
                                         <option value="4">Z20.828 Contacto y (sospecha de) exposición a otras enfermedades</option>
                                         <option value="5">A09 Diarrea diarreico(a) (de presunto origen infeccioso)</option>
-                                    </select>
+                                        <option value="6">U12.9 Vacunas COVID-19 que causan efectos adversos en uso terapéutico, no especificado</option>
+</select>
                                 </div>
                             </div>
 
@@ -1643,6 +1680,38 @@
             SaveChange(id, "Otros", "#" + textOtrosId, "control-text");
         });
 
+
+        $(".panel-body").on("change", ".FechaProgramadaP", function (e) {
+            let fechaResultado = $($(e.target).get(0)).attr("id");
+            let id = fechaResultado.split('-')[2];
+            SaveChange(id, "Programar Fecha de Prueba", "#" + fechaResultado, "control-datepicker");
+
+            //var valorFecha = $("#" + fechaResultado).val();
+
+            //const fechaParse = moment(valorFecha, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+            //var fechaActual = new Date($.now());
+            //var fechaActualParse = moment(fechaActual, 'DD/MM/YYYY').format('YYYY-MM-DD[T]HH:mm:ss');
+            //if (fechaParse >= fechaActualParse) {
+            //    $("#validarFechaProgramada").val(valorFecha);
+            //} else {
+            //    console.log("NADA");
+            //}
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $(".panel-body").on("change", ".fechaProximoSeguimiento", function (e) {
             let fechaResultado = $($(e.target).get(0)).attr("id");
             let id = fechaResultado.split('-')[2];
@@ -2026,10 +2095,11 @@
                     "OtrosComentar": $("#txt-Otros-" + seguimientoId).val(),
                     "PAntigeno": $("#chk-PAntigeno-" + seguimientoId).get(0).checked,
                     "PAntigenos": $("#chk-PAntigenos-" + seguimientoId).get(0).checked,
-                    "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
+                    //"PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
                     "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
                     "Recetamedica": $("#txt-Receta-" + seguimientoId).val(),
-                    "TipoDiagnostico": $("#ddl-Diagnosticos-" + seguimientoId + " option:selected").val()
+                    "TipoDiagnostico": $("#ddl-Diagnosticos-" + seguimientoId + " option:selected").val(),
+                    "FechaProgramada": $("#dtp-FechaProgramadaP-" + seguimientoId).val()
 
                 }
             } else {
@@ -2051,10 +2121,11 @@
                     "ProximoSeguimiento": $("#dtp-ProximoSeguimiento-" + seguimientoId).val(),
                     //"PAntigeno": $("#chk-PAntigeno-" + seguimientoId).get(0).checked
                     "PAntigenos": $("#chk-PAntigenos-" + seguimientoId).get(0).checked,
-                    "PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
+                    //"PAntigenos5": $("#chk-PAntigenos5-" + seguimientoId).get(0).checked,
                     "PulsoOximetro": $("#chk-PulsoOximetro-" + seguimientoId).get(0).checked,
                     "Recetamedica": $("#txt-Receta-" + seguimientoId).val(),
-                    "TipoDiagnostico": $("#ddl-Diagnosticos-" + seguimientoId + " option:selected").val()
+                    "TipoDiagnostico": $("#ddl-Diagnosticos-" + seguimientoId + " option:selected").val(),
+                    "FechaProgramada": $("#dtp-FechaProgramadaP-" + seguimientoId).val()
                 }
             }
 
@@ -2423,6 +2494,18 @@
 
 
 
+        
+
+        $(".FechaProgramadaP").datepicker({ autoclose: true, format: 'dd/mm/yyyy' });
+
+        var faIcon = {
+            valid: 'fa fa-check-circle fa-lg text-success',
+            invalid: 'fa fa-times-circle fa-lg',
+            validating: 'fa fa-refresh'
+        }
+
+
+
         $(".kid").datepicker({
             //autoclose: true, format: 'dd/mm/yyyy', minDate: '16/08/2021'
 
@@ -2582,13 +2665,24 @@
     // CODIGO PARA EL ENVIO DE LOS DATOS PARA EL ENVIO DE LA NOTIFICACION POR CORREO PRUEBA 5DIAS - Creado por Saul Ramos
 
     function checkFluency5(seguimientoId) {
-        var Valordelchk = $("#chk-PAntigenos5-" + seguimientoId).get(0).checked;
+        //var Valordelchk = $("#chk-PAntigenos5-" + seguimientoId).get(0).checked;
         let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
 
-        var datos = { "TrabajadorId": registroTrabajadorId };
+        var datos = { "TrabajadorId": registroTrabajadorId, "seguimientoId": seguimientoId };
 
+        var dialog = bootbox.dialog({
+            title: 'IMPORTANTE:',
 
-        if (Valordelchk == true) {
+            message: '<p><i class="fa fa-paper-plane fa-spin blackiconcolor"></i>Espere - Enviando...</p>'
+
+        });
+
+        dialog.init(function () {
+            setTimeout(function () {
+                dialog.find('.bootbox-body').html('SE REALIZO EL ENVIO CON EXITO!');
+            }, 2000);
+        });
+                
 
             $.ajax({
                 type: "POST",
@@ -2597,8 +2691,13 @@
                 success: function (data) {
                     $('.cargaEsperar').modal('hide');
 
-                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                    //                //window.location = "/Home/index";
+                    //bootbox.dialog({
+                    //    size: 'extra-large',
+                    //    title: "IMPORTANTE:",
+                    //    message: "<h4 style='color:blue'>Se envió la Solicitud Respectiva</h4>",
+                    //});
+
+
                 },
                 error: function (jqXHR, exception) {
                     alert("Ocurrió un error en la operación");
@@ -2609,7 +2708,7 @@
             });
 
 
-        }
+        
     }
 
 

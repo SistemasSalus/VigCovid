@@ -25,6 +25,8 @@ namespace VigCovid.Common.BE
 
         public string CorreoSede { get; set; }
         public string FechaAltaMedica { get; set; }
+
+        public string FechaProgramada { get; set; }
         public string CorreosChampios { get; set; }
         public string CorreosTrabajador { get; set; }
 

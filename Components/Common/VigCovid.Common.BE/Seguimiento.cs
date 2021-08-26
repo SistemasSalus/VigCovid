@@ -47,6 +47,9 @@ namespace VigCovid.Common.BE
         public bool? Otros { get; set; }
         public string OtrosComentar { get; set; }
         public DateTime? ProximoSeguimiento { get; set; }
+
+        public DateTime? FechaProgramada { get; set; }
+
         public int Eliminado { get; set; }
         public int UsuarioIngresa { get; set; }
         public DateTime FechaIngresa { get; set; }

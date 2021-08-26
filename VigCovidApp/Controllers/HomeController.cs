@@ -1895,8 +1895,7 @@ namespace VigCovidApp.Controllers
 
                 resultado = listaTrabajadores;
                              
-
-                
+                              
 
 
             }

@@ -364,6 +364,7 @@ namespace VigCovidApp.Controllers
                     result.PAntigenos = entidad.PAntigenos;
                     result.PAntigenos5 = entidad.PAntigenos5;
                     result.PulsoOximetro = entidad.PulsoOximetro;
+                    result.FechaProgramada = entidad.FechaProgramada;
                     result.TipoDiagnostico = entidad.TipoDiagnostico;
                     result.Eliminado = 0;
                     result.UsuarioActualiza = sessione.IdUser;
@@ -517,7 +518,7 @@ namespace VigCovidApp.Controllers
 
 
 
-            SolicituddePruebasEmail(oRequestDarAltaBE.TrabajadorId);
+            SolicituddePruebasEmail(oRequestDarAltaBE.TrabajadorId,oRequestDarAltaBE.SeguimientoId);
 
         }
 
@@ -530,7 +531,7 @@ namespace VigCovidApp.Controllers
 
 
 
-            SolicituddePruebasEmail5(oRequestDarAltaBE.TrabajadorId);
+            SolicituddePruebasEmail5(oRequestDarAltaBE.TrabajadorId,oRequestDarAltaBE.SeguimientoId);
 
         }
 
@@ -541,7 +542,7 @@ namespace VigCovidApp.Controllers
 
 
 
-            SolicituddePruebasEmailPulsoOximetro(oRequestDarAltaBE.TrabajadorId);
+            SolicituddePruebasEmailPulsoOximetro(oRequestDarAltaBE.TrabajadorId,oRequestDarAltaBE.SeguimientoId);
 
         }
 
@@ -802,8 +803,15 @@ namespace VigCovidApp.Controllers
                         oSeguimiento.TipoDiagnostico = seguimiento.TipoDiagnostico.Value;
                     }
 
+                    if (seguimiento.FechaProgramada == null)
+                    {
+                        oSeguimiento.FechaProgramada = "";
+                    }
+                    else
+                    {
+                        oSeguimiento.FechaProgramada = seguimiento.FechaProgramada.Value.ToString("dd/MM/yyyy");
+                    }
 
-                    
                     oSeguimiento.NroSeguimiento = seguimiento.NroSeguimiento;
                     //-----------------------------------------------------
                     oSeguimiento.HipertensionArterial = seguimiento.HipertensionArterial == true ? "checked" : "";
@@ -1347,8 +1355,11 @@ namespace VigCovidApp.Controllers
                     mailMessage.IsBodyHtml = true;
                     mailMessage.Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted podrá <b>reincorporarse</b> a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ",la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b><u>Nota</u></b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje";
 
-
                     mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                    
+                    //Habilitado para nombre de archivo largo - Saul Ramos Vega 25082021     
+                    //mailMessage.Attachments.Add(new Attachment(memoryStream, datosAlta.Dni + "_DM " + "DEL " + datosAlta.FechaAislaminetoCuarentena + " AL " + datosAlta.FechaPosibleAlta + " .pdf"));
+
                     SmtpClient smtpClient = new SmtpClient
                     {
                         Host = smtp,
@@ -1626,11 +1637,11 @@ namespace VigCovidApp.Controllers
 
 
 
-        public void SolicituddePruebasEmail(int id)
+        public void SolicituddePruebasEmail(int id, int seguimientoId)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
             var oReportAltaBL = new ReportAltaBL();
-            var datosAlta = oReportAltaBL.ObtenerDatosPrueba(id, sessione.IdUser);
+            var datosAlta = oReportAltaBL.ObtenerDatosPrueba(id, sessione.IdUser, seguimientoId);
 
 
             var configEmail = new ReportAltaBL().ParametroCorreo();
@@ -1679,11 +1690,11 @@ namespace VigCovidApp.Controllers
             #endregion
         }
 
-        public void SolicituddePruebasEmail5(int id)
+        public void SolicituddePruebasEmail5(int id, int seguimientoId)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
             var oReportAltaBL = new ReportAltaBL();
-            var datosAlta = oReportAltaBL.ObtenerDatosPrueba(id, sessione.IdUser);
+            var datosAlta = oReportAltaBL.ObtenerDatosPrueba(id, sessione.IdUser,seguimientoId);
 
 
             var configEmail = new ReportAltaBL().ParametroCorreo();
@@ -1711,9 +1722,9 @@ namespace VigCovidApp.Controllers
             #region NOTIFICACIÓN  SEGÚN MATRIZ
             MailMessage mailMessageNotif = new MailMessage(from, datosAlta.CorreosTodaslasSedes + "," + datosAlta.CorreosSedesProvincia + "," + datosAlta.CorreosSedesLima)
             {
-                Subject = "SOLICITUD DE PRUEBA DE ANTIGENOS EN 5 DIAS Para el Paciente, " + datosAlta.Trabajador,
+                Subject = "SOLICITUD DE PRUEBA DE ANTIGENOS Para la Fecha: " + datosAlta.FechaProgramada + "  Paciente, " + datosAlta.Trabajador,
                 IsBodyHtml = true,
-                Body = "DNI: " + datosAlta.Dni + "<br>" + "Telefono: " + datosAlta.Telefono + "<br>" + "Direccion: " + datosAlta.Direccion + "<br>" + "Sede: " + datosAlta.NombreSede
+                Body = "<b>DNI:</b>" + datosAlta.Dni + "<br>" + "<b>Telefono:</b> " + datosAlta.Telefono + "<br>" + "<b>Dirección:</b> " + datosAlta.Direccion + "<br>" + "<b>Sede:</b> " + datosAlta.NombreSede
             };
 
 
@@ -1734,11 +1745,11 @@ namespace VigCovidApp.Controllers
 
 
 
-        public void SolicituddePruebasEmailPulsoOximetro(int id)
+        public void SolicituddePruebasEmailPulsoOximetro(int id, int seguimientoId)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
             var oReportAltaBL = new ReportAltaBL();
-            var datosAlta = oReportAltaBL.ObtenerDatosPrueba(id, sessione.IdUser);
+            var datosAlta = oReportAltaBL.ObtenerDatosPrueba(id, sessione.IdUser, seguimientoId);
 
 
             var configEmail = new ReportAltaBL().ParametroCorreo();
@@ -1764,7 +1775,7 @@ namespace VigCovidApp.Controllers
             {
                 Subject = "SOLICITUD DE PULSO OXIMETROS Para el Paciente, " + datosAlta.Trabajador,
                 IsBodyHtml = true,
-                Body = "DNI: " + datosAlta.Dni + "<br>" + "Telefono: " + datosAlta.Telefono + "<br>" + "Direccion: " + datosAlta.Direccion + "<br>" + "Sede: " + datosAlta.NombreSede
+                Body = "DNI: " + datosAlta.Dni + "<br>" + "Teléfono: " + datosAlta.Telefono + "<br>" + "Direccion: " + datosAlta.Direccion + "<br>" + "Sede: " + datosAlta.NombreSede
             };
 
 
