@@ -17,6 +17,8 @@ using VigCovidApp.ViewModels;
 using VigCovid.MedicalMonitoring.BL;
 using VigCovid.Report.BL;
 using static VigCovid.Common.Resource.Enums;
+using System.Data;
+
 
 namespace VigCovidApp.Controllers
 {
@@ -125,8 +127,10 @@ namespace VigCovidApp.Controllers
                 if (!sessione.AsignarPacientes) return null;
 
                 var oWorkerRegisterBL = new WorkerRegisterBL();
-                //Modioficado por Saul Ramos Vega - 06042021 - Valida si se realiza el registro y envía la notificaiones respectivas
-                
+                //Modificado por Saul Ramos Vega - 06042021 - Valida si se realiza el registro y envía la notificaiones respectivas
+
+                //Se quita la opción ed Reingreso  -  Creado por Saul Ramos Vega - 20210827
+
                 registrarTrabajador.UsuarioIngresa = sessione.IdUser;
                 string rpta = oWorkerRegisterBL.VerificarDuplicidadRegistro(registrarTrabajador);
 
@@ -137,13 +141,55 @@ namespace VigCovidApp.Controllers
                     GenerarNotificacionContactosDirectos(registrarTrabajador.Id);
                     return RedirectToAction("Index", "Home");
                 }
-                else if (registrarTrabajador.ModoIngreso == (int)ModoIngreso.Reingreso)
+
+                else if (registrarTrabajador.ModoIngreso == (int)ModoIngreso.Sospechoso)
                 {
                     oWorkerRegisterBL.WorkerRegister(registrarTrabajador);
                     GenerarNotificaciondeIngreso(registrarTrabajador.Id);
                     GenerarNotificacionContactosDirectos(registrarTrabajador.Id);
                     return RedirectToAction("Index", "Home");
                 }
+
+                else if (registrarTrabajador.ModoIngreso == (int)ModoIngreso.AsintomaticoPositivo)
+                {
+                    oWorkerRegisterBL.WorkerRegister(registrarTrabajador);
+                    GenerarNotificaciondeIngreso(registrarTrabajador.Id);
+                    GenerarNotificacionContactosDirectos(registrarTrabajador.Id);
+                    return RedirectToAction("Index", "Home");
+                }
+
+                else if (registrarTrabajador.ModoIngreso == (int)ModoIngreso.ContactoDirecto)
+                {
+                    oWorkerRegisterBL.WorkerRegister(registrarTrabajador);
+                    GenerarNotificaciondeIngreso(registrarTrabajador.Id);
+                    GenerarNotificacionContactosDirectos(registrarTrabajador.Id);
+                    return RedirectToAction("Index", "Home");
+                }
+
+                else if (registrarTrabajador.ModoIngreso == (int)ModoIngreso.CovidConfirmadoSintomatico)
+                {
+                    oWorkerRegisterBL.WorkerRegister(registrarTrabajador);
+                    GenerarNotificaciondeIngreso(registrarTrabajador.Id);
+                    GenerarNotificacionContactosDirectos(registrarTrabajador.Id);
+                    return RedirectToAction("Index", "Home");
+                }
+
+                else if (registrarTrabajador.ModoIngreso == (int)ModoIngreso.Sintomatico)
+                {
+                    oWorkerRegisterBL.WorkerRegister(registrarTrabajador);
+                    GenerarNotificaciondeIngreso(registrarTrabajador.Id);
+                    GenerarNotificacionContactosDirectos(registrarTrabajador.Id);
+                    return RedirectToAction("Index", "Home");
+                }
+
+                //Se quita la opción ed Reingreso  -  Creado por Saul Ramos Vega - 20210827
+                //else if (registrarTrabajador.ModoIngreso == (int)ModoIngreso.Reingreso)
+                //{
+                //    oWorkerRegisterBL.WorkerRegister(registrarTrabajador);
+                //    GenerarNotificaciondeIngreso(registrarTrabajador.Id);
+                //    GenerarNotificacionContactosDirectos(registrarTrabajador.Id);
+                //    return RedirectToAction("Index", "Home");
+                //}
 
                 return Json(rpta, JsonRequestBehavior.AllowGet);
             }
@@ -2160,6 +2206,26 @@ namespace VigCovidApp.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+
+
+        
+
+        //ACTIVARSE REPORTE DE MEDICOS
+        public JsonResult TraerIndicadoresMedico(int codigoMedico)
+        {
+            
+            var oTrerIndicadoresM = new DashboardBL();
+            List<AltasBE> listadodealtas = oTrerIndicadoresM.AltasMedicoAtendidasHoy(codigoMedico);
+
+            
+
+            //ViewBag.ROLO = listadodealtas;
+            return Json(listadodealtas, JsonRequestBehavior.AllowGet);
+        }
+
+
+
 
         public class Indicadores
         {

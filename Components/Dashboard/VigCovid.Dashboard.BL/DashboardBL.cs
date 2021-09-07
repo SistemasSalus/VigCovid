@@ -179,6 +179,67 @@ namespace VigCovid.Dashboard.BL
             }
         }
 
+
+
+        //Traer Indiacadores del Nuevo Reporte  - Creado por Saul Ramos Vega - 2021-08-27
+
+        public List<AltasBE> AltasMedicoAtendidasHoy(int codigoMedico)
+        {
+        
+            List<AltasBE> serviceDatas = new List<AltasBE>();
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(Constants.CONEXION))
+                {
+                    DataTable dt = new DataTable();
+                    using (SqlCommand cmd = new SqlCommand("ObtenerTotalTrabajadoresEnAltaPorMedico", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = codigoMedico;
+
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(dt);
+
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            AltasBE data = new AltasBE();
+
+                            data.Total = dr.Field<int>("Total");
+                            data.TotalSeguimientos = dr.Field<int>("TotalSeguimientos");
+                            serviceDatas.Add(data);
+                        }
+                    }
+                }
+
+                return serviceDatas;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         private int VerificarAltasCumplidas(List<FechaImportante> altasHoy)
         {
             var trabajadores = (from A in db.RegistroTrabajador where A.Eliminado == 0 select A).ToList();

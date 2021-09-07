@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<VigCovidApp.ViewModels.ListaTrabajadoresViewModel>
 
+
+
+
+
+
 style{
 }
 
@@ -125,45 +130,85 @@ style{
             </div>
         </div>
 
-        <!--<div class="col-sm-2">-->
-        <!--Sparkline Area Chart-->
-        <!--<div class="panel panel-success panel-colorful">
+
+@*HABILITAR DESPUES - REPORTE MEDICOS*@
+        <div class="col-sm-4">
+            <!--Sparkline Area Chart-->
+            <div class="panel panel-bordered-primary panel-colorful">
                 <div class="pad-all">
-                    <p class="text-lg text-semibold"><i class="demo-pli-data-storage icon-fw"></i> Positivos</p>
-                    <p class="mar-no">
-                        <span class="pull-right text-bold" id="info-TotalIgM">@ViewBag.INDICADORES.Data.TotalIgM</span> IgM
-                    </p>
-                    <p class="mar-no">
-                        <span class="pull-right text-bold" id="info-TotalIgG">@ViewBag.INDICADORES.Data.TotalIgG</span> IgG
-                    </p>
-                    <p class="mar-no">
-                        <span class="pull-right text-bold" id="info-TotalIgMeIgG">@ViewBag.INDICADORES.Data.TotalIgG_IgM</span> IgM e IgG
-                    </p>
-                </div>
-                <div class="pad-top text-center">
-                    <div id="demo-sparkline-area" class="sparklines-full-content"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-2">
-            <div class="panel panel-info panel-colorful cursor-pointer" data-toggle="modal" data-target="#modal-info-altas">
-                <div class="pad-all">
-                    <p class="text-lg text-semibold">Alta</p>
-                    <p class="mar-no">
-                        <span class="pull-right text-bold" id="info-AltasHoy"></span> Hoy
-                    </p>
-                    <p class="mar-no">
-                        <span class="pull-right text-bold" id="info-AltasTotal"></span> Total
-                    </p>
-                </div>
-                <div class="pad-top text-center">-->
-        <!--Placeholder-->
-        <!--<div id="demo-sparkline-line" class="sparklines-full-content"></div>
-                        </div>
+                    <p class="text-lg text-semibold"><i class="demo-psi-add-user-star icon-fw"></i>MEDICOS</p>
+                    
+                    @*<select class="selectpicker" id="ddlMedicoVigilaId" onchange="TraerIndicadores()">
+                        <option value=" -1">
+
+                            @foreach (var item in @ViewBag.MEDICOSVIGILA)
+                            {
+                                if (item.Propietario)
+                                {
+                                <option value="@item.Id" selected>@item.NombreUsuario</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.NombreUsuario</option>
+                            }
+
+                        }
+                        </select>
+
+                        <p class="mar-no">
+                            Inicia con:
+                            <input type="text" class="pull-right text-bold" autocomplete="off" placeholder="" id="TOTALASIGNADOS" style="width:30px;text-align:right" disabled>
+
+                        </p>
+
+                        <p class="mar-no">
+                            Altas:
+                            <input type="text" class="pull-right text-bold" autocomplete="off" placeholder="" id="TOTALDALTAH" style="width:30px;text-align:right" disabled>
+
+                        </p>
+
+                        <p class="mar-no">
+                            Ingresos:
+                            <input type="text" class="pull-right text-bold" autocomplete="off" placeholder="" id="TOTALING" style="width:30px;text-align:right" disabled>
+
+                        </p>
+
+                        <p class="mar-no">
+                            Total:
+                            <input type="text" class="pull-right text-bold" autocomplete="off" placeholder="" id="TOTALIZADO" style="width:30px;text-align:right" disabled>
+
+                        </p>*@
+
+
+                    </div>
+                    
+                    <div class="pad-top text-center">
+                        <div id="demo-sparkline-area" class="sparklines-full-content"></div>
+                    </div>
+                    <div class="pad-top text-center">
+                        <div id="demo-sparkline-area" class="sparklines-full-content"></div>
                     </div>
                 </div>
             </div>
-        </div>-->
+            <!--<div class="col-sm-2">
+                <div class="panel panel-info panel-colorful cursor-pointer" data-toggle="modal" data-target="#modal-info-altas">
+                    <div class="pad-all">
+                        <p class="text-lg text-semibold">Alta</p>
+                        <p class="mar-no">
+                            <span class="pull-right text-bold" id="info-AltasHoy"></span> Hoy
+                        </p>
+                        <p class="mar-no">
+                            <span class="pull-right text-bold" id="info-AltasTotal"></span> Total
+                        </p>
+                    </div>
+                    <div class="pad-top text-center">-->
+            <!--Placeholder-->
+            <!--<div id="demo-sparkline-line" class="sparklines-full-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+        </div>
 
         <div class="row">
             <div class="col-xs-12">
@@ -232,50 +277,50 @@ style{
                                         {
 
                                         }
-                                    <tr>
-                                        @*SI ES PROPIETARIO PUEDE MODIFICAR*@
-                                        <td>@trabajador.Indice</td>
-                                        @if (trabajador.Propietario)
-                                        {
-                                            <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
-                                        }
-                                        else
-                                        {
-                                            if (trabajador.PermisoLectura && !trabajador.Propietario)
+                                        <tr>
+                                            @*SI ES PROPIETARIO PUEDE MODIFICAR*@
+                                            <td>@trabajador.Indice</td>
+                                            @if (trabajador.Propietario)
                                             {
                                                 <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
                                             }
                                             else
                                             {
-                                                <td>@Html.DisplayFor(modelItem => trabajador.NombreCompleto)</td>
+                                                if (trabajador.PermisoLectura && !trabajador.Propietario)
+                                                {
+                                                    <td><a href="/MonitoringWorker/RegisterMonitoring?id=@trabajador.RegistroTrabajadorId" class="btn-link">@Html.DisplayFor(modelItem => trabajador.NombreCompleto) </a></td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@Html.DisplayFor(modelItem => trabajador.NombreCompleto)</td>
+                                                }
                                             }
-                                        }
 
-                                        <td>@Html.DisplayFor(modelItem => trabajador.Dni)</td>
-                                        <td>@Html.DisplayFor(modelItem => trabajador.EmpresaEmpleadora)</td>
-                                        <td>@Html.DisplayFor(modelItem => trabajador.Sede)</td>
-                                        <td><span class="text-muted">@Html.DisplayFor(modelItem => trabajador.Edad)</span></td>
-                                        <td>@Html.DisplayFor(modelItem => trabajador.FechaIngreso)</td>
-                                        <td>@Html.DisplayFor(modelItem => trabajador.FechaAlta)</td>
-                                        <td class="text-center text-uppercase">
-                                            @Html.DisplayFor(modelItem => trabajador.ModoIngreso)
-                                        </td>
-                                        <td class="text-center">@Html.DisplayFor(modelItem => trabajador.EstadoDiario)</td>
-                                        <td class="text-center">@Html.DisplayFor(modelItem => trabajador.MedicoVigila)</td>
-                                        <td class="text-center">
-                                            @*<div id="btn-editar-@trabajador.RegistroTrabajadorId" class="label label-table label-success cursor-pointer" data-toggle="modal" data-target="#modal-editar-trabajador">Editar registro</div>
-            <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label label-table label-danger cursor-pointer btn-elimnar-registro">Eliminar</div>*@
+                                            <td>@Html.DisplayFor(modelItem => trabajador.Dni)</td>
+                                            <td>@Html.DisplayFor(modelItem => trabajador.EmpresaEmpleadora)</td>
+                                            <td>@Html.DisplayFor(modelItem => trabajador.Sede)</td>
+                                            <td><span class="text-muted">@Html.DisplayFor(modelItem => trabajador.Edad)</span></td>
+                                            <td>@Html.DisplayFor(modelItem => trabajador.FechaIngreso)</td>
+                                            <td>@Html.DisplayFor(modelItem => trabajador.FechaAlta)</td>
+                                            <td class="text-center text-uppercase">
+                                                @Html.DisplayFor(modelItem => trabajador.ModoIngreso)
+                                            </td>
+                                            <td class="text-center">@Html.DisplayFor(modelItem => trabajador.EstadoDiario)</td>
+                                            <td class="text-center">@Html.DisplayFor(modelItem => trabajador.MedicoVigila)</td>
+                                            <td class="text-center">
+                                                @*<div id="btn-editar-@trabajador.RegistroTrabajadorId" class="label label-table label-success cursor-pointer" data-toggle="modal" data-target="#modal-editar-trabajador">Editar registro</div>
+                                                    <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label label-table label-danger cursor-pointer btn-elimnar-registro">Eliminar</div>*@
 
-                                            @*Modificado por Saul Ramos V - 13072021*@
-                                            <div id="btn-editar-@trabajador.RegistroTrabajadorId" data-toggle="modal" data-target="#modal-editar-trabajador" class="label cursor-pointer"><img src="~/img/editarREGISTROS.png" title="EDITAR" width="22" height="20" /></div>
-                                            <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label cursor-pointer btn-elimnar-registro"><img src="~/img/eliminarREGISTRO.png" title="ELIMINAR" width="22" height="20" /></div>
-
+                                                @*Modificado por Saul Ramos V - 13072021*@
+                                                <div id="btn-editar-@trabajador.RegistroTrabajadorId" data-toggle="modal" data-target="#modal-editar-trabajador" class="label cursor-pointer"><img src="~/img/editarREGISTROS.png" title="EDITAR" width="22" height="20" /></div>
+                                                <div id="btn-eliminar-@trabajador.RegistroTrabajadorId" class="label cursor-pointer btn-elimnar-registro"><img src="~/img/eliminarREGISTRO.png" title="ELIMINAR" width="22" height="20" /></div>
 
 
-                                        </td>
-                                        <td class="text-center">
-                                        </td>
-                                    </tr>
+
+                                            </td>
+                                            <td class="text-center">
+                                            </td>
+                                        </tr>
                                     }
                                 </tbody>
 
@@ -466,7 +511,7 @@ style{
                                                                         <option value="1">SINTOMÁTICO</option>
                                                                         <option value="6">COVID CONFIRMADO SINTOMÁTICO</option>
                                                                         <option value="3">CONTACTO DIRECTO</option>
-                                                                        <option value="5">REINGRESO</option>
+                                                                        @*<option value="5">REINGRESO</option>*@
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -767,7 +812,7 @@ style{
                                                         <option value="1">SINTOMÁTICO</option>
                                                         <option value="6">COVID CONFIRMADO SINTOMÁTICO</option>
                                                         <option value="3">CONTACTO DIRECTO</option>
-                                                        <option value="5">REINGRESO</option>
+                                                        @*<option value="5">REINGRESO</option>*@
                                                     </select>
                                                 </div>
                                             </div>
@@ -866,12 +911,12 @@ style{
                         <button type="button" class="close" data-dismiss="modal">
                             <i class="pci-cross pci-circle"></i>
                         </button>
-                        <h4 class="modal-title" style="text-align:center" ><b>--Seleccionar la Empresa y el Rango de Fechas Respectivo--</b></h4>
+                        <h4 class="modal-title" style="text-align:center"><b>-Seleccionar la Empresa y el Rango de Fechas Respectivo-</b></h4>
                     </div>
-                    
-                        <div style="text-align:center">
 
-                         <select class="selectpicker" id="ddlEmpresaPrincipal" name="validateEmpresaRegistro" data-width="90%">
+                    <div style="text-align:center">
+
+                        <select class="selectpicker" id="ddlEmpresaPrincipal" name="validateEmpresaRegistro" data-width="90%">
                             <option value="0" selected>Seleccione la Empresa...</option>
 
                             @foreach (var item in @ViewBag.EmpresasRegistro)
@@ -881,40 +926,40 @@ style{
                             }
                         </select>
                     </div>
-                        <!--Modal body-->
-                        <div class="modal-body">
-                            <form id="form-descarga">
-                                <div class="panel-body">
-                                    <div class="table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Fecha de Inicio</th>
-                                                    <th>Fecha de Fin</th>
+                    <!--Modal body-->
+                    <div class="modal-body">
+                        <form id="form-descarga">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Fecha de Inicio</th>
+                                                <th>Fecha de Fin</th>
 
-                                                </tr>
-                                                <tr>
-                                                    <th><input type="text" class="form-control fechaRFechaInicio" id="dtp-rFechaInicio" autocomplete="off"></th>
-                                                    <th><input type="text" class="form-control fechaRFin" id="dtp-rFechaFin" autocomplete="off"></th>
+                                            </tr>
+                                            <tr>
+                                                <th><input type="text" class="form-control fechaRFechaInicio" id="dtp-rFechaInicio" autocomplete="off"></th>
+                                                <th><input type="text" class="form-control fechaRFin" id="dtp-rFechaFin" autocomplete="off"></th>
 
-                                                    <th><button class="btn btn-success" id="btnDescargartodoexcel">Descargar</button></th>
-                                                </tr>
+                                                <th><button class="btn btn-success" id="btnDescargartodoexcel">Descargar</button></th>
+                                            </tr>
 
 
-                                            </thead>
+                                        </thead>
 
-                                            <tbody id="table-altas">
-                                            </tbody>
-                                        </table>
+                                        <tbody id="table-altas">
+                                        </tbody>
+                                    </table>
 
-                                    </div>
                                 </div>
-                            </form>
-                        </div>
-
+                            </div>
+                        </form>
                     </div>
 
                 </div>
+
+            </div>
 
         </div>
     </div>
@@ -944,7 +989,7 @@ style{
     <script src="~/Scripts/Highcharts/modules/export-data.js"></script>
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-    
+
 
     @*Data Table*@
     <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
@@ -2402,6 +2447,46 @@ style{
             $('#table-Lista-Trabajadores').DataTable();
         });
 
+
+        function TraerIndicadores() {
+            //var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
+            let codigoMedico = $("#ddlMedicoVigilaId").val();
+            //var Descripcion = "FechaPosibleAlta6";
+            var datos = { "codigoMedico": codigoMedico };
+
+            $.ajax({
+                type: "GET",
+                url: "/Home/TraerIndicadoresMedico",
+                data: datos,
+                success: function (data) {
+                    $('.cargaEsperar').modal('hide');
+                    console.log(data);
+                   
+                    for (var i = 0; i < data.length; i++) {
+                       
+
+
+                        $("#TOTALDALTAH").val(data[i].Total);
+                        $("#TOTALASIGNADOS").val(data[i].TotalSeguimientos);
+
+
+                        
+                    }
+
+                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                    //                //window.location = "/Home/index";
+                },
+                error: function (jqXHR, exception) {
+                    alert("Ocurrió un error en la operación");
+                    $('.cargaEsperar').modal('hide');
+
+
+                }
+            });
+
+
+
+        }
 
 
     </script>

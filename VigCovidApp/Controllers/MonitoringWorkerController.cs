@@ -2955,12 +2955,13 @@ namespace VigCovidApp.Controllers
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
                         new PdfPCell(new Phrase(" " + "El(la)  señor(a):" +" "+ datos.Trabajador +" " + "con" + " " + " DNI Nro. " + "    " + datos.Dni + " ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase(" " + "quien luego de la evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
 
-                        new PdfPCell(new Phrase(" " + "de la empresa COMPAÑIA CERVECERA AMBEV PERU S.A.C., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
-                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        
+                        //new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
                         new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
@@ -3164,11 +3165,12 @@ namespace VigCovidApp.Controllers
 
                         new PdfPCell(new Phrase(" " + "El(la)  señor(a):" +" "+ datos.Trabajador +" " + "con" + " " + " DNI Nro. " + "    " + datos.Dni + " ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(new Phrase(" " + "quien luego de la evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        
+                        //new PdfPCell(new Phrase(" " + "de la empresa NAVIERA ORIENTE S.A.C., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        //new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase(" " + "de la empresa NAVIERA ORIENTE S.A.C., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
-                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
-
-                        new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        //new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
                         new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
@@ -3374,10 +3376,12 @@ namespace VigCovidApp.Controllers
                         new PdfPCell(new Phrase(" " + "El(la)  señor(a):" +" "+ datos.Trabajador +" " + "con" + " " + " DNI Nro. " + "    " + datos.Dni + " ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase(" " + "de la empresa TRANSPORTES 77 S.A., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
-                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase(" " + "quien luego de la evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        //new PdfPCell(new Phrase(" " + "de la empresa TRANSPORTES 77 S.A., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        //new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+
+                        //new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
                         new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
@@ -3577,11 +3581,11 @@ namespace VigCovidApp.Controllers
                         new PdfPCell(new Phrase(" " + "El(la)  señor(a):" +" "+ datos.Trabajador +" " + "con" + " " + " DNI Nro. " + "    " + datos.Dni + " ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase(" " + "de la empresa Unión de Cervecerías Peruana Backus y Johnston S.A.A., quien" + " " + "luego de la", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        new PdfPCell(new Phrase(" " + "quien luego de la evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
-                        new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase(" " + "evaluación correspondiente presenta diagnóstico de:",fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER },
+                        //new PdfPCell(new Phrase("luego de la evaluación correspondiente presenta diagnóstico de:", fontSubTitle)) { HorizontalAlignment = PdfPCell.ALIGN_LEFT, Colspan=6,Border = PdfPCell.NO_BORDER},
 
                         new PdfPCell(new Phrase("  " + "   " + "-" + datos.Diagnostico,fontTitle44)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },
                         new PdfPCell(new Phrase("  " + "   " + " " + datos.DetalleDiagnostico,fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_RIGHT,Border = PdfPCell.NO_BORDER },

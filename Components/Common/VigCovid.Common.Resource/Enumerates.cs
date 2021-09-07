@@ -19,7 +19,9 @@
             AsintomaticoPositivo = 4,
             Reingreso = 5,
             CovidConfirmadoSintomatico = 6
+                                 
         }
+
 
         public enum ViaIngreso
         {

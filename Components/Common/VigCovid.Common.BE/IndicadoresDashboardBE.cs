@@ -14,6 +14,8 @@
         public string TotalIgG_IgM { get; set; }
         public string AltasDadas { get; set; }
 
+        public string TotalesAlt { get; set; }
+
         public string Fallecidos { get; set; }
     }
 }
