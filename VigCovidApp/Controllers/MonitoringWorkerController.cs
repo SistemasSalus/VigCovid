@@ -1641,7 +1641,7 @@ namespace VigCovidApp.Controllers
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
             var oReportAltaBL = new ReportAltaBL();
-            var datosAlta = oReportAltaBL.ObtenerDatosPrueba(id, sessione.IdUser, seguimientoId);
+            var datosAlta = oReportAltaBL.ObtenerDatosPruebaEmail(id, sessione.IdUser, seguimientoId);
 
 
             var configEmail = new ReportAltaBL().ParametroCorreo();

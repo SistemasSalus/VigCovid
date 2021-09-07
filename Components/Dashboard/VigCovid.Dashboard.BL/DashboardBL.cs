@@ -125,6 +125,7 @@ namespace VigCovid.Dashboard.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuarioId;
+                       // cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -164,10 +165,10 @@ namespace VigCovid.Dashboard.BL
                 oIndicadoresDashboardBE.Hospitalizados = serviceDatas[0].HospitalizadoHoy.ToString();
                 oIndicadoresDashboardBE.ModeradosCriticos = serviceDatas[0].ModeradoCriticosHoy.ToString();
                 oIndicadoresDashboardBE.Cuarentena = serviceDatas[0].Cuarentena.ToString();
-                oIndicadoresDashboardBE.CovidPositivoAcumulado = serviceDatas[0].CovidPositivoAcumulado.ToString();
-                oIndicadoresDashboardBE.TotalIgG = serviceDatas[0].TotalIgG.ToString();
-                oIndicadoresDashboardBE.TotalIgM = serviceDatas[0].TotalIgM.ToString();
-                oIndicadoresDashboardBE.TotalIgG_IgM = serviceDatas[0].TotalIgG_IgM.ToString();
+               oIndicadoresDashboardBE.CovidPositivoAcumulado = serviceDatas[0].CovidPositivoAcumulado.ToString();
+               oIndicadoresDashboardBE.TotalIgG = serviceDatas[0].TotalIgG.ToString();
+               oIndicadoresDashboardBE.TotalIgM = serviceDatas[0].TotalIgM.ToString();
+               oIndicadoresDashboardBE.TotalIgG_IgM = serviceDatas[0].TotalIgG_IgM.ToString();
 
                 oIndicadoresDashboardBE.Fallecidos = serviceDatas[0].Fallecidos.ToString();
 
