@@ -1355,10 +1355,10 @@ namespace VigCovidApp.Controllers
                     mailMessage.IsBodyHtml = true;
                     mailMessage.Body = "Estimado trabajador," + "<br>" + "<br>" + "Se envía el descanso médico correspondiente a su vigilancia médica cuyo detalle podrá revisar en el adjunto." + "<br>" + "<br>" + "Recuerde que usted podrá <b>reincorporarse</b> a sus labores sólo a  partir del " + " <b>día siguiente de otorgada el Alta</b>" + "<br> " + ",la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "<br>" + "<b><u>Nota</u></b>: No es necesario que envíe este descanso médico al área de People Service, ya que fueron notificados de manera automática." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "Administrador de Sistemas de Vigilancia Médica" + "<br>" + "Salus Laboris" + "<br>" + "<br>" + "Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje";
 
-                    mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+                    //mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
                     
                     //Habilitado para nombre de archivo largo - Saul Ramos Vega 25082021     
-                    //mailMessage.Attachments.Add(new Attachment(memoryStream, datosAlta.Dni + "_DM " + "DEL " + datosAlta.FechaAislaminetoCuarentena + " AL " + datosAlta.FechaPosibleAlta + " .pdf"));
+                    mailMessage.Attachments.Add(new Attachment(memoryStream, datosAlta.IDjefe + "_DM " + "DEL " + datosAlta.FechaAislaminetoCuarentena + " AL " + datosAlta.FechaPosibleAlta + "_" + datosAlta.PAemploye + ".pdf"));
 
                     SmtpClient smtpClient = new SmtpClient
                     {
@@ -1964,8 +1964,11 @@ namespace VigCovidApp.Controllers
                 //"Estimado trabajador, se envía el descanso médico correspondiente a su vigilancia médica cuyo" + "<br>" + "detalle podrá revisar en el adjunto." + "<br>" + "Recuerde que usted podrá reincorporarse a sus labores sólo a  partir del día siguiente de otorgada" + "<br>" + "<br>" + "el Alta, la cual será comunicada por el médico de vigilancia en su seguimiento telefónico." + "<br>" + "Nota: No es necesario que envíe este descanso médico al área de people service ya que fueron notificados de manera automática."
             };
 
-            mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
-            SmtpClient smtpClient = new SmtpClient
+            //mailMessage.Attachments.Add(new Attachment(memoryStream, "Descanso Medico.pdf"));
+              
+                mailMessage.Attachments.Add(new Attachment(memoryStream, datosAlta.IDjefe + "_DM " + "DEL " + datosAlta.FechaAislaminetoCuarentena + " AL " + datosAlta.FechaPosibleAlta + "_" + datosAlta.PAemploye + ".pdf"));
+
+                SmtpClient smtpClient = new SmtpClient
             {
                 Host = smtp,
                 Port = port,
@@ -2834,12 +2837,12 @@ namespace VigCovidApp.Controllers
 
                     var Firma = new List<PdfPCell>()
                     {
-                        new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
+                          //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                         //new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                         new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,400,350)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 150f,Border = PdfPCell.NO_BORDER},
 
-
-                        new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
 
                         // new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE , Border = PdfPCell.NO_BORDER},
@@ -3027,16 +3030,16 @@ namespace VigCovidApp.Controllers
                     {
                         //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
 
 
+                         new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,400,350)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 150f,Border = PdfPCell.NO_BORDER},
 
 
-
-                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
 
 
@@ -3236,16 +3239,16 @@ namespace VigCovidApp.Controllers
                     {
                         //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+
+                         new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,400,350)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 150f,Border = PdfPCell.NO_BORDER},
 
 
 
-
-
-                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
 
 
@@ -3447,16 +3450,9 @@ namespace VigCovidApp.Controllers
                     {
                         //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
 
-
-
-
-
-                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,400,350)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 150f,Border = PdfPCell.NO_BORDER},
 
 
 
@@ -3650,16 +3646,16 @@ namespace VigCovidApp.Controllers
                     {
                         //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,400,350)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 150f,Border = PdfPCell.NO_BORDER},
 
 
 
 
 
-                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
 
 
@@ -3943,13 +3939,13 @@ namespace VigCovidApp.Controllers
                     {
                         //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
-                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                        new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,400,350)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 150f,Border = PdfPCell.NO_BORDER},
 
-
-                        new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
-                        new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Dr(a) " + datos.DatosDoctor , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Médico de Vigilancia Médica", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("C.M.P " + datos.Colegiatura, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
+                        //new PdfPCell(new Phrase("Salus Laboris ", fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
                         // new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE , Border = PdfPCell.NO_BORDER},
 

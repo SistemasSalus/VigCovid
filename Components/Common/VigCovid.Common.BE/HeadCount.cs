@@ -25,6 +25,10 @@ namespace VigCovid.Common.BE
 
         public string OrganizationId { get; set; }
 
+        public string IDjefe { get; set; }
+
+        public string PAEmployee { get; set; }
+
 
     }
 }

@@ -42,6 +42,7 @@ namespace VigCovidApp.Controllers
             }
 
             ViewBag.MEDICOSVIGILA = ListarUsuarios();
+            ViewBag.EMPRESASCODIGOS = empresasCodigos;
             ViewBag.EMPRESASASIGANADAS = empresasAsignadas;
             ViewBag.EmpresasRegistro = GetEmpresasRegistro(sessione.IdUser);
             ViewBag.INDICADORES = IndicadoresDashboard(empresasCodigos, sessione.IdUser, sessione.IdTipoUsuario);
@@ -1961,11 +1962,24 @@ namespace VigCovidApp.Controllers
         }
 
         public JsonResult IndicadoresDashboard(List<int> sedesId, int usuarioId, int tipoUsuarioId)
+        
+
         {
-            var indicadores = new DashboardBL().IndicadoresDashboard(sedesId, usuarioId, tipoUsuarioId);
+            var indicadores = new DashboardBL().IndicadoresDashboard(sedesId,usuarioId, tipoUsuarioId);
 
             return Json(indicadores, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult IndicadoresBasicos(int usuarioId, int tipoUsuarioId, int EmpresaId)
+
+
+        {
+            var indicadores = new DashboardBL().IndicadoresBasicos(usuarioId, tipoUsuarioId, EmpresaId);
+
+            return Json(indicadores, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         public JsonResult PermisoRegistrarTrabajador()
         {

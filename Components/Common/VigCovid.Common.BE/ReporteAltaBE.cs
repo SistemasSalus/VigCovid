@@ -56,6 +56,10 @@ namespace VigCovid.Common.BE
         public string FechaAislaminetoCuarentena { get; set; }
         public string FechaPosibleAlta { get; set; }
 
+        public string IDjefe { get; set; }
+
+        public string PAemploye { get; set; }
+
         public int DiasTotalDescanso { get; set; }
 
 

@@ -108,7 +108,7 @@ namespace VigCovid.Dashboard.BL
             return result;
         }
 
-        public IndicadoresDashboardBE IndicadoresDashboard(List<int> sedesId, int usuarioId, int tipoUsuarioId)
+        public IndicadoresDashboardBE IndicadoresDashboard(List<int> sedesId,int usuarioId, int tipoUsuarioId)
         {
             var oIndicadoresDashboardBE = new IndicadoresDashboardBE();
 
@@ -125,7 +125,7 @@ namespace VigCovid.Dashboard.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuarioId;
-                       // cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
+                        //cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -146,9 +146,9 @@ namespace VigCovid.Dashboard.BL
                             data.Fallecidos = dr.Field<int>("TotalFallecidos");
 
                             data.CovidPositivoAcumulado = dr.Field<int>("CovidPositivoAcumulado");
-                            data.TotalIgG = dr.Field<int>("TotalIgG");
-                            data.TotalIgM = dr.Field<int>("TotalIgM");
-                            data.TotalIgG_IgM = dr.Field<int>("TotalIgG_IgM");
+                            //data.TotalIgG = dr.Field<int>("TotalIgG");
+                            //data.TotalIgM = dr.Field<int>("TotalIgM");
+                            //data.TotalIgG_IgM = dr.Field<int>("TotalIgG_IgM");
 
                             serviceDatas.Add(data);
                         }
@@ -166,9 +166,9 @@ namespace VigCovid.Dashboard.BL
                 oIndicadoresDashboardBE.ModeradosCriticos = serviceDatas[0].ModeradoCriticosHoy.ToString();
                 oIndicadoresDashboardBE.Cuarentena = serviceDatas[0].Cuarentena.ToString();
                oIndicadoresDashboardBE.CovidPositivoAcumulado = serviceDatas[0].CovidPositivoAcumulado.ToString();
-               oIndicadoresDashboardBE.TotalIgG = serviceDatas[0].TotalIgG.ToString();
-               oIndicadoresDashboardBE.TotalIgM = serviceDatas[0].TotalIgM.ToString();
-               oIndicadoresDashboardBE.TotalIgG_IgM = serviceDatas[0].TotalIgG_IgM.ToString();
+               //oIndicadoresDashboardBE.TotalIgG = serviceDatas[0].TotalIgG.ToString();
+               //oIndicadoresDashboardBE.TotalIgM = serviceDatas[0].TotalIgM.ToString();
+               //oIndicadoresDashboardBE.TotalIgG_IgM = serviceDatas[0].TotalIgG_IgM.ToString();
 
                 oIndicadoresDashboardBE.Fallecidos = serviceDatas[0].Fallecidos.ToString();
 
@@ -181,6 +181,78 @@ namespace VigCovid.Dashboard.BL
         }
 
 
+        public IndicadoresDashboardBE IndicadoresBasicos(int usuarioId, int tipoUsuarioId, int EmpresaId)
+        {
+            var oIndicadoresDashboardBE = new IndicadoresDashboardBE();
+
+            try
+            {
+                List<IndicadoresBE> serviceDatas = new List<IndicadoresBE>();
+
+                using (SqlConnection con = new SqlConnection(Constants.CONEXION))
+                {
+                    DataTable dt = new DataTable();
+                    using (SqlCommand cmd = new SqlCommand("ObtenerIndicadoresDashboard", con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
+                        cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuarioId;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
+
+                        SqlDataAdapter da = new SqlDataAdapter(cmd);
+                        da.Fill(dt);
+
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            IndicadoresBE data = new IndicadoresBE();
+                            data.TrabajadorEnSeguimiento = dr.Field<int>("TrabajadorEnSeguimiento");
+                            data.TotalSeguimientoHoy = dr.Field<int>("TotalSeguimientoHoy");
+                            data.SeguimientoPorCompletarHoy = dr.Field<int>("SeguimientoPorCompletarHoy");
+                            data.TotalAltasHoy = dr.Field<int>("TotalAltasHoy");
+                            data.AltasPorCompletarHoy = dr.Field<int>("AltasPorCompletarHoy");
+                            data.HospitalizadoHoy = dr.Field<int>("HospitalizadoHoy");
+                            data.TotalAltas = dr.Field<int>("TotalAltas");
+                            data.ModeradoCriticosHoy = dr.Field<int>("ModeradoCriticosHoy");
+                            data.Cuarentena = dr.Field<int>("Cuarentena");
+
+                            data.Fallecidos = dr.Field<int>("TotalFallecidos");
+
+                            data.CovidPositivoAcumulado = dr.Field<int>("CovidPositivoAcumulado");
+                            //data.TotalIgG = dr.Field<int>("TotalIgG");
+                            //data.TotalIgM = dr.Field<int>("TotalIgM");
+                            //data.TotalIgG_IgM = dr.Field<int>("TotalIgG_IgM");
+
+                            serviceDatas.Add(data);
+                        }
+                    }
+                }
+
+                //var oAltas = AltasPendientes_Dadas(sedesId, usuarioId, tipoUsuarioId);
+                oIndicadoresDashboardBE.SeguimientoTotales = serviceDatas[0].TrabajadorEnSeguimiento.ToString();
+                //oIndicadoresDashboardBE.AltasDadas = serviceDatas[0].TotalAltas.ToString();
+                //oIndicadoresDashboardBE.AltasHoy = oAltas.Dadas + "/" + oAltas.Hoy;// serviceDatas[0].AltasPorCompletarHoy.ToString() + "/" + serviceDatas[0].TotalAltasHoy.ToString();
+
+                oIndicadoresDashboardBE.ProgramadosHoy = serviceDatas[0].SeguimientoPorCompletarHoy.ToString() + "/" + serviceDatas[0].TotalSeguimientoHoy.ToString();
+
+                //oIndicadoresDashboardBE.Hospitalizados = serviceDatas[0].HospitalizadoHoy.ToString();
+                //oIndicadoresDashboardBE.ModeradosCriticos = serviceDatas[0].ModeradoCriticosHoy.ToString();
+                //oIndicadoresDashboardBE.Cuarentena = serviceDatas[0].Cuarentena.ToString();
+                //oIndicadoresDashboardBE.CovidPositivoAcumulado = serviceDatas[0].CovidPositivoAcumulado.ToString();
+                //oIndicadoresDashboardBE.TotalIgG = serviceDatas[0].TotalIgG.ToString();
+                //oIndicadoresDashboardBE.TotalIgM = serviceDatas[0].TotalIgM.ToString();
+                //oIndicadoresDashboardBE.TotalIgG_IgM = serviceDatas[0].TotalIgG_IgM.ToString();
+
+                //oIndicadoresDashboardBE.Fallecidos = serviceDatas[0].Fallecidos.ToString();
+
+                return oIndicadoresDashboardBE;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+        
 
         //Traer Indiacadores del Nuevo Reporte  - Creado por Saul Ramos Vega - 2021-08-27
 

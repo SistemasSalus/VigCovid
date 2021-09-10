@@ -243,8 +243,25 @@ namespace VigCovid.Report.BL
 
             var fechaHoy = DateTime.Now;
 
+            
+            //evaluar posibles errores en casos que no esten registrados en el HC PROPORCIONADO
+            
+            var DatoHC = (from RE in db.RegistroTrabajador join HC in db.HeadCount on 
+                           RE.Dni equals HC.Dni where RE.Id == trabajadorId select HC).FirstOrDefault().IDjefe;
 
-            //var FechaInicio = (from AM in db.FechaImportante where AM.TrabajadorId == trabajadorId  select AM).OrderByDescending(t => t.FechaInicio).FirstOrDefault();
+            var DatoHCPAemploye = (from RE in db.RegistroTrabajador
+                          join HC in db.HeadCount on
+                          RE.Dni equals HC.Dni
+                                   where RE.Id == trabajadorId
+                                   select HC).FirstOrDefault().PAEmployee;
+
+
+            if (DatoHC == null)
+            {
+
+                DatoHC = "no-registra";
+                
+            }
 
             var FechaInicio = (from AM in db.FechaImportante where AM.Id == Id select AM).OrderByDescending(x => x.FechaInicio).First().FechaInicio;
 
@@ -355,7 +372,8 @@ namespace VigCovid.Report.BL
                              CorreoSede = D.Correos,
                              CorreosChampios = D.CorreosChampion,
                              //FechaAltaMedica = fechaFormat,
-
+                             IDjefe = DatoHC,
+                             PAemploye = DatoHCPAemploye,
                              FechaAislaminetoCuarentena = FAC,
                              FechaPosibleAlta = FPA,
                              DiasTotalDescanso = F1,
@@ -380,6 +398,36 @@ namespace VigCovid.Report.BL
 
 
             var fechaHoy = DateTime.Now;
+
+            var DatoHC = (from RE in db.RegistroTrabajador
+                          join HC in db.HeadCount on
+                          RE.Dni equals HC.Dni
+                          where RE.Id == trabajadorId
+                          select HC).FirstOrDefault().IDjefe;
+
+
+            var DatoHCPAemploye = (from RE in db.RegistroTrabajador
+                                   join HC in db.HeadCount on
+                                   RE.Dni equals HC.Dni
+                                   where RE.Id == trabajadorId
+                                   select HC).FirstOrDefault().PAEmployee;
+
+            //.LastOrDefault.IDjefe;
+
+
+            if (DatoHC == null)
+            {
+
+                DatoHC = "no-registra";
+
+            }
+
+            if (DatoHC == "")
+            {
+
+                DatoHC = "no-registra";
+
+            }
 
 
             //var FechaInicio = (from AM in db.FechaImportante where AM.TrabajadorId == trabajadorId  select AM).OrderByDescending(t => t.FechaInicio).FirstOrDefault();
@@ -500,7 +548,8 @@ namespace VigCovid.Report.BL
                                  CorreoSede = D.Correos,
                                  CorreosChampios = D.CorreosChampion,
                                  //FechaAltaMedica = fechaFormat,
-
+                                 IDjefe = DatoHC,
+                                 PAemploye = DatoHCPAemploye,
                                  FechaAislaminetoCuarentena = FAC,
                                  FechaPosibleAlta = FPA,
                                  DiasTotalDescanso = F1,

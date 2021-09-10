@@ -13,8 +13,7 @@ style{
 
     <div class="pad-all text-center">
         <h3>SISTEMA DE VIGILANCIA COVID-19</h3>
-
-        <div class="row">
+         <div class="row">
             <select id="ddlEmpresaCodigo" multiple tabindex="4" data-width="50%">
                 @for (int i = 0; i < ViewBag.EMPRESASASIGANADAS.Count; i++)
                 {
@@ -67,22 +66,18 @@ style{
             </div>
         </div>
     </div>
-    @*<div class="row">
+    <!--<div class="row">
    
         <div class="col-sm-8">
 
-            <select class="selectpicker" id="ddlEmpresaRegistro" name="validateEmpresaRegistro" data-width="90%" style="width:50px">
-                <option value="0" selected>Seleccione...</option>
+            <select class="selectpicker" id="ddlEmpresaSeleccionar" onchange="SeleccionarIndicadores()" name="validateEmpresaRegistro" data-width="80%" style="width:50px">-->
+                @*<option value="0" selected>Seleccione...</option>*@
 
-                @foreach (var item in @ViewBag.EmpresasRegistro)
-                {
-
-                    <option value="@item.EmpresaId">@item.EmpresaNombre</option>
-                }
-            </select>
+              
+            @*</select>
         </div>
 
-        </div>*@
+        </div>-->*@
         
             @*<div class="row">*@
             <div class="row">
@@ -988,6 +983,11 @@ style{
             <div class="modal-dialog modal-dialog-centered text-center" role="document">
                 <div class="load6">
                     <div class="loader"></div>
+
+                    @*<input type="hidden" id="UsuarioId" value=@ViewBag.EMPRESASASIGANADAS[1].UsuarioId>
+                    <input type="hidden" id="TipoUsuario" value=@ViewBag.EMPRESASASIGANADAS[1].TipoUsuarioId>
+                    <input type="hidden" id="EpresasCodigos" value=@ViewBag.EMPRESASCODIGOS>*@
+
                 </div>
             </div>
         </div>
@@ -2490,6 +2490,43 @@ style{
 
 
                         }
+
+                        //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                        //                //window.location = "/Home/index";
+                    },
+                    error: function (jqXHR, exception) {
+                        alert("Ocurrió un error en la operación");
+                        $('.cargaEsperar').modal('hide');
+
+
+                    }
+                });
+
+
+
+            }
+
+            
+
+            function SeleccionarIndicadores() {
+                var EmpresaId = $("#ddlEmpresaSeleccionar").val();
+                var usuarioId = $("#UsuarioId").val();
+                var tipoUsuarioId = $("#TipoUsuario").val();
+                
+
+                var datos = {"EmpresaId": EmpresaId, "usuarioId": usuarioId, "tipoUsuarioId": tipoUsuarioId };
+                
+                console.log(datos);
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Home/IndicadoresBasicos",
+                    data: datos,
+                    success: function (data) {
+                        $('.cargaEsperar').modal('hide');
+                        //console.log(data);
+
+                        
 
                         //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
                         //                //window.location = "/Home/index";
