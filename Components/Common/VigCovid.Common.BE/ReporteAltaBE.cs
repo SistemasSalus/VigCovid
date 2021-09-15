@@ -39,6 +39,8 @@ namespace VigCovid.Common.BE
         public string CorreosMedicoZona { get; set; }
         public string CorreosMedicoCoord { get; set; }
 
+        public string CorreoLicenciaCompensable { get; set; }
+
         public string Direccion { get; set; }
 
         public string Telefono { get; set; }

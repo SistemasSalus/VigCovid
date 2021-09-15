@@ -391,6 +391,112 @@ namespace VigCovid.Report.BL
             return query;
         }
 
+              
+
+          public ReporteAltaBE EnviarLicenciaCompensable(int trabajadorId, int usuarioId, string Diagnostico)
+        {
+
+
+           var fechaHoy = DateTime.Now;
+
+           //var FechaInicio = (from AM in db.FechaImportante where AM.TrabajadorId == trabajadorId  select AM).OrderByDescending(t => t.FechaInicio).FirstOrDefault();
+           var FechaInicio = (from AM in db.FechaImportante where AM.TrabajadorId == trabajadorId select AM).OrderByDescending(x => x.FechaInicio).First().FechaInicio;
+
+
+
+           var FechaFin = (from AM in db.FechaImportante where AM.TrabajadorId == trabajadorId select AM).OrderByDescending(x => x.FechaFin).First().FechaFin;
+            //var Diag1 = (from AM in db.FechaImportante where AM.TrabajadorId == trabajadorId select AM).OrderByDescending(x => x.Diagnostico).First().Diagnostico;
+           var D1 = "";
+           var D2 = "";
+           
+           var diasDescanso = (FechaFin - FechaInicio).Value.Days;
+
+            //var diasDescanso = (FechaFin - FechaInicio).Days;
+           var F1 = diasDescanso + 1;
+
+           var FAC = FechaInicio.Value.ToString("dd/MM/yyyy");
+           var FPA = FechaFin.Value.ToString("dd/MM/yyyy");
+
+            //var FAC = FechaInicio.Date.ToString("dd/MM/yyyy");
+            //var FPA = FechaFin.Date.ToString("dd/MM/yyyy");               
+
+           var query = (from A in db.RegistroTrabajador
+                         join B in db.Parametro on new { a = A.ModoIngreso, b = 100 } equals new { a = B.i_ParameterId, b = B.i_GroupId } into B_join
+                         from B in B_join.DefaultIfEmpty()
+                         join C in db.Parametro on new { a = A.ViaIngreso, b = 101 } equals new { a = C.i_ParameterId, b = C.i_GroupId } into C_join
+                         from C in C_join.DefaultIfEmpty()
+                         join D in db.Sede on A.SedeId equals D.Id
+                         where A.Id == trabajadorId
+                         select new ReporteAltaBE
+                         {
+                             Trabajador = A.NombreCompleto + " " + A.ApePaterno + " " + A.ApeMaterno,
+                             Edad = A.Edad,
+                             Dni = A.Dni,
+                             Empresa = A.Empleadora,
+                             PuestoTrabajo = A.PuestoTrabajo,
+                             ModoIngreso = B.v_Value1,
+                             ViaIngreso = C.v_Value1,
+                             //FechaRegistro = A.FechaIngreso,
+                             Sexo = A.Sexo,
+                             //DiasCuarentena = dias,
+                             DatosDoctor = (from A2 in db.Usuario
+                                            join B3 in db.Persona on A2.PersonaId equals B3.Id
+                                            where A2.Id == A.MedicoVigilaId
+                                            select new
+                                            {
+                                                Nombres = B3.Nombres + " " + B3.Apellidos
+                                            }).FirstOrDefault().Nombres,
+                             DoctorId = (from A2 in db.Usuario
+                                         join B3 in db.Persona on A2.PersonaId equals B3.Id
+                                         where A2.Id == A.MedicoVigilaId
+                                         select new
+                                         {
+                                             Id = A2.Id
+                                         }).FirstOrDefault().Id,
+                             Colegiatura = (from A2 in db.Usuario
+                                            join B3 in db.Persona on A2.PersonaId equals B3.Id
+                                            where A2.Id == A.MedicoVigilaId
+                                            select new
+                                            {
+                                                CMP = B3.CMP
+                                            }).FirstOrDefault().CMP,
+                             Examenes = (from A1 in db.Examen
+                                         join B1 in db.Parametro on new { a = A1.TipoPrueba, b = 103 } equals new { a = B1.i_ParameterId, b = B1.i_GroupId } into B1_join
+                                         from B1 in B1_join.DefaultIfEmpty()
+                                         join C1 in db.Parametro on new { a = A1.Resultado, b = 102 } equals new { a = C1.i_ParameterId, b = C1.i_GroupId } into C1_join
+                                         from C1 in C1_join.DefaultIfEmpty()
+                                         where A1.TrabajadorId == trabajadorId
+                                         select new ExamenBE
+                                         {
+                                             Fecha = A1.Fecha,
+                                             TipoPrueba = B1.v_Value1,
+                                             Resultado = C1.v_Value1
+                                         }).ToList(),
+                             ComentarioAlta = A.ComentarioAlta,
+                             Receta = A.Recetamedica, //SE AGREGA RECETA MEDICA PARA TABLA REGISTROTRABAJADOR
+                             CorreoSede = D.Correos,
+                             CorreosChampios = D.CorreosChampion,
+                             //FechaAltaMedica = fechaFormat,
+                             
+                             FechaAislaminetoCuarentena = FAC,
+                             FechaPosibleAlta = FPA,
+                             DiasTotalDescanso = F1,
+                             CorreosTrabajador = A.Email,
+                             Diagnostico = D1,
+                             DetalleDiagnostico = D2,
+                             CorreosBP = D.CorreosBP,
+                             CorreosPeople = D.CorreosPeople,
+                             CorreosSeguridad = D.CorreosSeguridadFisica,
+                             CorreosMedicoZona = D.CorreosMedico,
+                             CorreosMedicoCoord = D.CorreosCoordinador,
+                             CorreoLicenciaCompensable = D.CorreoLicenciaCompensable
+                         }).FirstOrDefault();
+
+
+            return query;
+        }
+
+
 
 
         public ReporteAltaBE EnviarDocumentoDM1(int trabajadorId, int usuarioId, string Diagnostico)

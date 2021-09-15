@@ -564,6 +564,10 @@ namespace VigCovidApp.Controllers
                 {
                     EnviarDM(oRequestDarAltaBE.TrabajadorId, oRequestDarAltaBE.EmpresaPrincipalId, oRequestDarAltaBE.Diagnostico);
                 }
+                else if (oRequestDarAltaBE.TipoRango == 4)
+                {
+                    LicenciaCompensable(oRequestDarAltaBE.TrabajadorId, oRequestDarAltaBE.EmpresaPrincipalId, oRequestDarAltaBE.Diagnostico);
+                }
                 else
                 {
                 
@@ -1885,6 +1889,304 @@ namespace VigCovidApp.Controllers
 
         }
 
+
+
+        //EnviarLicenciaCompensable - Creado por Saul Ramos Vega - 20210915
+
+        public void LicenciaCompensable(int id, string eid, string Diagnostico)
+        {
+            var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
+            var oReportAltaBL = new ReportAltaBL();
+            var empresa = eid;
+
+            if (empresa == "BACKUS" || empresa == "Backus" || empresa == "UCP" || empresa == "CERVECERIA" || empresa == "San")
+            {
+                
+                var datosAlta = oReportAltaBL.EnviarLicenciaCompensable(id, sessione.IdUser, Diagnostico);
+
+                
+                //MemoryStream memoryStream = GetPdfDescansoMedico(datosAlta);
+
+                #region Envio correos
+
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosTrabajador))
+                {
+                    datosAlta.CorreosTrabajador = "administrador@saluslaboris.com.pe";
+                }
+                //if (string.IsNullOrEmpty(datosAlta.CorreosChampios))
+                //{
+                //    datosAlta.CorreosChampios = "administrador@saluslaboris.com.pe";
+                //}
+                //if (string.IsNullOrEmpty(datosAlta.CorreoSede))
+                //{
+                //    datosAlta.CorreoSede = "administrador@saluslaboris.com.pe";
+                //}
+                if (string.IsNullOrEmpty(datosAlta.CorreosBP))
+                {
+                    datosAlta.CorreosBP = "administrador@saluslaboris.com.pe";
+                }
+                
+                if (string.IsNullOrEmpty(datosAlta.CorreoLicenciaCompensable))
+                {
+                    datosAlta.CorreosPeople = "administrador@saluslaboris.com.pe";
+                }
+                 if (string.IsNullOrEmpty(datosAlta.CorreosMedicoCoord))
+                {
+                  datosAlta.CorreosMedicoCoord = "administrador@saluslaboris.com.pe";
+                }
+
+                //SmtpClient smtpClient = new SmtpClient
+
+
+                //NOTIFICACION RECETA
+
+
+                //Enviar correo y receta al Trabajador
+                MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreoLicenciaCompensable + "," + datosAlta.CorreosMedicoCoord + "," + datosAlta.CorreosBP)
+
+
+                //datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios
+
+
+                {
+                    Subject = "LICENCIA CON GOCE COMPENSABLE POR AISLAMIENTO DOMICILIARIO - COVID19  SEÑOR(A), " + datosAlta.Trabajador,
+
+                    IsBodyHtml = true,
+                    Body = "Estimado trabajador," + "<br>" + "<br>" + "Por la presente le informamos que, al haber culminado su descanso médico establecido en la R.M." + "<br>" + "N°972-2020-MINSA, corresponde que del " + datosAlta.FechaAislaminetoCuarentena +  " al "  + datosAlta.FechaPosibleAlta + " usted continúe en " + "<br>" + "aislamiento domiciliario, para lo cual gozará de una licencia con goce compensable por el periodo" + "<br>" + "mencionado." + "<br>" + "<br>" + "Durante esta etapa, usted continuará bajo vigilancia médica diaria con el fin de monitorear que se" + "<br>" + "mantiene sin sintomatología; por lo que podrá reincorporarse a sus labores al día siguiente de" +"<br>"+ "otorgada el Alta Epidemiológica, la cual será comunicada por su médico de vigilancia en su" + "<br>" + "seguimiento telefónico." + "<br>" + "<br>" + "Cualquier información adicional puede consultarla con su business partner." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "<br>" + "<b>Administrador de Sistemas de Vigilancia Médica</b>" + "<br>" + "<br>" + "<b>Salus Laboris</b>" + "<br>" + "<br>" + "<br>" + "<i>Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje</i>"
+
+                };
+
+                
+                SmtpClient smtpClient = new SmtpClient
+                {
+                    Host = smtp,
+                    Port = port,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(from, fromPassword)
+                };
+
+                smtpClient.Send(mailMessage);
+                #endregion
+
+            }
+
+            if (empresa == "TRANSPORTE")
+            {
+                var datosAlta = oReportAltaBL.EnviarLicenciaCompensable(id, sessione.IdUser, Diagnostico);
+
+
+                //MemoryStream memoryStream = GetPdfDescansoMedico(datosAlta);
+
+                #region Envio correos
+
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosTrabajador))
+                {
+                    datosAlta.CorreosTrabajador = "administrador@saluslaboris.com.pe";
+                }
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosBP))
+                {
+                    datosAlta.CorreosBP = "administrador@saluslaboris.com.pe";
+                }
+
+                if (string.IsNullOrEmpty(datosAlta.CorreoLicenciaCompensable))
+                {
+                    datosAlta.CorreosPeople = "administrador@saluslaboris.com.pe";
+                }
+                if (string.IsNullOrEmpty(datosAlta.CorreosMedicoCoord))
+                {
+                    datosAlta.CorreosMedicoCoord = "administrador@saluslaboris.com.pe";
+                }
+
+                //SmtpClient smtpClient = new SmtpClient
+
+
+                //NOTIFICACION RECETA
+
+
+                //Enviar correo y receta al Trabajador
+                MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreoLicenciaCompensable + "," + datosAlta.CorreosMedicoCoord + "," + datosAlta.CorreosBP)
+
+
+                //datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios
+
+
+                {
+                    Subject = "LICENCIA CON GOCE COMPENSABLE POR AISLAMIENTO DOMICILIARIO - COVID19 SEÑOR(A), " + datosAlta.Trabajador,
+
+                    IsBodyHtml = true,
+                    Body = "Estimado trabajador," + "<br>" + "<br>" + "Por la presente le informamos que, al haber culminado su descanso médico establecido en la R.M." + "<br>" + "N°972-2020-MINSA, corresponde que del " + datosAlta.FechaAislaminetoCuarentena + " al " + datosAlta.FechaPosibleAlta + " usted continúe en " + "<br>" + "aislamiento domiciliario, para lo cual gozará de una licencia con goce compensable por el periodo" + "<br>" + "mencionado." + "<br>" + "<br>" + "Durante esta etapa, usted continuará bajo vigilancia médica diaria con el fin de monitorear que se" + "<br>" + "mantiene sin sintomatología; por lo que podrá reincorporarse a sus labores al día siguiente de" + "<br>" + "otorgada el Alta Epidemiológica, la cual será comunicada por su médico de vigilancia en su" + "<br>" + "seguimiento telefónico." + "<br>" + "<br>" + "Cualquier información adicional puede consultarla con su business partner." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "<br>" + "<b>Administrador de Sistemas de Vigilancia Médica</b>" + "<br>" + "<br>" + "<b>Salus Laboris</b>" + "<br>" + "<br>" + "<br>" + "<i>Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje</i>"
+
+                };
+
+
+                SmtpClient smtpClient = new SmtpClient
+                {
+                    Host = smtp,
+                    Port = port,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(from, fromPassword)
+                };
+
+                smtpClient.Send(mailMessage);
+
+            }
+
+
+            if (empresa == "NAO")
+            {
+                var datosAlta = oReportAltaBL.EnviarLicenciaCompensable(id, sessione.IdUser, Diagnostico);
+
+
+                //MemoryStream memoryStream = GetPdfDescansoMedico(datosAlta);
+
+                #region Envio correos
+
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosTrabajador))
+                {
+                    datosAlta.CorreosTrabajador = "administrador@saluslaboris.com.pe";
+                }
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosBP))
+                {
+                    datosAlta.CorreosBP = "administrador@saluslaboris.com.pe";
+                }
+
+                if (string.IsNullOrEmpty(datosAlta.CorreoLicenciaCompensable))
+                {
+                    datosAlta.CorreosPeople = "administrador@saluslaboris.com.pe";
+                }
+                if (string.IsNullOrEmpty(datosAlta.CorreosMedicoCoord))
+                {
+                    datosAlta.CorreosMedicoCoord = "administrador@saluslaboris.com.pe";
+                }
+
+
+                //NOTIFICACION RECETA
+
+
+                //Enviar correo y receta al Trabajador
+                //MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreoLicenciaCompensable)
+
+                MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreoLicenciaCompensable + "," + datosAlta.CorreosMedicoCoord + "," + datosAlta.CorreosBP)
+
+                //datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios
+
+
+                {
+                    Subject = "LICENCIA CON GOCE COMPENSABLE POR AISLAMIENTO DOMICILIARIO - COVID19 SEÑOR(A), " + datosAlta.Trabajador,
+
+                    IsBodyHtml = true,
+                    Body = "Estimado trabajador," + "<br>" + "<br>" + "Por la presente le informamos que, al haber culminado su descanso médico establecido en la R.M." + "<br>" + "N°972-2020-MINSA, corresponde que del " + datosAlta.FechaAislaminetoCuarentena + " al " + datosAlta.FechaPosibleAlta + " usted continúe en " + "<br>" + "aislamiento domiciliario, para lo cual gozará de una licencia con goce compensable por el periodo" + "<br>" + "mencionado." + "<br>" + "<br>" + "Durante esta etapa, usted continuará bajo vigilancia médica diaria con el fin de monitorear que se" + "<br>" + "mantiene sin sintomatología; por lo que podrá reincorporarse a sus labores al día siguiente de" + "<br>" + "otorgada el Alta Epidemiológica, la cual será comunicada por su médico de vigilancia en su" + "<br>" + "seguimiento telefónico." + "<br>" + "<br>" + "Cualquier información adicional puede consultarla con su business partner." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "<br>" + "<b>Administrador de Sistemas de Vigilancia Médica</b>" + "<br>" + "<br>" + "<b>Salus Laboris</b>" + "<br>" + "<br>" + "<br>" + "<i>Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje</i>"
+
+                };
+
+
+                SmtpClient smtpClient = new SmtpClient
+                {
+                    Host = smtp,
+                    Port = port,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(from, fromPassword)
+                };
+
+                smtpClient.Send(mailMessage);
+                #endregion
+
+            }
+
+            if (empresa == "AMBEV")
+            {
+                var datosAlta = oReportAltaBL.EnviarLicenciaCompensable(id, sessione.IdUser, Diagnostico);
+
+
+                //MemoryStream memoryStream = GetPdfDescansoMedico(datosAlta);
+
+                #region Envio correos
+
+
+                var configEmail = new ReportAltaBL().ParametroCorreo();
+                string smtp = configEmail[0].v_Value1.ToLower();
+                int port = int.Parse(configEmail[1].v_Value1);
+                string from = configEmail[2].v_Value1.ToLower();
+                string fromPassword = configEmail[4].v_Value1;
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosTrabajador))
+                {
+                    datosAlta.CorreosTrabajador = "administrador@saluslaboris.com.pe";
+                }
+
+                if (string.IsNullOrEmpty(datosAlta.CorreosBP))
+                {
+                    datosAlta.CorreosBP = "administrador@saluslaboris.com.pe";
+                }
+
+                if (string.IsNullOrEmpty(datosAlta.CorreoLicenciaCompensable))
+                {
+                    datosAlta.CorreosPeople = "administrador@saluslaboris.com.pe";
+                }
+                if (string.IsNullOrEmpty(datosAlta.CorreosMedicoCoord))
+                {
+                    datosAlta.CorreosMedicoCoord = "administrador@saluslaboris.com.pe";
+                }
+
+
+                //SmtpClient smtpClient = new SmtpClient
+
+
+
+
+                MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreoLicenciaCompensable + "," + datosAlta.CorreosMedicoCoord + "," + datosAlta.CorreosBP)
+
+                //datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios
+
+
+                {
+                    Subject = "LICENCIA CON GOCE COMPENSABLE POR AISLAMIENTO DOMICILIARIO - COVID19 SEÑOR(A), " + datosAlta.Trabajador,
+
+                    IsBodyHtml = true,
+                    Body = "Estimado trabajador," + "<br>" + "<br>" + "Por la presente le informamos que, al haber culminado su descanso médico establecido en la R.M." + "<br>" + "N°972-2020-MINSA, corresponde que del " + datosAlta.FechaAislaminetoCuarentena + " al " + datosAlta.FechaPosibleAlta + " usted continúe en " + "<br>" + "aislamiento domiciliario, para lo cual gozará de una licencia con goce compensable por el periodo" + "<br>" + "mencionado." + "<br>" + "<br>" + "Durante esta etapa, usted continuará bajo vigilancia médica diaria con el fin de monitorear que se" + "<br>" + "mantiene sin sintomatología; por lo que podrá reincorporarse a sus labores al día siguiente de" + "<br>" + "otorgada el Alta Epidemiológica, la cual será comunicada por su médico de vigilancia en su" + "<br>" + "seguimiento telefónico." + "<br>" + "<br>" + "Cualquier información adicional puede consultarla con su business partner." + "<br>" + "<br>" + "<br>" + "Atentamente," + "<br>" + "<br>" + "<br>" + "<b>Administrador de Sistemas de Vigilancia Médica</b>" + "<br>" + "<br>" + "<b>Salus Laboris</b>" + "<br>" + "<br>" + "<br>" + "<i>Este es un correo electrónico exclusivamente de notificación, por favor no responda este mensaje</i>"
+
+                };
+
+
+                SmtpClient smtpClient = new SmtpClient
+                {
+                    Host = smtp,
+                    Port = port,
+                    EnableSsl = true,
+                    Credentials = new NetworkCredential(from, fromPassword)
+                };
+
+                smtpClient.Send(mailMessage);
+                #endregion
+
+            }
+
+            #endregion
+
+        }
 
         public void EnviarDM(int id, string eid, string Diagnostico)
         {
