@@ -296,29 +296,6 @@ namespace VigCovid.Worker.BL
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //Se deshabilita para implementar nueva funcionalidad -- Saul RV --20210720 
 
         //public List<ReporteAcumuladoManualBE> ListarTrabajadoresPorSedesReporteAcumulado(List<int> sedesId, int EmpresaId)

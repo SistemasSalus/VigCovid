@@ -1844,7 +1844,6 @@ namespace VigCovidApp.Controllers
             var resultado = new List<ListaTrabajadoresViewModel>();
            
 
-
             if (sedesId == "")
                 return Json(resultado, JsonRequestBehavior.AllowGet);
 
@@ -1932,8 +1931,7 @@ namespace VigCovidApp.Controllers
 
             else
             {
-                //var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario);
-                                
+                
 
                 var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario);
 

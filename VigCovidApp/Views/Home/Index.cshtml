@@ -29,7 +29,7 @@ style{
             </select>
         </div>
 
-        @*<button class="btn btn-default" id="btnFiltroAvanzado" data-toggle="modal" data-target="#modal-filtroavanzado"><i class="demo-psi-view-list icon-fw"></i>Filtro Avanzado</button>*@
+       <button class="btn btn-default" id="btnFiltroAvanzado" data-toggle="modal" data-target="#modal-filtroavanzado"><i class="demo-psi-view-list icon-fw"></i>Filtro Avanzado</button>
 
     </div>
 </div>
@@ -1118,7 +1118,6 @@ style{
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
 
-
 <script>
 
     $(document).ready(function () {
@@ -1369,29 +1368,26 @@ style{
 
                     //$('#UsersList').innerHTML = _options;
 
+                    var selected = $("#ddlSedeRegistro2").html(_options);
+                    var arrSelected = [];
+                    selected.each(function () {
+                    arrSelected.push($(this).val());
 
 
                     $('#ddlSedeRegistro2').html(_options).selectpicker('refresh');
-                    var selected = $(this).find("option:selected");
-                    var arrSelected = [];
-                    //var sedesNombres = []
-                    selected.each(function () {
-                    arrSelected.push($(this).val());
-                        
+
+                    //var selected = $('#ddlSedeRegistro2').html(_options);
+
+                 
+
+                                 
                     });
-
-
-                    //var resultData = Object.values(_options);
+                 
                     ActualizarTablaListaTrabajadores(arrSelected, undefined);
                     
                 }
             });
         });
-
-
-
-
-
 
 
 
@@ -1443,16 +1439,13 @@ style{
                 var codSede = $("#ddlSedeRegistro option:contains(" + SedeId + ")").val();
                 $("#ddlSedeRegistro").val(codSede);
                 $("#ddlSedeRegistro").trigger("change");
-                //console.log(codSede + "PTA AREQUIPA");
+
+
+                //console.log(codSede);
+              
             }
         });
         }
-
-
-
-
-
-
 
 
 
@@ -1738,14 +1731,12 @@ style{
                     $("#ddlEmpresaRegistro").trigger("change");
                     $("#ddlEmpresaRegistro").attr("disabled", true);
 
+
+                    //CAPTURA EL VALOR DEL COMBO
                     //$("#ddlEmpresaRegistro option:contains(" + result.NombreEmpresa + ")").attr("selected", true);
-                                      
-                    
+                     
                     //$("#ddlEmpresaRegistro").selectpicker("refresh");
                     //$("#ddlEmpresaRegistro").attr("disabled", false);
-
-
-
                     //var codSede = $("#ddlSedeRegistro option:contains(" + result.Sede + ")").val();
                     //$("#ddlSedeRegistro").val(codSede);
                     ////$("#ddlSedeRegistro").trigger("change");
@@ -1764,8 +1755,7 @@ style{
             var table = $("#table-Lista-Trabajadores");
             table.footable();
 
-
-            //var paramTable = $('.footable');
+             //var paramTable = $('.footable');
             //paramTable.trigger('footable_initialize');
 
         }
@@ -1903,51 +1893,7 @@ style{
             return true;
         }
 
-        //$("#btnRegistrarTrabajador").on("click", function () {
-
-        //    if (!ValidarModoIngreso()) return false;
-        //    var bootstrapValidator = $("#form-registrar-trabajador").data('bootstrapValidator');
-        //    bootstrapValidator.validate();
-        //    if (bootstrapValidator.isValid()) {
-
-        //        bootbox.confirm("¿Está seguro de registrar trabajador?", function (result) {
-
-        //            var datos = poblarEntidadRegistroTrabajador();
-        //            console.log("DATOS", datos);
-        //            if (result) {
-        //                $.ajax({
-        //                    type: "POST",
-        //                    url: "/Home/RegistrarTrabajador",
-        //                    data: datos,
-        //                    success: function (data) {
-        //                        console.log("DATA", data);
-        //                        if (data == "") {
-        //                            alert("El trabajador ya ha sido registrado");
-        //                        } else {
-        //                            window.location = "/Home/Index"
-        //                        }
-        //                    },
-        //                    error: function (jqXHR, exception) {
-        //                        alert("Ocurrió un error en la operación")
-        //                    }
-        //                });
-        //            } else {
-        //                $.niftyNoty({
-        //                    type: 'danger',
-        //                    icon: 'pli-cross icon-2x',
-        //                    message: 'Se canceló la operación.',
-        //                    container: 'floating',
-        //                    timer: 3000
-        //                });
-        //            };
-        //        });
-        //    }
-        //    else {
-        //        console.log("FAIL REGISTRO");
-        //        return;
-        //    }
-        //});
-
+       
         $("#btnRegistrarTrabajador").on("click", function () {
 
             if (!ValidarModoIngreso()) return false;
@@ -2390,8 +2336,7 @@ style{
             }
         }).on('success.field.bv', function (e, data) {
             var $parent = data.element.parents('.form-group');
-
-            // Remove the has-success class
+                        
             $parent.removeClass('has-success');
         });
 
@@ -2571,8 +2516,6 @@ style{
     }
 
 
-
-
     $(".fechaRFin").datepicker({ autoclose: true, dateFormat: 'dd/mm/yy' });
     var faIcon = {
         valid: 'fa fa-check-circle fa-lg text-success',
@@ -2581,85 +2524,7 @@ style{
 
     }
 
-
-
-    //CODIGO PARA ENVIAR LAS VARIABLES DE CONSULTA PARA LA DESCARGA DEL EXCEL ACUMULADO - Saul Ramos Vega  20072021
-
-    //function checkFluencyDESCARGA() {
-    //    //    if ($("#dtp-rFechaInicio").val() == "") {
-    //    //  alert("Fecha de Inicio es requerido");
-    //    //    return;
-    //    //}
-    //    //////}
-    //    let FechaInicio = $("#dtp-rFechaInicio").val();
-    //    let FechaFin = $("#dtp-rFechaFin").val();
-    //    var saul = "sss";
-    //    //let trabajadorId = $("#txtRegistroTrabajadoId").val();
-
-    //    var datos = { "FechaInicio": FechaInicio, "FechaFin": FechaFin, "saul": saul };
-
-
-
-
-    //    ////url: "/Home/ReporteExcelManual?str=" + JSON.stringify("sss"),
-    //    //    window.location.href = "/Home/ReporteExcelManual?str=" + JSON.stringify("sss",FechaInicio,FechaFin);
-
-
-    //    $.ajax({
-
-    //        type: "POST",
-    //        url: "/Home/ReporteExcelManual",
-    //        data: datos,
-    //        success: function (data) {
-    //            $("#modal-rangodefechas").modal("hide");
-    //            //tablaExamenes();
-    //            if (!data) {
-    //                alert("Acceso denegado");
-    //            } else {
-    //                //tablaExamenes();
-    //                //ActualizarLineaTiempo();
-
-    //               // window.location.href = "/Home/ReporteExcelManual?str=" + JSON.stringify("sss");
-    //                //window.location = "/Home/Index"
-    //            }
-
-    //        },
-    //        error: function (jqxhr, exception) {
-    //            alert("ocurrió un error en la operación")
-    //        }
-    //    });
-    //}
-
-
-
-    ////js/datatable.js
-    //$(document).ready(function () {
-    //    $('#table-Lista-Trabajadores').DataTable({
-    //        "columnDefs": [{
-    //            "targets": 0
-    //        }],
-    //        language: {
-    //            "sProcessing": "Procesando...",
-    //            "sLengthMenu": "Mostrar _MENU_ resultados",
-    //            "sZeroRecords": "No se encontraron resultados",
-    //            "sEmptyTable": "Ningún dato disponible en esta tabla",
-    //            "sInfo": "Mostrando resultados _START_-_END_ de  _TOTAL_",
-    //            "sInfoEmpty": "Mostrando resultados del 0 al 0 de un total de 0 registros",
-    //            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-    //            "sSearch": "Buscar:",
-    //            "sLoadingRecords": "Cargando...",
-    //            "oPaginate": {
-    //                "sFirst": "Primero",
-    //                "sLast": "Último",
-    //                "sNext": "Siguiente",
-    //                "sPrevious": "Anterior"
-
-
-    //            },
-    //        }
-    //    });
-    //});
-
+        
     $(document).ready(function () {
         $('#table-Lista-Trabajadores').DataTable();
     });
@@ -2668,7 +2533,7 @@ style{
     function TraerIndicadores() {
         //var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
         let codigoMedico = $("#ddlMedicoVigilaId").val();
-        //var Descripcion = "FechaPosibleAlta6";
+       
         var datos = { "codigoMedico": codigoMedico };
 
         $.ajax({
@@ -2680,8 +2545,6 @@ style{
                 console.log(data);
 
                 for (var i = 0; i < data.length; i++) {
-
-
 
                     $("#TOTALDALTAH").val(data[i].Total);
                     $("#TOTALASIGNADOS").val(data[i].TotalSeguimientos);
@@ -2723,12 +2586,8 @@ style{
             data: datos,
             success: function (data) {
                 $('.cargaEsperar').modal('hide');
-                //console.log(data);
-
-
-
-                //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                //                //window.location = "/Home/index";
+               //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+              //window.location = "/Home/index";
             },
             error: function (jqXHR, exception) {
                 alert("Ocurrió un error en la operación");

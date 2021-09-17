@@ -2734,48 +2734,15 @@
         }
     }
 
-    //CODIGO ENVIO DE DM
-
-    //function checkFluencypd1(trabajadorId) {
-    //    var Valordelchk = $("#chk-PrimerDescanso-" + trabajadorId).get(0).checked;
-    //    let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-    //    var Descripcion = "FechaPosibleAlta";
-    //    var datos = { "trabajadorId": trabajadorId, "DM": Valordelchk, "Descripcion": Descripcion };
-
-
-    //    if (Valordelchk == true) {
-
-    //        $.ajax({
-    //            type: "POST",
-    //            url: "/MonitoringWorker/EnviarDescansoMedico1",
-    //            data: datos,
-    //            success: function (data) {
-    //                $('.cargaEsperar').modal('hide');
-
-    //                //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-    //                //                //window.location = "/Home/index";
-    //            },
-    //            error: function (jqXHR, exception) {
-    //                alert("Ocurrió un error en la operación");
-    //                $('.cargaEsperar').modal('hide');
-
-
-    //            }
-    //        });
-
-    //    }
-
-    //}
-
-
+  
 
     //CODIGO ENVIO DE DM - CAMBIO Saul Ramos Vega 14/07/2021
 
     function checkFluencypd1(trabajadorId) {
         var Valordelddl = $("#ddl-TipoRango" + "option:selected").val();
 
-        //    //let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
-        //    //var seguimientoId = seguimientoId;
+          //let registroTrabajadorId = $("#txtRegistroTrabajadoId").val();
+         //var seguimientoId = seguimientoId;
 
         var datos = { "trabajadorId": trabajadorId, };
 
@@ -2921,8 +2888,8 @@
                 success: function (data) {
                     $('.cargaEsperar').modal('hide');
 
-                    //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                    //                //window.location = "/Home/index";
+                                    //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                                    //window.location = "/Home/index";
                 },
                 error: function (jqXHR, exception) {
                     alert("Ocurrió un error en la operación");
@@ -3077,7 +3044,7 @@
 
             $("#ddl-Diagnostico").focus;
 
-            //$("#ddl-Diagnostico").on("click", handler).
+        //$("#ddl-Diagnostico").on("click", handler).
 
             $("#MensajeDiagnostico").prop("hidden", false);
 
@@ -3113,9 +3080,7 @@
     }
 
 
-
-
-    //js/datatable.js
+        
     $(document).ready(function () {
         $('#example').DataTable({
             "columnDefs": [{
@@ -3186,7 +3151,7 @@
                 const a = document.createElement('a');
                 a.style.display = 'none';
                 a.href = url;
-                // the filename you want
+                //El Nombre del Archivo PDF
                 a.download = 'Descanso Medico.pdf';
                 document.body.appendChild(a);
                 a.click();
@@ -3223,7 +3188,7 @@
         let trabajadorId = $("#txtRegistroTrabajadoId").val();
         let EmpresaPrincipalId = $("#EmpresaPrincipalId").val();
 
-       //alert(renglon);
+    
 
         if (campo2 == 'Descanso Médico')
         {

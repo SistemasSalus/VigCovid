@@ -1854,17 +1854,13 @@ namespace VigCovidApp.Controllers
                     datosAlta.CorreosMedicoCoord = "administrador@saluslaboris.com.pe";
                 }
 
-                //SmtpClient smtpClient = new SmtpClient
+                           
 
 
-                //NOTIFICACION RECETA
-
-
-                //Enviar correo y receta al Trabajador
+                //Enviar correo
                 MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreosMedicoCoord + "," + datosAlta.CorreosMedicoZona)
 
-
-                //datosAlta.CorreosTrabajador + "," + datosAlta.CorreosChampios
+                              
 
 
                 {
@@ -1945,10 +1941,10 @@ namespace VigCovidApp.Controllers
                 //SmtpClient smtpClient = new SmtpClient
 
 
-                //NOTIFICACION RECETA
+              
 
 
-                //Enviar correo y receta al Trabajador
+                //Enviar correo 
                 MailMessage mailMessage = new MailMessage(from, datosAlta.CorreosTrabajador + "," + datosAlta.CorreoLicenciaCompensable + "," + datosAlta.CorreosMedicoCoord + "," + datosAlta.CorreosBP)
 
 
@@ -1982,7 +1978,7 @@ namespace VigCovidApp.Controllers
                 var datosAlta = oReportAltaBL.EnviarLicenciaCompensable(id, sessione.IdUser, Diagnostico);
 
 
-                //MemoryStream memoryStream = GetPdfDescansoMedico(datosAlta);
+              
 
                 #region Envio correos
 
