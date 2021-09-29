@@ -55,6 +55,8 @@ namespace VigCovid.Common.BE
         public DateTime? FechaActualiza { get; set; }
         public int? TipoIngreso { get; set; }
 
+        public int? NotificacionIngreso { get; set; }
+
         [NotMapped]
         public bool? ConfirmarDuplicidadNombre { get; set; }
 

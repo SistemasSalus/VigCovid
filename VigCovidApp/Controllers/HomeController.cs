@@ -45,7 +45,7 @@ namespace VigCovidApp.Controllers
             ViewBag.EMPRESASCODIGOS = empresasCodigos;
             ViewBag.EMPRESASASIGANADAS = empresasAsignadas;
             ViewBag.EmpresasRegistro = GetEmpresasRegistro(sessione.IdUser);
-            ViewBag.INDICADORES = IndicadoresDashboard(empresasCodigos, sessione.IdUser, sessione.IdTipoUsuario);
+            ViewBag.INDICADORES = IndicadoresDashboard(empresasCodigos, sessione.IdUser, sessione.IdTipoUsuario, sessione.EmpresaId);
             var sedesAsignadas = new List<SedeBE>();
             foreach (var item in empresasAsignadas)
             {
@@ -56,7 +56,8 @@ namespace VigCovidApp.Controllers
             }
             ViewBag.SEDESASIGNADAS = sedesAsignadas;
 
-            var listaTrabajadores = ListaTrabajadores(empresasCodigos, sessione.IdUser).ToList();
+            var listaTrabajadores = ListaTrabajadores(empresasCodigos, sessione.IdUser, sessione.EmpresaId).ToList();
+            //var listaTrabajadores = ListaTrabajadores(empresasCodigos, sessione.IdUser).ToList();
             int index = 1;
             listaTrabajadores.ToList().ForEach(x =>
             {
@@ -1663,39 +1664,39 @@ namespace VigCovidApp.Controllers
                     }
                }
 
-                //public void ReporteExcelAltasHoy(string cadena)
-                //{
-                //    try
-                //    {
-                //        var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
-                //        var empresasAsignadas = sessione.EmpresasAsignadas;
+                public void ReporteExcelAltasHoy(string cadena, int EmpresaId)
+                {
+                   try
+                    {
+                        var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
+                        var empresasAsignadas = sessione.EmpresasAsignadas;
 
-                //        var empresasCodigos = new List<int>();
-                //        foreach (var item in empresasAsignadas)
-                //        {
-                //            var sedeId = item.EmpresaIdSedeId.Split('-')[1];
-                //            empresasCodigos.Add(int.Parse(sedeId));
-                //        }
+                        var empresasCodigos = new List<int>();
+                        foreach (var item in empresasAsignadas)
+                        {
+                            var sedeId = item.EmpresaIdSedeId.Split('-')[1];
+                            empresasCodigos.Add(int.Parse(sedeId));
+                        }
 
-                //        var xobj = cadena;
+                        var xobj = cadena;
 
-                //        var listaTrabajadores = ListaTrabajadoresReporte(empresasCodigos, sessione.EmpresaId,sessione.IdUser).ToList();
-                //        listaTrabajadores = listaTrabajadores.OrderBy(x => x.ApellidosNombres).ToList();
+                        var listaTrabajadores = ListaTrabajadoresReporteAlta(empresasCodigos,EmpresaId,sessione.IdUser).ToList();
+                        listaTrabajadores = listaTrabajadores.OrderBy(x => x.ApellidosNombres).ToList();
 
-                //        listaTrabajadores = listaTrabajadores.Where(x => x.FechaAltaMedica == DateTime.Now.ToString("dd/MM/yyyy")).ToList();
+                        listaTrabajadores = listaTrabajadores.Where(x => x.FechaAltaMedica == DateTime.Now.ToString("dd/MM/yyyy")).ToList();
 
-                //        Response.ClearContent();
-                //        Response.BinaryWrite(generateExcelAltas(listaTrabajadores));
-                //        Response.AddHeader("content-disposition", "attachment; filename=Reporte.xlsx");
-                //        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                //        Response.Flush();
-                //        Response.End();
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //        throw;
-                //    }
-                //}
+                        Response.ClearContent();
+                        Response.BinaryWrite(generateExcelAltas(listaTrabajadores));
+                        Response.AddHeader("content-disposition", "attachment; filename=Reporte.xlsx");
+                        Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        Response.Flush();
+                        Response.End();
+                    }
+                    catch (Exception ex)
+                    {
+                        throw;
+                    }
+                }
 
                 //#region Private Methodos
 
@@ -1737,12 +1738,15 @@ namespace VigCovidApp.Controllers
             return listaTrabajadores;
         }
 
-        private IEnumerable<ListaTrabajadoresViewModel> ListaTrabajadores(List<int> sedesId, int usuarioId)
+        private IEnumerable<ListaTrabajadoresViewModel> ListaTrabajadores(List<int> sedesId, int usuarioId, int EmpresaId)
+        //private IEnumerable<ListaTrabajadoresViewModel> ListaTrabajadores(List<int> sedesId, int usuarioId)
         {
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
             var oWorkerRegisterBL = new WorkerRegisterBL();
 
-            var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario);
+            var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario, EmpresaId);
+
+            //var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario);
 
             var listaTrabajadores = ToTrabajadoresViewModel(trabajadores);
 
@@ -1778,6 +1782,26 @@ namespace VigCovidApp.Controllers
 
             return trabajadores;
         }
+
+
+
+        private IEnumerable<ReporteAcumuladoManualBE> ListaTrabajadoresReporteAlta(List<int> sedesId, int EP, int IdUser)
+        {
+            var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
+            var oWorkerRegisterBL = new WorkerRegisterBL();
+            var trabajadores = oWorkerRegisterBL.ListarTrabajadoresAltaHoy(sedesId, EP,IdUser);
+            //ListarTrabajadoresPorSedesReporteAcumulado
+            if (sessione.IdTipoUsuario == (int)TipoUsuario.MedicoVigilancia)
+            {
+                trabajadores = trabajadores.FindAll(p => p.MedicoVigilaId == IdUser);
+            }
+
+            return trabajadores;
+        }
+
+
+
+        
 
 
 
@@ -1837,7 +1861,7 @@ namespace VigCovidApp.Controllers
             }
         }
 
-        public JsonResult ActualizarGrillaListaTrabajadores(string sedesId, string option)
+        public JsonResult ActualizarGrillaListaTrabajadores(string sedesId, string option,int EmpresaId)
         {
             var oDashboardBL = new DashboardBL();
             var sessione = (SessionModel)Session[Resources.Constants.SessionUser];
@@ -1855,7 +1879,7 @@ namespace VigCovidApp.Controllers
 
             if (option == "btnProgramadosHoy")
             {
-                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimientoHoy(sessione.IdUser, sessione.IdTipoUsuario);
+                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimientoHoy(sessione.IdUser, sessione.IdTipoUsuario,EmpresaId);
 
                 var listaTrabajadores = ToTrabajadoresViewModel(trabajadores);
                
@@ -1874,7 +1898,7 @@ namespace VigCovidApp.Controllers
                 //var trabajadoresIds = oDashboardBL.ListarHospitalizadosHoy(arrint);
                 //resultado = lista.FindAll(p => trabajadoresIds.Contains(p.RegistroTrabajadorId));
 
-                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresHospitalizadoHoy(sessione.IdUser, sessione.IdTipoUsuario);
+                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresHospitalizadoHoy(sessione.IdUser, sessione.IdTipoUsuario,EmpresaId);
 
                 var listaTrabajadores = ToTrabajadoresViewModel(trabajadores);
 
@@ -1886,7 +1910,7 @@ namespace VigCovidApp.Controllers
                 //var trabajadoresIds = oDashboardBL.ListarModeradosCriticos(arrint);
                 //resultado = lista.FindAll(p => trabajadoresIds.Contains(p.RegistroTrabajadorId));
 
-                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnModeradoCritico(sessione.IdUser, sessione.IdTipoUsuario);
+                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnModeradoCritico(sessione.IdUser, sessione.IdTipoUsuario,EmpresaId);
 
                 var listaTrabajadores = ToTrabajadoresViewModel(trabajadores);
 
@@ -1898,7 +1922,7 @@ namespace VigCovidApp.Controllers
                 //    var trabajadoresIds = oDashboardBL.ListarCuarentena(arrint);
                 //    resultado = lista.FindAll(p => trabajadoresIds.Contains(p.RegistroTrabajadorId));
 
-                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnCuarentena(sessione.IdUser, sessione.IdTipoUsuario);
+                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnCuarentena(sessione.IdUser, sessione.IdTipoUsuario,EmpresaId);
 
                 var listaTrabajadores = ToTrabajadoresViewModel(trabajadores);
 
@@ -1909,7 +1933,7 @@ namespace VigCovidApp.Controllers
                 //var trabajadoresIds = oDashboardBL.ListarAltasDadas(arrint);
                 //resultado = lista.FindAll(p => trabajadoresIds.Contains(p.RegistroTrabajadorId));
 
-                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnAlta(sessione.IdUser, sessione.IdTipoUsuario);
+                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnAlta(sessione.IdUser, sessione.IdTipoUsuario,EmpresaId);
 
                 var listaTrabajadores = ToTrabajadoresViewModel(trabajadores);
 
@@ -1921,7 +1945,7 @@ namespace VigCovidApp.Controllers
                 //var trabajadoresIds = oDashboardBL.ListarAltasDadas(arrint);
                 //resultado = lista.FindAll(p => trabajadoresIds.Contains(p.RegistroTrabajadorId));
 
-                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresFallecidos(sessione.IdUser, sessione.IdTipoUsuario);
+                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresFallecidos(sessione.IdUser, sessione.IdTipoUsuario,EmpresaId);
 
                 var listaTrabajadores = ToTrabajadoresViewModel(trabajadores);
 
@@ -1931,9 +1955,9 @@ namespace VigCovidApp.Controllers
 
             else
             {
-                
 
-                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario);
+                var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario, EmpresaId);
+                //var trabajadores = oWorkerRegisterBL.ObtenerTrabajadoresEnSeguimiento(sessione.IdUser, sessione.IdTipoUsuario);
 
                 var listaTrabajadores = ToTrabajadoresViewModel(trabajadores);
                 //return listaTrabajadores;
@@ -1959,23 +1983,23 @@ namespace VigCovidApp.Controllers
 
         }
 
-        public JsonResult IndicadoresDashboard(List<int> sedesId, int usuarioId, int tipoUsuarioId)
+        public JsonResult IndicadoresDashboard(List<int> sedesId, int usuarioId, int tipoUsuarioId, int EmpresaId)
         
 
         {
-            var indicadores = new DashboardBL().IndicadoresDashboard(sedesId,usuarioId, tipoUsuarioId);
+            var indicadores = new DashboardBL().IndicadoresDashboard(sedesId,usuarioId, tipoUsuarioId,EmpresaId);
 
             return Json(indicadores, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult IndicadoresBasicos(int usuarioId, int tipoUsuarioId, int EmpresaId)
+        //public JsonResult IndicadoresBasicos(List<int> sedesId, int usuarioId, int tipoUsuarioId, int EmpresaId)
 
 
-        {
-            var indicadores = new DashboardBL().IndicadoresBasicos(usuarioId, tipoUsuarioId, EmpresaId);
+        //{
+        //    var indicadores = new DashboardBL().IndicadoresBasicos(sedesId, usuarioId, tipoUsuarioId, EmpresaId);
 
-            return Json(indicadores, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(indicadores, JsonRequestBehavior.AllowGet);
+        //}
 
 
 

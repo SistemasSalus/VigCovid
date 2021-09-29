@@ -53,6 +53,7 @@
     <Compile Include="GraficoAltasBE.cs" />
     <Compile Include="GraficoCasosDiariosBE.cs" />
     <Compile Include="GraficoSedesBE.cs" />
+    <Compile Include="GraficoSeguimientosDiariosBE.cs" />
     <Compile Include="HeadCount.cs" />
     <Compile Include="IndicadoresDashboardBE.cs" />
     <Compile Include="LineaTiempo.cs" />

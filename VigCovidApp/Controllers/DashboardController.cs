@@ -49,6 +49,71 @@ namespace VigCovidApp.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+
+        public JsonResult GraficoSeguimientosDiarios(string sedesId)
+        {
+            var oDashboardBL = new DashboardBL();
+            var result = new List<SeguimientosDiariosViewModel>();
+            var ff = DateTime.Now;
+            var fi = DateTime.Now.AddDays(-17);
+
+            var lista = oDashboardBL.SeguimientosDiarios(fi, ff, sedesArr(sedesId));
+
+            foreach (var item in lista)
+                        
+            {
+                var oCasosDiariosViewModel = new SeguimientosDiariosViewModel();
+                oCasosDiariosViewModel.dia = item.dia;
+
+                #region Cuarentena
+
+                oCasosDiariosViewModel.Cuarentena = item.Cuarentena;
+
+                #endregion Cuarentena
+
+                #region Hospitalizado
+
+                oCasosDiariosViewModel.Hospitalizado = item.Hospitalizado;
+
+                #endregion Hospitalizado
+
+                #region Fallecido
+
+                oCasosDiariosViewModel.Fallecido = item.Fallecido;
+
+                #endregion Fallecido
+
+                oCasosDiariosViewModel.AislamientoLeve = item.AislamientoLeve;
+
+                oCasosDiariosViewModel.AltaEpidemiologica = item.AltaEpidemiologica;
+
+                oCasosDiariosViewModel.AislamientoModerado = item.AislamientoModerado;
+
+                oCasosDiariosViewModel.AislamientoSevero = item.AislamientoSevero;
+
+                oCasosDiariosViewModel.AislamientoCasoAsintomatico = item.AislamientoCasoAsintomatico;
+
+                oCasosDiariosViewModel.AislamientoPostHospitalitario = item.AislamientoPostHospitalitario;
+
+                result.Add(oCasosDiariosViewModel);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public JsonResult IndicadoresBasicos(string sedesId, int usuarioId, int tipoUsuarioId, int EmpresaId)
+
+
+        {
+            var indicadores = new DashboardBL().IndicadoresBasicos(sedesArr(sedesId), usuarioId, tipoUsuarioId, EmpresaId);
+
+            return Json(indicadores, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
         public JsonResult GraficoAltas(string sedesId)
         {
             var oDashboardBL = new DashboardBL();

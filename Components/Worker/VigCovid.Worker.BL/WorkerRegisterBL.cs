@@ -28,6 +28,7 @@ namespace VigCovid.Worker.BL
         //    return true;
         //}
 
+        //Modificado por Saul Ramos - Verificacion de Datos
         public string VerificarDuplicidadRegistro(RegistroTrabajador registrarTrabajador)
         {
             var trabajador = (from A in db.RegistroTrabajador
@@ -70,6 +71,7 @@ namespace VigCovid.Worker.BL
                 registrarTrabajador.FechaIngresa = DateTime.Now;
                 registrarTrabajador.UsuarioIngresa = registrarTrabajador.UsuarioIngresa;
                 registrarTrabajador.TipoIngreso = 1;
+                registrarTrabajador.NotificacionIngreso = 1;
 
                 db.RegistroTrabajador.Add(registrarTrabajador);
                 db.SaveChanges();
@@ -124,6 +126,8 @@ namespace VigCovid.Worker.BL
                 entidadTrabjador.FechaActualiza = DateTime.Now.Date;
                 entidadTrabjador.UsuarioActualiza = registrarTrabajador.UsuarioActualiza;
                 registrarTrabajador.TipoIngreso = registrarTrabajador.TipoIngreso;
+                registrarTrabajador.NotificacionIngreso = registrarTrabajador.NotificacionIngreso;
+
 
                 //db.RegistroTrabajador.Add(registrarTrabajador);
                 db.SaveChanges();
@@ -168,7 +172,7 @@ namespace VigCovid.Worker.BL
             }
         }
 
-        //Modificado por Saul Ramos / Luis de la Cruz 25052021  - HC  Empresa Principal usando OrganizationId
+        //Modificado por Saul Ramos 25052021  - HC  Empresa Principal usando OrganizationId
         public TrabajadorHcBE BuscarTrabajadorPorDni(string dni)
         {
             try
@@ -298,119 +302,104 @@ namespace VigCovid.Worker.BL
 
         //Se deshabilita para implementar nueva funcionalidad -- Saul RV --20210720 
 
-        //public List<ReporteAcumuladoManualBE> ListarTrabajadoresPorSedesReporteAcumulado(List<int> sedesId, int EmpresaId)
-        //     {
-        //         List<ReporteAcumuladoManualBE> serviceDatas = new List<ReporteAcumuladoManualBE>();
-        //         List<ReporteAcumuladoManualBE> serviceDatasModificado = new List<ReporteAcumuladoManualBE>();
-
-        //         using (SqlConnection con = new SqlConnection(Constants.CONEXION))
-        //         {
-        //             DataTable dt = new DataTable();
-        //             using (SqlCommand cmd = new SqlCommand("ObtenerReporteTrabajadoresAcumulado", con))
-        //             {
-        //                 cmd.CommandType = CommandType.StoredProcedure;
-        //                 cmd.Parameters.Add("@EmpresaPrincipal", SqlDbType.Int).Value = EmpresaId;
-        //                 cmd.CommandTimeout = 0;
-        //                 SqlDataAdapter da = new SqlDataAdapter(cmd);
-        //                 da.Fill(dt);
-
-        //                 foreach (DataRow dr in dt.Rows)
-        //                 {
-        //                     ReporteAcumuladoManualBE data = new ReporteAcumuladoManualBE();
-        //                     data.RegistroTrabajadorId = dr.Field<int>("RegistroTrabajadorId");
-        //                     data.ApellidosNombres = dr.Field<string>("ApellidosNombres");
-        //                     data.Idhmc = dr.Field<string>("Idhmc");
-        //                     data.Dni = dr.Field<string>("Dni");
-        //                     data.Edad = dr.Field<int>("Edad");
-        //                     data.FechaRegistro = dr.Field<string>("FechaRegistro");
-        //                     data.SedeId = dr.Field<int>("SedeId");
-        //                     data.Sede = dr.Field<string>("Sede");
-        //                     data.ModoIngreso = dr.Field<string>("ModoIngreso");
-        //                     data.EstadoActual = dr.Field<string>("EstadoActual");
-        //                     data.Telefono = dr.Field<string>("Telefono");
-        //                     data.Puesto = dr.Field<string>("Puesto");
-        //                     data.DivisionPersonal = dr.Field<string>("DivisionPersonal");
-        //                     data.CentroCosteArea = dr.Field<string>("CentroCosteArea");
-        //                     data.ViaIngreso = dr.Field<string>("ViaIngreso");
-        //                     data.FechaUltimoDiaTrabajo = dr.Field<string>("FechaUltimoDiaTrabajo");
-        //                     data.AntecedentePatologico = dr.Field<string>("AntecedentePatologico");
-        //                     data.TipoContacto = dr.Field<string>("TipoContacto");
-        //                     data.NombreContacto = dr.Field<string>("NombreContacto");
-        //                     //data.PrimerResultadoPr = dr.Field<string>("PrimerResultadoPr");
-        //                     //data.FechaResultadoPr = dr.Field<string>("FechaResultadoPr");
-        //                     //data.PrimerResultadoPositivoPr = dr.Field<string>("PrimerResultadoPositivoPr");
-        //                     //data.FechaResultadoPositivoPr = dr.Field<string>("FechaResultadoPositivoPr");
-        //                     //data.ResultadoPcr = dr.Field<string>("ResultadoPcr");
-        //                     //data.FechaResultadoPcr = dr.Field<string>("FechaResultadoPcr");
 
 
-        //                     data.FechaInicioSintomas = dr.Field<string>("FechaInicioSintomas");
-        //                     data.FechanFinSintomas = dr.Field<string>("FechanFinSintomas");
-        //                     data.NroDiasSinSintomas = dr.Field<string>("NroDiasSinSintomas");
-        //                     data.FechaAislaminetoCuarentena = dr.Field<string>("FechaAislaminetoCuarentena");
-        //                     data.NroDiasDescansoMedico = dr.Field<string>("NroDiasDescansoMedico");
-        //                     data.NroDiasSegundoDescansoMedico = dr.Field<string>("NroDiasSegundoDescansoMedico");
-        //                     data.FechaPosibleAltaA = dr.Field<string>("FechaPosibleAltaA");
-        //                     data.NroDiasPosibleAltaA = dr.Field<string>("NroDiasPosibleAltaA");
-        //                     data.FechaPosibleAltaB = dr.Field<string>("FechaPosibleAltaB");
-        //                     data.NroDiasPosibleAltaB = dr.Field<string>("NroDiasPosibleAltaB");
-        //                     data.FechaPosibleAltaC = dr.Field<string>("FechaPosibleAltaC");
-        //                     data.NroDiasPosibleAltaC = dr.Field<string>("NroDiasPosibleAltaC");
-
-        //                     /*AGREGADO POR LUIS DE LA CRUZ*/
-        //                     data.FechaPosibleAltaDD = dr.Field<string>("FechaPosibleAltaD");
-        //                     data.NroDiasPosibleAltaD = dr.Field<string>("NroDiasPosibleAltaD");
-        //                     data.FechaPosibleAltaEE = dr.Field<string>("FechaPosibleAltaE");
-        //                     data.NroDiasPosibleAltaE = dr.Field<string>("NroDiasPosibleAltaE");
-        //                     data.FechaPosibleAltaFF = dr.Field<string>("FechaPosibleAltaF");
-        //                     data.NroDiasPosibleAltaF = dr.Field<string>("NroDiasPosibleAltaF");
-        //                     /*--------------------------------*/
-
-        //                     data.FechaAltaMedica = dr.Field<string>("FechaAltaMedica");
-        //                     data.NroDiasAltaMedica = dr.Field<string>("NroDiasAltaMedica");
-        //                     data.MedicoVigilaId = dr.Field<int>("MedicoVigilaId");
-        //                     data.MedicoVigila = dr.Field<string>("MedicoVigila");
+        
 
 
+            public List<ReporteAcumuladoManualBE> ListarTrabajadoresAltaHoy(List<int> sedesId, int EP, int IdUser)
+        {
+            List<ReporteAcumuladoManualBE> serviceDatas = new List<ReporteAcumuladoManualBE>();
+            List<ReporteAcumuladoManualBE> serviceDatasModificado = new List<ReporteAcumuladoManualBE>();
+
+            //var FECHA1 = FechaInicio.ToString("yyyy-dd-MM");
+            //var FECHA2 = FechaFin.ToString("yyyy-dd-MM");
+
+            using (SqlConnection con = new SqlConnection(Constants.CONEXION))
+            {
+                DataTable dt = new DataTable();
+                using (SqlCommand cmd = new SqlCommand("ObtenerReporteTrabajadoresAcumuladoAlta", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@EmpresaPrincipal", SqlDbType.Int).Value = EP;
+                    cmd.CommandTimeout = 0;
+                    SqlDataAdapter da = new SqlDataAdapter(cmd);
+                    da.Fill(dt);
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        ReporteAcumuladoManualBE data = new ReporteAcumuladoManualBE();
+                        data.RegistroTrabajadorId = dr.Field<int>("RegistroTrabajadorId");
+                        data.ApellidosNombres = dr.Field<string>("ApellidosNombres");
+                        data.Idhmc = dr.Field<string>("Idhmc");
+                        data.Dni = dr.Field<string>("Dni");
+                        data.Edad = dr.Field<int>("Edad");
+                        data.FechaRegistro = dr.Field<string>("FechaRegistro");
+                        data.SedeId = dr.Field<int>("SedeId");
+                        data.Sede = dr.Field<string>("Sede");
+                        data.ModoIngreso = dr.Field<string>("ModoIngreso");
+                        data.EstadoActual = dr.Field<string>("EstadoActual");
+                        data.Telefono = dr.Field<string>("Telefono");
+                        data.Puesto = dr.Field<string>("Puesto");
+                        data.DivisionPersonal = dr.Field<string>("DivisionPersonal");
+                        data.CentroCosteArea = dr.Field<string>("CentroCosteArea");
+                        data.ViaIngreso = dr.Field<string>("ViaIngreso");
+                        data.FechaUltimoDiaTrabajo = dr.Field<string>("FechaUltimoDiaTrabajo");
+                        //Deshabilitado por Saul Ramos Vega -- 04082021
+                        // data.AntecedentePatologico = dr.Field<string>("AntecedentePatologico");
+                        data.TipoContacto = dr.Field<string>("TipoContacto");
+                        data.NombreContacto = dr.Field<string>("NombreContacto");
+                        //data.PrimerResultadoPr = dr.Field<string>("PrimerResultadoPr");
+                        //data.FechaResultadoPr = dr.Field<string>("FechaResultadoPr");
+                        //data.PrimerResultadoPositivoPr = dr.Field<string>("PrimerResultadoPositivoPr");
+                        //data.FechaResultadoPositivoPr = dr.Field<string>("FechaResultadoPositivoPr");
+                        //data.ResultadoPcr = dr.Field<string>("ResultadoPcr");
+                        //data.FechaResultadoPcr = dr.Field<string>("FechaResultadoPcr");
+                        data.FechaAltaMedica = dr.Field<string>("FechaAltaMedica");
+
+                        //data.FechaInicioSintomas = dr.Field<string>("FechaInicioSintomas");
+                        //data.FechanFinSintomas = dr.Field<string>("FechanFinSintomas");
+                        //data.NroDiasSinSintomas = dr.Field<string>("NroDiasSinSintomas");
+                        //data.FechaAislaminetoCuarentena = dr.Field<string>("FechaAislaminetoCuarentena");
+
+                        //data.DescTipoRango = dr.Field<string>("DescTipoRango");
+                        //data.FechaInicio = dr.Field<DateTime>("FechaInicio");
+                        //data.FechanFin = dr.Field<DateTime>("FechaFin");
+                        //data.NroDiasDescansoMedico = dr.Field<string>("NroDiasDescansoMedico");
+                        //data.NroDiasSegundoDescansoMedico = dr.Field<string>("NroDiasSegundoDescansoMedico");
+                        //data.FechaPosibleAltaA = dr.Field<string>("FechaPosibleAltaA");
+                        //data.NroDiasPosibleAltaA = dr.Field<string>("NroDiasPosibleAltaA");
+                        //data.FechaPosibleAltaB = dr.Field<string>("FechaPosibleAltaB");
+                        //data.NroDiasPosibleAltaB = dr.Field<string>("NroDiasPosibleAltaB");
+                        //data.FechaPosibleAltaC = dr.Field<string>("FechaPosibleAltaC");
+                        //data.NroDiasPosibleAltaC = dr.Field<string>("NroDiasPosibleAltaC");
 
 
-        //                     //Revisar habilitacion de acuerdo a la nueva logica de envio de DM - 31052021
-        //                     //data.FechaInicioSintomas = dr.Field<string>("FechaInicioSintomas");
-        //                     //data.FechanFinSintomas = dr.Field<string>("FechanFinSintomas");
-        //                     //data.NroDiasSinSintomas = dr.Field<string>("NroDiasSinSintomas");
-        //                     //data.FechaAislaminetoCuarentena = dr.Field<string>("FechaAislaminetoCuarentena");
-        //                     //data.NroDiasDescansoMedico = dr.Field<string>("NroDiasDescansoMedico");
-        //                     //data.NroDiasSegundoDescansoMedico = dr.Field<string>("NroDiasSegundoDescansoMedico");
-        //                     //data.FechaPosibleAltaAA = dr.Field<string>("FechaPosibleAltaAA");
-        //                     //data.NroDiasPosibleAltaA = dr.Field<string>("NroDiasPosibleAltaA");
-        //                     //data.FechaPosibleAltaBB = dr.Field<string>("FechaPosibleAltaBB");
-        //                     //data.NroDiasPosibleAltaB = dr.Field<string>("NroDiasPosibleAltaB");
-        //                     //data.FechaPosibleAltaCC = dr.Field<string>("FechaPosibleAltaCC");
-        //                     //data.NroDiasPosibleAltaC = dr.Field<string>("NroDiasPosibleAltaC");
-        //                     //data.FechaPosibleAltaDD = dr.Field<string>("FechaPosibleAltaDD");
-        //                     //data.NroDiasPosibleAltaD = dr.Field<string>("NroDiasPosibleAltaD");
-        //                     //data.FechaPosibleAltaEE = dr.Field<string>("FechaPosibleAltaEE");
-        //                     //data.NroDiasPosibleAltaE = dr.Field<string>("NroDiasPosibleAltaE");
-        //                     //data.FechaPosibleAltaFF = dr.Field<string>("FechaPosibleAltaFF");
-        //                     //data.NroDiasPosibleAltaF = dr.Field<string>("NroDiasPosibleAltaF");
+                        //data.FechaAltaMedica = dr.Field<string>("FechaAltaMedica");
+                        //data.NroDiasAltaMedica = dr.Field<string>("NroDiasAltaMedica");
+                        data.MedicoVigilaId = dr.Field<int>("MedicoVigilaId");
+                        data.MedicoVigila = dr.Field<string>("MedicoVigila");
 
-        //                     //data.FechaAltaMedica = dr.Field<string>("FechaAltaMedica");
-        //                     //data.NroDiasAltaMedica = dr.Field<string>("NroDiasAltaMedica");
-        //                     //data.MedicoVigilaId = dr.Field<int>("MedicoVigilaId");
-        //                     //data.MedicoVigila = dr.Field<string>("MedicoVigila");
-        //                     serviceDatas.Add(data);
-        //                 }
-        //             }
 
-        //            serviceDatasModificado = CompletarDataExcel(serviceDatas);
 
-        //             serviceDatasModificado = (from A in serviceDatasModificado
-        //                             where sedesId.Contains(A.SedeId)
-        //                             select A).ToList();
-        //         }
 
-        //         return serviceDatasModificado;
-        //     }
+                        serviceDatas.Add(data);
+                    }
+                }
+
+                serviceDatasModificado = CompletarDataExcel(serviceDatas);
+
+                serviceDatasModificado = (from A in serviceDatasModificado
+                                          where sedesId.Contains(A.SedeId)
+                                          select A).ToList();
+            }
+
+            return serviceDatasModificado;
+        }
+
+
+
+
 
         private List<ReporteAcumuladoManualBE> CompletarDataExcel(List<ReporteAcumuladoManualBE> serviceDatas)
         {
@@ -559,7 +548,7 @@ namespace VigCovid.Worker.BL
             return newServiceDatas;
         }
 
-        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnSeguimientoHoy(int usuarioId, int tipoUsuario)
+        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnSeguimientoHoy(int usuarioId, int tipoUsuario, int EmpresaId)
         {
             List<ListaTrabajadoresBE> serviceDatas = new List<ListaTrabajadoresBE>();
 
@@ -574,6 +563,7 @@ namespace VigCovid.Worker.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -633,7 +623,9 @@ namespace VigCovid.Worker.BL
             }
         }
 
-        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnSeguimiento(int usuarioId, int tipoUsuario)
+        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnSeguimiento(int usuarioId, int tipoUsuario, int EmpresaId)
+
+        //public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnSeguimiento(int usuarioId, int tipoUsuario)
         {
             List<ListaTrabajadoresBE> serviceDatas = new List<ListaTrabajadoresBE>();
 
@@ -648,6 +640,7 @@ namespace VigCovid.Worker.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -748,7 +741,7 @@ namespace VigCovid.Worker.BL
 
         }
 
-        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnAlta(int usuarioId, int tipoUsuario)
+        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnAlta(int usuarioId, int tipoUsuario, int EmpresaId)
         {
             List<ListaTrabajadoresBE> serviceDatas = new List<ListaTrabajadoresBE>();
 
@@ -763,6 +756,7 @@ namespace VigCovid.Worker.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -847,7 +841,7 @@ namespace VigCovid.Worker.BL
             }
         }
 
-        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnCuarentena(int usuarioId, int tipoUsuario)
+        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnCuarentena(int usuarioId, int tipoUsuario, int EmpresaId)
         {
             List<ListaTrabajadoresBE> serviceDatas = new List<ListaTrabajadoresBE>();
 
@@ -862,6 +856,7 @@ namespace VigCovid.Worker.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -921,7 +916,7 @@ namespace VigCovid.Worker.BL
             }
         }
 
-        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnModeradoCritico(int usuarioId, int tipoUsuario)
+        public List<ListaTrabajadoresBE> ObtenerTrabajadoresEnModeradoCritico(int usuarioId, int tipoUsuario,int EmpresaId)
         {
             List<ListaTrabajadoresBE> serviceDatas = new List<ListaTrabajadoresBE>();
 
@@ -936,6 +931,7 @@ namespace VigCovid.Worker.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -995,7 +991,7 @@ namespace VigCovid.Worker.BL
             }
         }
 
-        public List<ListaTrabajadoresBE> ObtenerTrabajadoresHospitalizadoHoy(int usuarioId, int tipoUsuario)
+        public List<ListaTrabajadoresBE> ObtenerTrabajadoresHospitalizadoHoy(int usuarioId, int tipoUsuario,int EmpresaId)
         {
             List<ListaTrabajadoresBE> serviceDatas = new List<ListaTrabajadoresBE>();
 
@@ -1010,6 +1006,7 @@ namespace VigCovid.Worker.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -1144,7 +1141,7 @@ namespace VigCovid.Worker.BL
         }
 
 
-        public List<ListaTrabajadoresBE> ObtenerTrabajadoresFallecidos(int usuarioId, int tipoUsuario)
+        public List<ListaTrabajadoresBE> ObtenerTrabajadoresFallecidos(int usuarioId, int tipoUsuario, int EmpresaId)
         {
             List<ListaTrabajadoresBE> serviceDatas = new List<ListaTrabajadoresBE>();
 
@@ -1159,6 +1156,9 @@ namespace VigCovid.Worker.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuario;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
+
+
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);

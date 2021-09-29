@@ -983,11 +983,11 @@
 
                             </div>
                         </div>
-                        @*<div class="col-md-6">
-         <input id="chk-PAntigenos5-@seguimiento.SeguimientoId" onclick="checkFluency5(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos5>
-         <label for="chk-PAntigenos5-@seguimiento.SeguimientoId">Prueba Antígeno en 5 dias</label>
-        </div>*@
 
+                        @*<div class="col-md-6">
+                        <input id="chk-PAntigenos5-@seguimiento.SeguimientoId" onclick="checkFluency5(@seguimiento.SeguimientoId)" class="magic-checkbox" type="checkbox" @seguimiento.PAntigenos5>
+                        <label for="chk-PAntigenos5-@seguimiento.SeguimientoId">Prueba Antígeno en 5 dias</label>
+                        </div>*@
 
                         @* PROGRAMAR FECHA DE PRUEBA - Creado por Saul Ramos Vega - 26082021*@
 
@@ -1333,8 +1333,6 @@
         var suma = data.reduce(function (a, b) { return a + b; }, 0);
         //alert(suma);
         $("#totaldias").html("Total dias de Descanso:  " + suma)
-
-
 
 
         //var table = $('#example').DataTable();
@@ -3023,13 +3021,8 @@
 
             });
 
-
-
-
         }
     }
-
-
 
 
     //DESHABILITAR - HABILITAR OPCIONES EN POPUP  - Creado por Saul Ramos
@@ -3156,7 +3149,6 @@
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
-
 
             },
             error: function (jqXHR, exception) {

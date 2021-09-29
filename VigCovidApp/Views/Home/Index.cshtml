@@ -2,17 +2,16 @@
 
 
 
-
-
-
 style{
+
+
 }
 
 <link href="~/Content/jquery-ui.css" rel="stylesheet" />
-<div id="page-head">
+<div id="page-head" class="pad-all text-center">
+    <h3>SISTEMA DE VIGILANCIA COVID-19</h3>
+    <div class="pad-all text-center" hidden="hidden">
 
-    <div class="pad-all text-center">
-        <h3>SISTEMA DE VIGILANCIA COVID-19</h3>
         <div class="row">
             <select id="ddlEmpresaCodigo" multiple tabindex="4" data-width="50%">
                 @for (int i = 0; i < ViewBag.EMPRESASASIGANADAS.Count; i++)
@@ -29,10 +28,42 @@ style{
             </select>
         </div>
 
-       <button class="btn btn-default" id="btnFiltroAvanzado" data-toggle="modal" data-target="#modal-filtroavanzado"><i class="demo-psi-view-list icon-fw"></i>Filtro Avanzado</button>
-
     </div>
 </div>
+
+<div class="row">
+    <div class="col-sm-1" hidden="hidden">
+        <div class="form-group">
+            <label class="control-label">Sede</label>
+            <select class="selectpicker" id="ddlSedeRegistro2" multiple tabindex="4" data-width="90%">
+
+                @foreach (var item in @ViewBag.SEDESASIGNADAS)
+                {
+                    <option value="@item.SedeId">@item.SedeNombre</option>
+                }
+
+
+            </select>
+        </div>
+    </div>
+</div>
+@*<div class="col-sm-5">*@
+
+<div class="pad-all text-center">
+
+    <select class="selectpicker" id="ddlEmpresaRegistro2" name="validateEmpresaRegistro" data-width="50%">
+
+        <option selected>SELECCIONAR EMPRESA...</option>
+
+        @foreach (var item in @ViewBag.EmpresasRegistro)
+        {
+
+            <option value="@item.EmpresaId">@item.EmpresaNombre</option>
+        }
+    </select>
+</div>
+
+
 
 
 
@@ -53,23 +84,29 @@ style{
         </div>
         <div class="col-sm-4">
             <div id="demo-panel-network" class="panel">
-                <div id="chart-sedes"></div>
-                <div class="form-group">
-                    <select class="selectpicker" id="ddlMes">
-                        <option value="MARZO">MARZO</option>
-                        <option value="ABRIL">ABRIL</option>
-                        <option value="MAYO">MAYO</option>
-                        <option value="JUNIO">JUNIO</option>
-                        <option value="JULIO">JULIO</option>
-                        <option value="AGOSTO">AGOSTO</option>
-                        <option value="SETIEMBRE" selected>SETIEMBRE</option>
-                        <option value="OCTUBRE">OCTUBRE</option>
-                        <option value="NOVIEMBRE">NOVIEMBRE</option>
-                        <option value="DICIEMBRE">DICIEMBRE</option>
-                    </select>
-                </div>
+                <div id="Chart-SegDiarios"></div>
             </div>
         </div>
+
+        @*<div class="col-sm-4">
+                <div id="demo-panel-network" class="panel">
+                    <div id="chart-sedes"></div>
+                    <div class="form-group">
+                        <select class="selectpicker" id="ddlMes">
+                            <option value="MARZO">MARZO</option>
+                            <option value="ABRIL">ABRIL</option>
+                            <option value="MAYO">MAYO</option>
+                            <option value="JUNIO">JUNIO</option>
+                            <option value="JULIO">JULIO</option>
+                            <option value="AGOSTO">AGOSTO</option>
+                            <option value="SETIEMBRE" selected>SETIEMBRE</option>
+                            <option value="OCTUBRE">OCTUBRE</option>
+                            <option value="NOVIEMBRE">NOVIEMBRE</option>
+                            <option value="DICIEMBRE">DICIEMBRE</option>
+                        </select>
+                    </div>
+                </div>
+            </div>*@
     </div>
     <!--<div class="row">
 
@@ -85,17 +122,16 @@ style{
         </div>-->*@
 
     @*<div class="row">*@
+
     <div class="row">
         <div class="col-sm-8">
             <div class="panel botonera">
                 <div class="panel-body text-center clearfix">
-
-
                     <div class="col-sm-3 pad-top">
                         <div class="text-lg">
                             <p>
-                                <button class="btn btn-default text-2x text-thin text-main" name="btnSeguimientoTotales">
-                                    @ViewBag.INDICADORES.Data.SeguimientoTotales
+                                <button class="btn btn-default text-2x text-thin text-main" id="btnSeguimientoTotales" name="btnSeguimientoTotales">
+                                    @*@ViewBag.INDICADORES.Data.SeguimientoTotales*@
                                 </button>
                             </p>
                         </div>
@@ -104,8 +140,8 @@ style{
                     <div class="col-sm-3 pad-top">
                         <div class="text-lg">
                             <p class="cursor-pointer ">
-                                <button class="btn btn-default btn-programadas-hoy text-2x text-thin text-main" name="btnProgramadosHoy">
-                                    @ViewBag.INDICADORES.Data.ProgramadosHoy
+                                <button class="btn btn-default btn-programadas-hoy text-2x text-thin text-main" id="btnProgramadosHoy" name="btnProgramadosHoy">
+                                    @*@ViewBag.INDICADORES.Data.ProgramadosHoy*@
                                 </button>
                             </p>
                         </div>
@@ -114,29 +150,29 @@ style{
                     <div class="col-sm-6">
                         <ul class="list-unstyled text-center pad-top mar-btm row ">
                             <li class="col-xs-4 cursor-pointer">
-                                <button class="btn btn-default btn-icon btn-circle " name="btnAltasPendientes">@ViewBag.INDICADORES.Data.AltasHoy</button>
+                                <button class="btn btn-default btn-icon btn-circle " id="btnAltasPendientes" name="btnAltasPendientes">@*@ViewBag.INDICADORES.Data.AltasHoy*@</button>
                                 <p class="text-sm text-muted mar-no">Altas Pendientes por completar (HOY)</p>
                             </li>
                             <li class="col-xs-4">
-                                <button class="btn btn-default btn-icon btn-circle " name="btnHospitalizados">@ViewBag.INDICADORES.Data.Hospitalizados</button>
+                                <button class="btn btn-default btn-icon btn-circle " id="btnHospitalizados" name="btnHospitalizados">@*@ViewBag.INDICADORES.Data.Hospitalizados*@</button>
                                 <p class="text-sm text-muted mar-no">Hospitalizados HOY DÍA</p>
                             </li>
                             <li class="col-xs-4">
-                                <button class="btn btn-default btn-icon btn-circle " name="btnAltasDadas">@ViewBag.INDICADORES.Data.AltasDadas</button>
+                                <button class="btn btn-default btn-icon btn-circle " id="btnAltasDadas" name="btnAltasDadas">@*@ViewBag.INDICADORES.Data.AltasDadas*@</button>
                                 <p class="text-sm text-muted mar-no">Altas Dadas</p>
                             </li>
                         </ul>
                         <ul class="list-unstyled text-center bord-top pad-top mar-no row">
                             <li class="col-xs-4">
-                                <button class="btn btn-default btn-icon btn-circle " name="btnModeradosCriticos">@ViewBag.INDICADORES.Data.ModeradosCriticos</button>
+                                <button class="btn btn-default btn-icon btn-circle " id="btnModeradosCriticos" name="btnModeradosCriticos">@*@ViewBag.INDICADORES.Data.ModeradosCriticos*@</button>
                                 <p class="text-sm text-muted mar-no">Moderados/Severo HOY DÍA</p>
                             </li>
                             <li class="col-xs-4">
-                                <button class="btn btn-default btn-icon btn-circle " name="btnCuarentena">@ViewBag.INDICADORES.Data.Cuarentena</button>
+                                <button class="btn btn-default btn-icon btn-circle " id="btnCuarentena" name="btnCuarentena">@*@ViewBag.INDICADORES.Data.Cuarentena*@</button>
                                 <p class="text-sm text-muted mar-no">Cuarentena (Contacto Directo)</p>
                             </li>
                             <li class="col-xs-4">
-                                <button class="btn btn-default btn-icon btn-circle" name="btnFallecidos">@ViewBag.INDICADORES.Data.Fallecidos</button>
+                                <button class="btn btn-default btn-icon btn-circle" id="btnFallecidos" name="btnFallecidos">@*@ViewBag.INDICADORES.Data.Fallecidos*@</button>
                                 <p class="text-sm text-muted mar-no">Fallecidos</p>
                             </li>
 
@@ -1010,12 +1046,12 @@ style{
                         <label class="control-label">Emp. Principal</label>
                         <select class="selectpicker" id="ddlEmpresaRegistro2" name="validateEmpresaRegistro" data-width="90%">
                             @*<option> </option>
-                    <option value="1">BACKUS</option>
-                    <option value="2">AMBEV</option>
-                    <option value="3">TRANSPORTE 77</option>
-                    <option value="4">NAVIERA ORIENTE S.A.C.</option>
-                    <option value="5">BARBARIAN</option>
-                    <option value="6">PERU LNG</option>*@
+                                <option value="1">BACKUS</option>
+                                <option value="2">AMBEV</option>
+                                <option value="3">TRANSPORTE 77</option>
+                                <option value="4">NAVIERA ORIENTE S.A.C.</option>
+                                <option value="5">BARBARIAN</option>
+                                <option value="6">PERU LNG</option>*@
                             @*<option value="0" selected>Seleccione...</option>*@
 
                             @foreach (var item in @ViewBag.EmpresasRegistro)
@@ -1030,10 +1066,7 @@ style{
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="control-label">Sede</label>
-                        <select class="selectpicker" id="ddlSedeRegistro2" name="validateEmpresaRegistro" data-width="90%">
-                            <option> </option>
-
-
+                        <select class="selectpicker" id="ddlSedeRegistro2" data-width="90%">
 
                             @foreach (var item in @ViewBag.SEDESASIGNADAS)
                             {
@@ -1048,35 +1081,35 @@ style{
             </div>
 
 
-                <!--Modal body-->
-                <div class="modal-body">
-                    <form id="form-descarga">
-                        <div class="panel-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th><button class="btn btn-success" id="btnFiltroavanzado" onchange="RefrescarFiltros()">Filtrar</button></th>
-                                        </tr>
+            <!--Modal body-->
+            <div class="modal-body">
+                <form id="form-descarga">
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th><button class="btn btn-success" id="btnFiltroavanzado" onchange="RefrescarFiltros()">Filtrar</button></th>
+                                    </tr>
 
 
-                                    </thead>
+                                </thead>
 
-                                    <tbody id="table-altas">
-                                    </tbody>
-                                </table>
+                                <tbody id="table-altas">
+                                </tbody>
+                            </table>
 
-                            </div>
                         </div>
-                    </form>
-                </div>
-
+                    </div>
+                </form>
             </div>
 
         </div>
 
+    </div>
+
 </div>
-       
+
 
 
 
@@ -1087,10 +1120,9 @@ style{
     <div class="modal-dialog modal-dialog-centered text-center" role="document">
         <div class="load6">
             <div class="loader"></div>
-
-            @*<input type="hidden" id="UsuarioId" value=@ViewBag.EMPRESASASIGANADAS[1].UsuarioId>
-                <input type="hidden" id="TipoUsuario" value=@ViewBag.EMPRESASASIGANADAS[1].TipoUsuarioId>
-                <input type="hidden" id="EpresasCodigos" value=@ViewBag.EMPRESASCODIGOS>*@
+            <input type="hidden" id="UsuarioId" value=@ViewBag.EMPRESASASIGANADAS[1].UsuarioId>
+            <input type="hidden" id="TipoUsuario" value=@ViewBag.EMPRESASASIGANADAS[1].TipoUsuarioId>
+            @*<input type="hidden" id="EpresasCodigos" value=@ViewBag.EMPRESASCODIGOS>*@
 
         </div>
     </div>
@@ -1118,6 +1150,11 @@ style{
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
 
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+
+
+
 <script>
 
     $(document).ready(function () {
@@ -1126,7 +1163,10 @@ style{
 
         ObtenerAltas('');
 
-        ObtenerSedes('');
+        //ObtenerSedes('');
+        ObtenerSeguimientosDiarios('');
+
+
 
         function viewAltaMedica(idTrabajador) {
             window.location.href = "/MonitoringWorker/ExportAltaMedica?id=" + idTrabajador;
@@ -1223,7 +1263,7 @@ style{
             let FechaInicio = $("#dtp-rFechaInicio").val();
             let FechaFin = $("#dtp-rFechaFin").val();
             let EMPRESAPRINCIPAL = $("#ddlEmpresaPrincipal").val();
-            console.log(EMPRESAPRINCIPAL);
+            //console.log(EMPRESAPRINCIPAL);
             var St = "sss";
 
             window.location.href = "/Home/ReporteExcelManual?cadena=" + St + "&FechaInicio=" + FechaInicio + "&FechaFin=" + FechaFin + "&EP=" + EMPRESAPRINCIPAL;
@@ -1233,10 +1273,14 @@ style{
 
         });
 
-        //$("#btnReporteAltaMedicaHoy").on('click', function () {
-        //    window.location.href = "/Home/ReporteExcelAltasHoy?str=" + JSON.stringify("sss");
-        //});
+        //Implementado por Saul Ramos Vega - Reporte Excel Altas Hoy - por Empresas 
+        $("#btnReporteAltaMedicaHoy").on('click', function () {
+            var EmpresaId = $("#ddlEmpresaRegistro2").val();
+            var St = "sss";
+            window.location.href = "/Home/ReporteExcelAltasHoy?cadena=" + St + "&EmpresaId=" + EmpresaId;
+        });
 
+        //Modificado por Saul Ramos Vega - MultiEmpresa - 20210928
         $(".botonera").on("click", "button", function (e) {
 
             $(".botonera button").each(function (index, element) {
@@ -1246,16 +1290,33 @@ style{
             let nameOption = $(this).attr('name')
             $(this).addClass('btn-warning');
 
-            var selected = $('#ddlEmpresaCodigo').find("option:selected");
+            var EmpresaId = $('#ddlEmpresaRegistro2').val();
+            var selected = $('#ddlSedeRegistro2').find("option:selected");
             var arrSelected = [];
             var sedesNombres = []
             selected.each(function () {
-                arrSelected.push($(this).val().split('-')[1]);
-                sedesNombres.push($(this).get(0).innerText.split('-')[1]);
+                arrSelected.push($(this).val());
+                //sedesNombres.push($(this).get(0).innerText.split('-')[1]);
             });
 
-            ActualizarTablaListaTrabajadores(arrSelected, nameOption);
-            console.log("Mensaje de prueba");
+            if (nameOption == 'btnAltasDadas')
+            {
+            var dialog = bootbox.dialog({
+                title: 'Importante: Espere un momento',
+
+                message: '<p><i class="fa fa-paper-plane fa-spin blackiconcolor"></i>Preparando Información de Altas...</p>'
+
+            });
+
+            dialog.init(function () {
+                setTimeout(function () {
+                    dialog.find('.bootbox-body').html('INFORMACION LISTA!');
+                }, 8000);
+            });
+            }
+            
+            ActualizarTablaListaTrabajadores(arrSelected, nameOption, EmpresaId);
+            //console.log("Mensaje de prueba");
         });
 
         $("#ddlModoIngreso").on("change", function () {
@@ -1347,44 +1408,65 @@ style{
             ObtenerSedes(arrSelected, 'AGOSTO');
         });
 
-        
+
+        //Hecho por Saul Ramos Vega - 20210927 Cargar valores - MultiEmpresa
         $('#ddlEmpresaRegistro2').on('change', function () {
-            var empresaId = $('#ddlEmpresaRegistro2').val();
-            
+            var EmpresaId = $('#ddlEmpresaRegistro2').val();
+            var usuarioId = $("#UsuarioId").val();
+            var tipoUsuarioId = $("#TipoUsuario").val();
+
             $.ajax({
                 type: "GET",
-                url: "/Home/GetSedesEmpresaPrincipal?empresaId=" + empresaId,
+                url: "/Home/GetSedesEmpresaPrincipal?empresaId=" + EmpresaId,
                 dataType: 'json',
                 success: function (result) {
-                    console.log(result);
+                    //console.log(result);
                     var options = [], _options;
-                    
+
                     //var option;
+                    var arrSelected = [];
+                    var sedesNombres = []
                     for (var i = 0; i < result.length; i++) {
-                        var option = "<option value='" + result[i].SedeId + "'>" + result[i].SedeNombre + "</option>";
+                        var option = "<option value='" + result[i].SedeId + "'selected>" + result[i].SedeNombre + "</option>";
                         options.push(option);
+                        arrSelected.push(result[i].SedeId);
+                        sedesNombres.push(result[i].SedeNombre);
                     }
                     _options = options.join('');
 
-                    //$('#UsersList').innerHTML = _options;
 
-                    var selected = $("#ddlSedeRegistro2").html(_options);
-                    var arrSelected = [];
-                    selected.each(function () {
-                    arrSelected.push($(this).val());
-
+                    $('#ddlSedeRegistro2').html(_options);
+                    
 
                     $('#ddlSedeRegistro2').html(_options).selectpicker('refresh');
 
-                    //var selected = $('#ddlSedeRegistro2').html(_options);
 
-                 
 
-                                 
+                    var dialog = bootbox.dialog({
+                        title: 'Importante: Espere un momento',
+
+                        message: '<p><i class="fa fa-paper-plane fa-spin blackiconcolor"></i>Preparando Información...</p>'
+
                     });
-                 
-                    ActualizarTablaListaTrabajadores(arrSelected, undefined);
-                    
+
+                    dialog.init(function () {
+                        setTimeout(function () {
+                            dialog.find('.bootbox-body').html('INFORMACION LISTA!');
+                        }, 4000);
+                    });
+                
+
+
+                    ActualizarTablaListaTrabajadores(arrSelected, undefined, EmpresaId);
+                    ObtenerCasosDiarios(arrSelected, sedesNombres);
+                    ObtenerAltas(arrSelected, sedesNombres);
+                    ObtenerSeguimientosDiarios(arrSelected, sedesNombres);
+                    SeleccionarIndicadores(arrSelected, usuarioId, tipoUsuarioId, EmpresaId);
+
+
+
+
+
                 }
             });
         });
@@ -1415,36 +1497,38 @@ style{
             });
         });
 
-        function ObtenerSedesPorEmId(SedeId)
-        {
-        var empresaId = $('#ddlEmpresaRegistro').val();
-        console.log(empresaId);
-        $.ajax({
-            type: "GET",
-            url: "/Home/GetSedesEmpresaPrincipal?empresaId=" + empresaId,
-            dataType: 'json',
-            success: function (result) {
-                console.log(result);
-                var options = [], _options;
-                //var option;
-                for (var i = 0; i < result.length; i++) {
-                    var option = "<option value='" + result[i].SedeId + "'>" + result[i].SedeNombre + "</option>";
-                    options.push(option);
+
+
+
+        function ObtenerSedesPorEmId(SedeId) {
+            var empresaId = $('#ddlEmpresaRegistro').val();
+            console.log(empresaId);
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetSedesEmpresaPrincipal?empresaId=" + empresaId,
+                dataType: 'json',
+                success: function (result) {
+                    console.log(result);
+                    var options = [], _options;
+                    //var option;
+                    for (var i = 0; i < result.length; i++) {
+                        var option = "<option value='" + result[i].SedeId + "'>" + result[i].SedeNombre + "</option>";
+                        options.push(option);
+                    }
+                    _options = options.join('');
+
+                    //$('#UsersList').innerHTML = _options;
+                    $('#ddlSedeRegistro').html(_options).selectpicker('refresh');
+
+                    var codSede = $("#ddlSedeRegistro option:contains(" + SedeId + ")").val();
+                    $("#ddlSedeRegistro").val(codSede);
+                    $("#ddlSedeRegistro").trigger("change");
+
+
+                    //console.log(codSede);
+
                 }
-                _options = options.join('');
-
-                //$('#UsersList').innerHTML = _options;
-                $('#ddlSedeRegistro').html(_options).selectpicker('refresh');
-
-                var codSede = $("#ddlSedeRegistro option:contains(" + SedeId + ")").val();
-                $("#ddlSedeRegistro").val(codSede);
-                $("#ddlSedeRegistro").trigger("change");
-
-
-                //console.log(codSede);
-              
-            }
-        });
+            });
         }
 
 
@@ -1689,6 +1773,172 @@ style{
 
         }
 
+
+        function ObtenerSeguimientosDiarios(sedesId, sedesNombres) {
+            $.ajax({
+                type: "GET",
+                url: "/Dashboard/GraficoSeguimientosDiarios?sedesId=" + sedesId,
+                dataType: 'json',
+                success: function (result) {
+                    GraficoSeguimientosDiarios(result, sedesNombres);
+                }
+            });
+        }
+
+
+        function GraficoSeguimientosDiarios(result, sedesNombres) {
+
+            var ejeX = result.map(function (value) {
+                return value.dia;
+            })
+
+            var Cuarentena = result.map(function (value) {
+                return value.Cuarentena;
+            });
+
+            var Hospitalizado = result.map(function (value) {
+
+                return value.Hospitalizado;
+            });
+
+            var Fallecido = result.map(function (value) {
+                return value.Fallecido;
+            });
+
+            var AislamientoLeve = result.map(function (value) {
+                return value.AislamientoLeve;
+            });
+
+            var AltaEpidemiologica = result.map(function (value) {
+                return value.AltaEpidemiologica;
+            });
+
+            var AislamientoModerado = result.map(function (value) {
+                return value.AislamientoModerado;
+            });
+
+            var AislamientoModerado = result.map(function (value) {
+                return value.AislamientoModerado;
+            });
+
+            var AislamientoSevero = result.map(function (value) {
+                return value.AislamientoSevero;
+            });
+
+            var AislamientoCasoAsintomatico = result.map(function (value) {
+                return value.AislamientoCasoAsintomatico;
+            });
+
+            var AislamientoPostHospitalitario = result.map(function (value) {
+                return value.AislamientoPostHospitalitario;
+            });
+
+
+
+            Highcharts.chart('Chart-SegDiarios', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Seguimientos Diarios'
+                },
+                xAxis: {
+                    //categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
+
+                    categories: ejeX,
+                    crosshair: true,
+
+
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Total seguimientos'
+                    },
+
+                    stackLabels: {
+                        enabled: true,
+                        style: {
+                            fontWeight: 'bold',
+                            color: ( // theme
+                                Highcharts.defaultOptions.title.style &&
+                                Highcharts.defaultOptions.title.style.color
+                            ) || 'gray'
+                        }
+                    }
+                },
+
+
+                //legend: {
+                //    align: 'right',
+                //    x: -30,
+                //    verticalAlign: 'top',
+                //    y: 25,
+                //    floating: true,
+                //    backgroundColor:
+                //        Highcharts.defaultOptions.legend.backgroundColor || 'white',
+                //    borderColor: '#CCC',
+                //    borderWidth: 1,
+                //    shadow: false
+                //},
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+
+
+                series: [{
+                    name: 'Cuarentena',
+                    data: [Cuarentena[0], Cuarentena[1], Cuarentena[2], Cuarentena[3], Cuarentena[4], Cuarentena[5], Cuarentena[6], Cuarentena[7], Cuarentena[8], Cuarentena[9], Cuarentena[10], Cuarentena[11], Cuarentena[12], Cuarentena[13], Cuarentena[14], Cuarentena[15], Cuarentena[16], Cuarentena[17], Cuarentena[18], Cuarentena[19], Cuarentena[20], Cuarentena[21], Cuarentena[22], Cuarentena[23], Cuarentena[24], Cuarentena[25], Cuarentena[26], Cuarentena[27], Cuarentena[28], Cuarentena[29], Cuarentena[30], Cuarentena[31]]
+
+                }, {
+                    name: 'Hospitalizado',
+                    data: [Hospitalizado[0], Hospitalizado[1], Hospitalizado[2], Hospitalizado[3], Hospitalizado[4], Hospitalizado[5], Hospitalizado[6], Hospitalizado[7], Hospitalizado[8], Hospitalizado[9], Hospitalizado[10], Hospitalizado[11], Hospitalizado[12], Hospitalizado[13], Hospitalizado[14], Hospitalizado[15], Hospitalizado[16], Hospitalizado[17], Hospitalizado[18], Hospitalizado[19], Hospitalizado[20], Hospitalizado[21], Hospitalizado[22], Hospitalizado[23], Hospitalizado[24], Hospitalizado[25], Hospitalizado[26], Hospitalizado[27], Hospitalizado[28], Hospitalizado[29], Hospitalizado[30], Hospitalizado[31]]
+
+                }, {
+                    name: 'Fallecido',
+                    data: [Fallecido[0], Fallecido[1], Fallecido[2], Fallecido[3], Fallecido[4], Fallecido[5], Fallecido[6], Fallecido[7], Fallecido[8], Fallecido[9], Fallecido[10], Fallecido[11], Fallecido[12], Fallecido[13], Fallecido[14], Fallecido[15], Fallecido[16], Fallecido[17], Fallecido[18], Fallecido[19], Fallecido[20], Fallecido[21], Fallecido[22], Fallecido[23], Fallecido[24], Fallecido[25], Fallecido[26], Fallecido[27], Fallecido[28], Fallecido[29], Fallecido[30], Fallecido[31]]
+
+                }, {
+                    name: 'AislamientoLeve',
+                    data: [AislamientoLeve[0], AislamientoLeve[1], AislamientoLeve[2], AislamientoLeve[3], AislamientoLeve[4], AislamientoLeve[5], AislamientoLeve[6], AislamientoLeve[7], AislamientoLeve[8], AislamientoLeve[9], AislamientoLeve[10], AislamientoLeve[11], AislamientoLeve[12], AislamientoLeve[13], AislamientoLeve[14], AislamientoLeve[15], AislamientoLeve[16], AislamientoLeve[17], AislamientoLeve[18], AislamientoLeve[19], AislamientoLeve[20], AislamientoLeve[21], AislamientoLeve[22], AislamientoLeve[23], AislamientoLeve[24], AislamientoLeve[25], AislamientoLeve[26], AislamientoLeve[27], AislamientoLeve[28], AislamientoLeve[29], AislamientoLeve[30], AislamientoLeve[31]]
+
+                }, {
+                    name: 'AltaEpidemiologica',
+                    data: [AltaEpidemiologica[0], AltaEpidemiologica[1], AltaEpidemiologica[2], AltaEpidemiologica[3], AltaEpidemiologica[4], AltaEpidemiologica[5], AltaEpidemiologica[6], AltaEpidemiologica[7], AltaEpidemiologica[8], AltaEpidemiologica[9], AltaEpidemiologica[10], AltaEpidemiologica[11], AltaEpidemiologica[12], AltaEpidemiologica[13], AltaEpidemiologica[14], AltaEpidemiologica[15], AltaEpidemiologica[16], AltaEpidemiologica[17], AltaEpidemiologica[18], AltaEpidemiologica[19], AltaEpidemiologica[20], AltaEpidemiologica[21], AltaEpidemiologica[22], AltaEpidemiologica[23], AltaEpidemiologica[24], AltaEpidemiologica[25], AltaEpidemiologica[26], AltaEpidemiologica[27], AltaEpidemiologica[28], AltaEpidemiologica[29], AltaEpidemiologica[30], AltaEpidemiologica[31]]
+
+                }, {
+                    name: 'AislamientoModerado',
+                    data: [AislamientoModerado[0], AislamientoModerado[1], AislamientoModerado[2], AislamientoModerado[3], AislamientoModerado[4], AislamientoModerado[5], AislamientoModerado[6], AislamientoModerado[7], AislamientoModerado[8], AislamientoModerado[9], AislamientoModerado[10], AislamientoModerado[11], AislamientoModerado[12], AislamientoModerado[13], AislamientoModerado[14], AislamientoModerado[15], AislamientoModerado[16], AislamientoModerado[17], AislamientoModerado[18], AislamientoModerado[19], AislamientoModerado[20], AislamientoModerado[21], AislamientoModerado[22], AislamientoModerado[23], AislamientoModerado[24], AislamientoModerado[25], AislamientoModerado[26], AislamientoModerado[27], AislamientoModerado[28], AislamientoModerado[29], AislamientoModerado[30], AislamientoModerado[31]]
+
+                }, {
+                    name: 'AislamientoSevero',
+                    data: [AislamientoSevero[0], AislamientoSevero[1], AislamientoSevero[2], AislamientoSevero[3], AislamientoSevero[4], AislamientoSevero[5], AislamientoSevero[6], AislamientoSevero[7], AislamientoSevero[8], AislamientoSevero[9], AislamientoSevero[10], AislamientoSevero[11], AislamientoSevero[12], AislamientoSevero[13], AislamientoSevero[14], AislamientoSevero[15], AislamientoSevero[16], AislamientoSevero[17], AislamientoSevero[18], AislamientoSevero[19], AislamientoSevero[20], AislamientoSevero[21], AislamientoSevero[22], AislamientoSevero[23], AislamientoSevero[24], AislamientoSevero[25], AislamientoSevero[26], AislamientoSevero[27], AislamientoSevero[28], AislamientoSevero[29], AislamientoSevero[30], AislamientoSevero[31]]
+
+                }, {
+                    name: 'AislamientoCasoAsintomatico',
+                    data: [AislamientoCasoAsintomatico[0], AislamientoCasoAsintomatico[1], AislamientoCasoAsintomatico[2], AislamientoCasoAsintomatico[3], AislamientoCasoAsintomatico[4], AislamientoCasoAsintomatico[5], AislamientoCasoAsintomatico[6], AislamientoCasoAsintomatico[7], AislamientoCasoAsintomatico[8], AislamientoCasoAsintomatico[9], AislamientoCasoAsintomatico[10], AislamientoCasoAsintomatico[11], AislamientoCasoAsintomatico[12], AislamientoCasoAsintomatico[13], AislamientoCasoAsintomatico[14], AislamientoCasoAsintomatico[15], AislamientoCasoAsintomatico[16], AislamientoCasoAsintomatico[17], AislamientoCasoAsintomatico[18], AislamientoCasoAsintomatico[19], AislamientoCasoAsintomatico[20], AislamientoCasoAsintomatico[21], AislamientoCasoAsintomatico[22], AislamientoCasoAsintomatico[23], AislamientoCasoAsintomatico[24], AislamientoCasoAsintomatico[25], AislamientoCasoAsintomatico[26], AislamientoCasoAsintomatico[27], AislamientoCasoAsintomatico[28], AislamientoCasoAsintomatico[29], AislamientoCasoAsintomatico[30], AislamientoCasoAsintomatico[31]]
+
+                }, {
+                    name: 'AislamientoPostHospitalitario',
+                    data: [AislamientoPostHospitalitario[0], AislamientoPostHospitalitario[1], AislamientoPostHospitalitario[2], AislamientoPostHospitalitario[3], AislamientoPostHospitalitario[4], AislamientoPostHospitalitario[5], AislamientoPostHospitalitario[6], AislamientoPostHospitalitario[7], AislamientoPostHospitalitario[8], AislamientoPostHospitalitario[9], AislamientoPostHospitalitario[10], AislamientoPostHospitalitario[11], AislamientoPostHospitalitario[12], AislamientoPostHospitalitario[13], AislamientoPostHospitalitario[14], AislamientoPostHospitalitario[15], AislamientoPostHospitalitario[16], AislamientoPostHospitalitario[17], AislamientoPostHospitalitario[18], AislamientoPostHospitalitario[19], AislamientoPostHospitalitario[20], AislamientoPostHospitalitario[21], AislamientoPostHospitalitario[22], AislamientoPostHospitalitario[23], AislamientoPostHospitalitario[24], AislamientoPostHospitalitario[25], AislamientoPostHospitalitario[26], AislamientoPostHospitalitario[27], AislamientoPostHospitalitario[28], AislamientoPostHospitalitario[29], AislamientoPostHospitalitario[30], AislamientoPostHospitalitario[31]]
+
+
+                }]
+            });
+
+        }
+
+
+
         function ObtenerEmpresas() {
             $.ajax({
                 type: "GET",
@@ -1734,7 +1984,7 @@ style{
 
                     //CAPTURA EL VALOR DEL COMBO
                     //$("#ddlEmpresaRegistro option:contains(" + result.NombreEmpresa + ")").attr("selected", true);
-                     
+
                     //$("#ddlEmpresaRegistro").selectpicker("refresh");
                     //$("#ddlEmpresaRegistro").attr("disabled", false);
                     //var codSede = $("#ddlSedeRegistro option:contains(" + result.Sede + ")").val();
@@ -1743,7 +1993,7 @@ style{
 
                     ObtenerSedesPorEmId(result.Sede);
                     $("#ddlSedeRegistro").attr("disabled", true);
-                   
+
 
 
                     $("#txtEmpleadora").val(result.EmpresaEmpleadora);
@@ -1755,17 +2005,17 @@ style{
             var table = $("#table-Lista-Trabajadores");
             table.footable();
 
-             //var paramTable = $('.footable');
+            //var paramTable = $('.footable');
             //paramTable.trigger('footable_initialize');
 
         }
 
-        function ActualizarTablaListaTrabajadores(sedesId, option) {
+        function ActualizarTablaListaTrabajadores(sedesId, option, EmpresaId) {
             $('.cargaEsperar').modal('show');
 
             $.ajax({
                 type: "GET",
-                url: "/Home/ActualizarGrillaListaTrabajadores?sedesId=" + sedesId + "&option=" + option,
+                url: "/Home/ActualizarGrillaListaTrabajadores?sedesId=" + sedesId + "&option=" + option + "&EmpresaId=" + EmpresaId,
                 dataType: 'json',
                 success: function (result) {
 
@@ -1893,7 +2143,7 @@ style{
             return true;
         }
 
-       
+
         $("#btnRegistrarTrabajador").on("click", function () {
 
             if (!ValidarModoIngreso()) return false;
@@ -2076,7 +2326,6 @@ style{
                 "ResultadoExamen": $("#ddl-ExamenResultado-registro").val(),
                 "NombreContacto": $("#txtNombreContactoRegistro").val(),
                 "TipoContacto": $("#ddl-TipoContacto-registro").val(),
-
                 "ViaIngreso": $("#ddlViaIngreso").val(),
                 "NombreCompleto": $("#txtNombreCompleto").val(),
                 "ApePaterno": $("#txtApePaterno").val(),
@@ -2180,9 +2429,9 @@ style{
 
 
         var faIcon = {
-            valid: 'fa fa-check-circle fa-lg text-success',
-            invalid: 'fa fa-times-circle fa-lg',
-            validating: 'fa fa-refresh'
+           valid: 'fa fa-check-circle fa-lg text-success',
+           invalid: 'fa fa-times-circle fa-lg',
+           validating: 'fa fa-refresh'
         }
 
         $('#form-registrar-trabajador').bootstrapValidator({
@@ -2336,7 +2585,7 @@ style{
             }
         }).on('success.field.bv', function (e, data) {
             var $parent = data.element.parents('.form-group');
-                        
+
             $parent.removeClass('has-success');
         });
 
@@ -2524,7 +2773,7 @@ style{
 
     }
 
-        
+
     $(document).ready(function () {
         $('#table-Lista-Trabajadores').DataTable();
     });
@@ -2533,7 +2782,7 @@ style{
     function TraerIndicadores() {
         //var Valordelchk = $("#chk-SextoDescanso-" + trabajadorId).get(0).checked;
         let codigoMedico = $("#ddlMedicoVigilaId").val();
-       
+
         var datos = { "codigoMedico": codigoMedico };
 
         $.ajax({
@@ -2553,8 +2802,7 @@ style{
 
                 }
 
-                //                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-                //                //window.location = "/Home/index";
+
             },
             error: function (jqXHR, exception) {
                 alert("Ocurrió un error en la operación");
@@ -2569,25 +2817,89 @@ style{
     }
 
 
-
-    function SeleccionarIndicadores() {
-        var EmpresaId = $("#ddlEmpresaSeleccionar").val();
-        var usuarioId = $("#UsuarioId").val();
-        var tipoUsuarioId = $("#TipoUsuario").val();
+    function SeleccionarIndicadores(sedesId, usuarioId, tipoUsuarioId, EmpresaId) {
+  
 
 
-        var datos = { "EmpresaId": EmpresaId, "usuarioId": usuarioId, "tipoUsuarioId": tipoUsuarioId };
+        var datos = { "sedesId": sedesId, "EmpresaId": EmpresaId, "usuarioId": usuarioId, "tipoUsuarioId": tipoUsuarioId };
 
         console.log(datos);
 
         $.ajax({
-            type: "GET",
-            url: "/Home/IndicadoresBasicos",
+            type: "POST",
+            url: "/Dashboard/IndicadoresBasicos",
             data: datos,
             success: function (data) {
-                $('.cargaEsperar').modal('hide');
-               //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
-              //window.location = "/Home/index";
+                // $('.cargaEsperar').modal('hide');
+                //SaveFechaImportante("FechaAltaMedica", getDate, fecha);
+                //window.location = "/Home/index";
+
+                var content = "";
+                var content2 = "";
+                var content3 = "";
+                var content4 = "";
+                var content5 = "";
+                var content6 = "";
+                var content7 = "";
+                var content8 = "";
+
+                content = "<button>  </button>";
+                content2 = "<button>  </button>";
+                content3 = "<button>  </button>";
+                content4 = "<button>  </button>";
+                content5 = "<button>  </button>";
+                content6 = "<button>  </button>";
+                content7 = "<button>  </button>";
+                content8 = "<button>  </button>";
+
+                //content += '<td class="text-center">' + data.SeguimientoTotales + '</td>';
+                //$("btnSeguimientoTotales")
+
+                //content ="<button value= '"+ data.SeguimientoTotales +"'</button>";
+
+
+
+                content = "<button value='" + data.SeguimientoTotales + "'>" + data.SeguimientoTotales + "</button>";
+                $("#btnSeguimientoTotales").empty();
+                $("#btnSeguimientoTotales").append(content);
+
+                content2 = "<button value='" + data.ProgramadosHoy + "'>" + data.ProgramadosHoy + "</button>";
+                $("#btnProgramadosHoy").empty();
+                $("#btnProgramadosHoy").append(content2);
+
+                content3 = "<button value='" + data.AltasHoy + "'>" + data.AltasHoy + "</button>";
+                $("#btnAltasPendientes").empty();
+                $("#btnAltasPendientes").append(content3);
+
+
+                content4 = "<button value='" + data.Hospitalizados + "'>" + data.Hospitalizados + "</button>";
+                $("#btnHospitalizados").empty();
+                $("#btnHospitalizados").append(content4);
+
+
+                content5 = "<button value='" + data.AltasDadas + "'>" + data.AltasDadas + "</button>";
+                $("#btnAltasDadas").empty();
+                $("#btnAltasDadas").append(content5);
+
+
+                content6 = "<button value='" + data.ModeradosCriticos + "'>" + data.ModeradosCriticos + "</button>";
+                $("#btnModeradosCriticos").empty();
+                $("#btnModeradosCriticos").append(content6);
+
+
+                content7 = "<button value='" + data.Cuarentena + "'>" + data.Cuarentena + "</button>";
+                $("#btnCuarentena").empty();
+                $("#btnCuarentena").append(content7);
+
+
+                content8 = "<button value='" + data.Fallecidos + "'>" + data.Fallecidos + "</button>";
+                $("#btnFallecidos").empty();
+                $("#btnFallecidos").append(content8);
+
+
+
+
+
             },
             error: function (jqXHR, exception) {
                 alert("Ocurrió un error en la operación");

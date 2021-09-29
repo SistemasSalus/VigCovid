@@ -37,6 +37,60 @@ namespace VigCovid.Dashboard.BL
             return result;
         }
 
+
+
+        public List<GraficoSeguimientosDiariosBE> SeguimientosDiarios(DateTime fi, DateTime ff, List<int> sedesId)
+        {
+            //var query = (from A in db.RegistroTrabajador where A.FechaIngreso >= fi && A.FechaIngreso <= ff && sedesId.Contains(A.SedeId) select A).OrderBy(o => o.FechaIngreso).ToList();
+
+            var query = (from A in db.Seguimiento join B in db.RegistroTrabajador on A.RegistroTrabajadorId equals B.Id   
+                         
+                         where A.Fecha >= fi && A.Fecha <= ff && sedesId.Contains(B.SedeId) select A).OrderBy(o => o.Fecha).ToList();
+
+
+
+            var result = new List<GraficoSeguimientosDiariosBE>();
+
+            var diasQuery = query.GroupBy(g => g.Fecha).Select(s => s.First());
+
+            foreach (var item in diasQuery)
+            {
+                var reg = new GraficoSeguimientosDiariosBE();
+                reg.dia = item.Fecha.ToString("dd MMMM");
+                
+                reg.Cuarentena = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.Cuarentena && p.Fecha == item.Fecha).Count;
+               
+                reg.Hospitalizado = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.Hospitalizado && p.Fecha == item.Fecha).Count;
+               
+                reg.Fallecido = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.Fallecido && p.Fecha == item.Fecha).Count;
+                
+                reg.AislamientoLeve = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.AislamientoLeve && p.Fecha == item.Fecha).Count;
+
+                reg.AltaEpidemiologica = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.AltaEpidemiologica && p.Fecha == item.Fecha).Count;
+
+                reg.AislamientoModerado = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.AislamientoModerado && p.Fecha == item.Fecha).Count;
+
+                reg.AislamientoSevero = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.AislamientoSevero && p.Fecha == item.Fecha).Count;
+
+                reg.AislamientoCasoAsintomatico = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.AislamientoCasoAsintomatico && p.Fecha == item.Fecha).Count;
+
+                reg.AislamientoPostHospitalitario = query.FindAll(p => p.TipoEstadoId == (int)Common.Resource.Enums.TipoEstado.AislamientoPostHospitalitario && p.Fecha == item.Fecha).Count;
+
+               //reg = query.FindAll(p => p.ModoIngreso == (int)Common.Resource.Enums.ModoIngreso.ContactoDirecto && p.FechaIngreso == item.FechaIngreso).Count;
+
+               // reg.CasosReingreso = query.FindAll(p => p.ModoIngreso == (int)Common.Resource.Enums.ModoIngreso.Reingreso && p.FechaIngreso == item.FechaIngreso).Count;
+
+                
+
+                result.Add(reg);
+            }
+
+            return result;
+        }
+
+
+
+
         public List<GraficoAltasBE> Altas(DateTime fi, DateTime ff, List<int> sedesId)
         {
             var result = new List<GraficoAltasBE>();
@@ -108,7 +162,7 @@ namespace VigCovid.Dashboard.BL
             return result;
         }
 
-        public IndicadoresDashboardBE IndicadoresDashboard(List<int> sedesId,int usuarioId, int tipoUsuarioId)
+        public IndicadoresDashboardBE IndicadoresDashboard(List<int> sedesId,int usuarioId, int tipoUsuarioId,int EmpresaId)
         {
             var oIndicadoresDashboardBE = new IndicadoresDashboardBE();
 
@@ -125,7 +179,7 @@ namespace VigCovid.Dashboard.BL
 
                         cmd.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = usuarioId;
                         cmd.Parameters.Add("@TipoUsuario", SqlDbType.Int).Value = tipoUsuarioId;
-                        //cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
+                        cmd.Parameters.Add("@EmpresaId", SqlDbType.Int).Value = EmpresaId;
 
                         SqlDataAdapter da = new SqlDataAdapter(cmd);
                         da.Fill(dt);
@@ -181,7 +235,7 @@ namespace VigCovid.Dashboard.BL
         }
 
 
-        public IndicadoresDashboardBE IndicadoresBasicos(int usuarioId, int tipoUsuarioId, int EmpresaId)
+        public IndicadoresDashboardBE IndicadoresBasicos(List<int> sedesId, int usuarioId, int tipoUsuarioId, int EmpresaId)
         {
             var oIndicadoresDashboardBE = new IndicadoresDashboardBE();
 
@@ -228,22 +282,22 @@ namespace VigCovid.Dashboard.BL
                     }
                 }
 
-                //var oAltas = AltasPendientes_Dadas(sedesId, usuarioId, tipoUsuarioId);
+                var oAltas = AltasPendientes_Dadas(sedesId, usuarioId, tipoUsuarioId);
                 oIndicadoresDashboardBE.SeguimientoTotales = serviceDatas[0].TrabajadorEnSeguimiento.ToString();
-                //oIndicadoresDashboardBE.AltasDadas = serviceDatas[0].TotalAltas.ToString();
-                //oIndicadoresDashboardBE.AltasHoy = oAltas.Dadas + "/" + oAltas.Hoy;// serviceDatas[0].AltasPorCompletarHoy.ToString() + "/" + serviceDatas[0].TotalAltasHoy.ToString();
+                oIndicadoresDashboardBE.AltasDadas = serviceDatas[0].TotalAltas.ToString();
+                oIndicadoresDashboardBE.AltasHoy = oAltas.Dadas + "/" + oAltas.Hoy;// serviceDatas[0].AltasPorCompletarHoy.ToString() + "/" + serviceDatas[0].TotalAltasHoy.ToString();
 
                 oIndicadoresDashboardBE.ProgramadosHoy = serviceDatas[0].SeguimientoPorCompletarHoy.ToString() + "/" + serviceDatas[0].TotalSeguimientoHoy.ToString();
 
-                //oIndicadoresDashboardBE.Hospitalizados = serviceDatas[0].HospitalizadoHoy.ToString();
-                //oIndicadoresDashboardBE.ModeradosCriticos = serviceDatas[0].ModeradoCriticosHoy.ToString();
-                //oIndicadoresDashboardBE.Cuarentena = serviceDatas[0].Cuarentena.ToString();
-                //oIndicadoresDashboardBE.CovidPositivoAcumulado = serviceDatas[0].CovidPositivoAcumulado.ToString();
+                oIndicadoresDashboardBE.Hospitalizados = serviceDatas[0].HospitalizadoHoy.ToString();
+                oIndicadoresDashboardBE.ModeradosCriticos = serviceDatas[0].ModeradoCriticosHoy.ToString();
+                oIndicadoresDashboardBE.Cuarentena = serviceDatas[0].Cuarentena.ToString();
+                oIndicadoresDashboardBE.CovidPositivoAcumulado = serviceDatas[0].CovidPositivoAcumulado.ToString();
                 //oIndicadoresDashboardBE.TotalIgG = serviceDatas[0].TotalIgG.ToString();
                 //oIndicadoresDashboardBE.TotalIgM = serviceDatas[0].TotalIgM.ToString();
                 //oIndicadoresDashboardBE.TotalIgG_IgM = serviceDatas[0].TotalIgG_IgM.ToString();
 
-                //oIndicadoresDashboardBE.Fallecidos = serviceDatas[0].Fallecidos.ToString();
+                oIndicadoresDashboardBE.Fallecidos = serviceDatas[0].Fallecidos.ToString();
 
                 return oIndicadoresDashboardBE;
             }
