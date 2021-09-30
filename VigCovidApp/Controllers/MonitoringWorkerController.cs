@@ -1864,7 +1864,8 @@ namespace VigCovidApp.Controllers
 
 
                 {
-                    Subject = "RECETA MEDICA",
+                    Subject = "RECETA MEDICA, " + datosAlta.Trabajador,
+
                     IsBodyHtml = true,
                     Body = "Se adjunta la Receta Médica"
                 };
@@ -3137,8 +3138,10 @@ namespace VigCovidApp.Controllers
                     {
                           //new PdfPCell(new Phrase("Firma del médico responsable", fontSubTitleNegroNegrita)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE, Border = PdfPCell.NO_BORDER},
 
-                         //new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,40)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
-                         new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,400,350)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 150f,Border = PdfPCell.NO_BORDER},
+                         new PdfPCell(new Phrase("Paciente: " + datos.Trabajador, fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_LEFT,VerticalAlignment = PdfPCell.ALIGN_LEFT,Border = PdfPCell.NO_BORDER},
+
+                         new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,100,60)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 50f,Border = PdfPCell.NO_BORDER},
+                         //new PdfPCell(HandlingItextSharp.GetImage(VigCovid.Common.Resource.Utils.FileToByteArray(firma),null,null,400,350)) { HorizontalAlignment = PdfPCell.ALIGN_CENTER, VerticalAlignment = PdfPCell.ALIGN_MIDDLE, FixedHeight = 150f,Border = PdfPCell.NO_BORDER},
 
                         //new PdfPCell(new Phrase(datos.DatosDoctor + "\n" + "C.M.P " + datos.Colegiatura  , fontTitle2)){ HorizontalAlignment = PdfPCell.ALIGN_CENTER,VerticalAlignment = PdfPCell.ALIGN_MIDDLE,Border = PdfPCell.NO_BORDER},
 
